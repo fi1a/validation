@@ -15,6 +15,11 @@ interface IResult
     public function isSuccess(): bool;
 
     /**
+     * Установить результат валидации
+     */
+    public function setSuccess(bool $success): bool;
+
+    /**
      * Добавить ошибку
      */
     public function addError(IError $error): bool;

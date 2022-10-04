@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
-use Fi1a\Validation\Rule\IRule;
+use InvalidArgumentException;
 
 /**
  * Все правила должны удовлетворять условию
@@ -14,40 +14,29 @@ class AllOf extends AChain
     /**
      * @inheritDoc
      */
-    public function validate($values, ?string $field = null): IResult
-    {
-        $result = new Result();
-
-        foreach ($this->getRules() as $key => $rule) {
-            if (is_null($field)) {
-                $field = (string) $key;
-            }
-            if ($rule instanceof IRule) {
-                if (is_array($values)) {
-                    /**
-                     * @var mixed $value
-                     */
-                    $value = $values[$field] ?? null;
-                } else {
-                    /**
-                     * @var mixed $value
-                     */
-                    $value = $values;
-                }
-                $validate = $rule->validate($value);
-                if (!$validate) {
-                    $result->addError(new Error());
-                }
-
-                continue;
+    protected function setSuccess(
+        IResult $result,
+        $success,
+        ?string $ruleName = null,
+        ?string $fieldName = null,
+        array $messages = []
+    ): void {
+        if ($success instanceof IResult) {
+            $result->setSuccess($result->isSuccess() && $success->isSuccess());
+            if (!$success->isSuccess()) {
+                $result->addErrors($success->getErrors());
             }
 
-            $ruleResult = $rule->validate($values, $field);
-            if (!$ruleResult->isSuccess()) {
-                $result->addErrors($ruleResult->getErrors());
+            return;
+        }
+        $result->setSuccess($result->isSuccess() && $success);
+        if (!$success) {
+            if (!$ruleName) {
+                throw new InvalidArgumentException('$ruleName argument is required');
+            }
+            foreach ($messages as $message) {
+                $result->addError(new Error($ruleName, $fieldName, $message));
             }
         }
-
-        return $result;
     }
 }

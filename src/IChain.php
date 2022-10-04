@@ -15,15 +15,16 @@ interface IChain
      * Конструктор
      *
      * @param IRule[]|IChain[] $rules
+     * @param string[] $messages
      */
-    public function __construct(array $rules = []);
+    public function __construct(array $rules = [], array $messages = []);
 
     /**
      * Метод валидации
      *
      * @param mixed $values
      */
-    public function validate($values, ?string $field = null): IResult;
+    public function validate($values, ?string $fieldName = null): IResult;
 
     /**
      * Возвращает правила
@@ -38,4 +39,18 @@ interface IChain
      * @param IRule[]|IChain[] $rules
      */
     public function setRules(array $rules): bool;
+
+    /**
+     * Возвращает сообщения об ошибках
+     *
+     * @return string[]
+     */
+    public function getMessages(): array;
+
+    /**
+     * Устанавливает сообщения об ошибках
+     *
+     * @param string[] $messages
+     */
+    public function setMessages(array $messages): bool;
 }

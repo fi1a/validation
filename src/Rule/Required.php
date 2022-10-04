@@ -14,6 +14,20 @@ class Required extends ARule
      */
     public function validate($value): bool
     {
-        return (bool) $value;
+        $success = (bool) $value;
+
+        if (!$success) {
+            $this->addMessage('Field "{{fieldName}}" is required');
+        }
+
+        return $success;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRuleName(): string
+    {
+        return 'required';
     }
 }

@@ -19,8 +19,10 @@ class ResultTest extends TestCase
     public function testSuccess(): void
     {
         $result = new Result();
+        $this->assertTrue($result->setSuccess(true));
         $this->assertTrue($result->isSuccess());
-        $this->assertTrue($result->addError(new Error()));
+        $this->assertTrue($result->addError(new Error('required')));
+        $this->assertTrue($result->setSuccess(false));
         $this->assertFalse($result->isSuccess());
     }
 
@@ -30,8 +32,8 @@ class ResultTest extends TestCase
     public function testErrors(): void
     {
         $result = new Result();
-        $this->assertTrue($result->addError(new Error()));
-        $this->assertTrue($result->addErrors([new Error()]));
+        $this->assertTrue($result->addError(new Error('required')));
+        $this->assertTrue($result->addErrors([new Error('required')]));
         $this->assertCount(2, $result->getErrors());
     }
 }

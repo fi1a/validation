@@ -9,4 +9,23 @@ namespace Fi1a\Validation;
  */
 interface IError
 {
+    /**
+     * Конструктор
+     */
+    public function __construct(string $ruleName, ?string $fieldName = null, ?string $message = null);
+
+    /**
+     * Возвращает название правила
+     */
+    public function getRuleName(): string;
+
+    /**
+     * Возвращает название поля
+     */
+    public function getFieldName(): ?string;
+
+    /**
+     * Возвращает сообщение
+     */
+    public function getMessage(): ?string;
 }

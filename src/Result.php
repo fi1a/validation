@@ -34,7 +34,17 @@ class Result implements IResult
      */
     public function isSuccess(): bool
     {
-        return $this->errors->isEmpty();
+        return $this->success;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setSuccess(bool $success): bool
+    {
+        $this->success = $success;
+
+        return true;
     }
 
     /**

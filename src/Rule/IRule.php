@@ -15,4 +15,16 @@ interface IRule
      * @param mixed $value
      */
     public function validate($value): bool;
+
+    /**
+     * Возвращает название правила
+     */
+    public function getRuleName(): string;
+
+    /**
+     * Возвращает сообщения об ошибках
+     *
+     * @return string[]
+     */
+    public function getMessages(): array;
 }
