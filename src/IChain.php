@@ -21,9 +21,9 @@ interface IChain
     /**
      * Метод валидации
      *
-     * @param mixed[] $values
+     * @param mixed $values
      */
-    public function validate(array $values): bool;
+    public function validate($values, ?string $field = null): bool;
 
     /**
      * Возвращает правила

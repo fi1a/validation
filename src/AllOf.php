@@ -14,22 +14,32 @@ class AllOf extends AChain
     /**
      * @inheritDoc
      */
-    public function validate(array $values): bool
+    public function validate($values, ?string $field = null): bool
     {
         $result = true;
-        foreach ($this->getRules() as $field => $rule) {
+        foreach ($this->getRules() as $key => $rule) {
+            if (is_null($field)) {
+                $field = (string) $key;
+            }
             if ($rule instanceof IRule) {
-                /**
-                 * @var mixed $value
-                 */
-                $value = $values[$field] ?? null;
+                if (is_array($values)) {
+                    /**
+                     * @var mixed $value
+                     */
+                    $value = $values[$field] ?? null;
+                } else {
+                    /**
+                     * @var mixed $value
+                     */
+                    $value = $values;
+                }
                 $validate = $rule->validate($value);
                 $result = $result && $validate;
 
                 continue;
             }
 
-            $validate = $rule->validate($values);
+            $validate = $rule->validate($values, $field);
             $result = $result && $validate;
         }
 

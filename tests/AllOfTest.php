@@ -36,4 +36,16 @@ class AllOfTest extends TestCase
         $chain = new AllOf();
         $chain->setRules([$this]);
     }
+
+    /**
+     * Валидация
+     */
+    public function testValidate(): void
+    {
+        $chain = new AllOf([new Required(), new Required()]);
+        $this->assertTrue($chain->validate(1));
+        $this->assertFalse($chain->validate(false));
+        $this->assertTrue($chain->validate(['field' => 1], 'field'));
+        $this->assertFalse($chain->validate(['field' => false], 'field'));
+    }
 }

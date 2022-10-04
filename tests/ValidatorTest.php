@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Validation;
 
+use Fi1a\Validation\AllOf;
 use Fi1a\Validation\Rule\Required;
 use Fi1a\Validation\Validation;
 use Fi1a\Validation\Validator;
@@ -26,7 +27,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Правило обязательного условия
+     * Валидация
      */
     public function testValidateRequiredFalse(): void
     {
@@ -37,12 +38,27 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Правило обязательного условия
+     * Валидация
      */
     public function testValidateRequiredTrue(): void
     {
         $validator = new Validator();
         $validation = $validator->make(['field' => 1,], ['field' => new Required()], []);
+        $this->assertInstanceOf(Validation::class, $validation);
+        $this->assertTrue($validation->validate());
+    }
+
+    /**
+     * Валидация
+     */
+    public function testValidateAllOfAndRequiredTrue(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            ['field' => 1,],
+            ['field' => new AllOf([new Required(), new Required(),])],
+            []
+        );
         $this->assertInstanceOf(Validation::class, $validation);
         $this->assertTrue($validation->validate());
     }
