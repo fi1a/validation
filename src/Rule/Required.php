@@ -9,4 +9,11 @@ namespace Fi1a\Validation\Rule;
  */
 class Required extends ARule
 {
+    /**
+     * @inheritDoc
+     */
+    public function validate($value): bool
+    {
+        return (bool) $value;
+    }
 }

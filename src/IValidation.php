@@ -21,4 +21,9 @@ interface IValidation
      * Возвращает экземпляр класса валидатора
      */
     public function getValidator(): IValidator;
+
+    /**
+     * Метод валидации
+     */
+    public function validate(): bool;
 }

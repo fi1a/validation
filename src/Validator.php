@@ -24,9 +24,18 @@ class Validator implements IValidator
     public function make($values, ?array $rules = null, array $messages = []): IValidation
     {
         /**
-         * @var IRule[] $ruleInstances
+         * @var IRule[]|IChain[] $ruleInstances
          */
         $ruleInstances = [];
+        if (is_array($rules)) {
+            foreach ($rules as $field => $rule) {
+                if ($rule instanceof IRule || $rule instanceof IChain) {
+                    $ruleInstances[$field] = $rule;
+
+                    continue;
+                }
+            }
+        }
         $chain = new AllOf($ruleInstances);
 
         return new Validation($this, $values, $chain, $messages);

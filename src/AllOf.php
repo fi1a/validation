@@ -9,18 +9,30 @@ use Fi1a\Validation\Rule\IRule;
 /**
  * Все правила должны удовлетворять условию
  */
-class AllOf implements IChain
+class AllOf extends AChain
 {
-    /**
-     * @var IRule[]
-     */
-    private $rules = [];
-
     /**
      * @inheritDoc
      */
-    public function __construct(array $rules = [])
+    public function validate(array $values): bool
     {
-        $this->rules = $rules;
+        $result = true;
+        foreach ($this->getRules() as $field => $rule) {
+            if ($rule instanceof IRule) {
+                /**
+                 * @var mixed $value
+                 */
+                $value = $values[$field] ?? null;
+                $validate = $rule->validate($value);
+                $result = $result && $validate;
+
+                continue;
+            }
+
+            $validate = $rule->validate($values);
+            $result = $result && $validate;
+        }
+
+        return $result;
     }
 }

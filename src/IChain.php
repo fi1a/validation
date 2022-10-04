@@ -14,7 +14,28 @@ interface IChain
     /**
      * Конструктор
      *
-     * @param IRule[] $rules
+     * @param IRule[]|IChain[] $rules
      */
     public function __construct(array $rules = []);
+
+    /**
+     * Метод валидации
+     *
+     * @param mixed[] $values
+     */
+    public function validate(array $values): bool;
+
+    /**
+     * Возвращает правила
+     *
+     * @return IRule[]|IChain[]
+     */
+    public function getRules(): array;
+
+    /**
+     * Устанавливает правила
+     *
+     * @param IRule[]|IChain[] $rules
+     */
+    public function setRules(array $rules): bool;
 }

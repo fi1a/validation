@@ -9,4 +9,10 @@ namespace Fi1a\Validation\Rule;
  */
 interface IRule
 {
+    /**
+     * Метод валидации
+     *
+     * @param mixed $value
+     */
+    public function validate($value): bool;
 }
