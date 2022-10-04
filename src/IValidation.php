@@ -25,5 +25,5 @@ interface IValidation
     /**
      * Метод валидации
      */
-    public function validate(): bool;
+    public function validate(): IResult;
 }

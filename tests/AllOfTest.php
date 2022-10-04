@@ -43,9 +43,9 @@ class AllOfTest extends TestCase
     public function testValidate(): void
     {
         $chain = new AllOf([new Required(), new Required()]);
-        $this->assertTrue($chain->validate(1));
-        $this->assertFalse($chain->validate(false));
-        $this->assertTrue($chain->validate(['field' => 1], 'field'));
-        $this->assertFalse($chain->validate(['field' => false], 'field'));
+        $this->assertTrue($chain->validate(1)->isSuccess());
+        $this->assertFalse($chain->validate(false)->isSuccess());
+        $this->assertTrue($chain->validate(['field' => 1], 'field')->isSuccess());
+        $this->assertFalse($chain->validate(['field' => false], 'field')->isSuccess());
     }
 }

@@ -51,7 +51,7 @@ class Validation implements IValidation
     /**
      * @inheritDoc
      */
-    public function validate(): bool
+    public function validate(): IResult
     {
         return $this->chain->validate($this->values);
     }

@@ -14,9 +14,11 @@ class AllOf extends AChain
     /**
      * @inheritDoc
      */
-    public function validate($values, ?string $field = null): bool
+    public function validate($values, ?string $field = null): IResult
     {
-        $result = true;
+        $result = new Result();
+        $result->setSuccess(true);
+
         foreach ($this->getRules() as $key => $rule) {
             if (is_null($field)) {
                 $field = (string) $key;
@@ -34,13 +36,13 @@ class AllOf extends AChain
                     $value = $values;
                 }
                 $validate = $rule->validate($value);
-                $result = $result && $validate;
+                $result->setSuccess($result->isSuccess() && $validate);
 
                 continue;
             }
 
             $validate = $rule->validate($values, $field);
-            $result = $result && $validate;
+            $result->setSuccess($result->isSuccess() && $validate->isSuccess());
         }
 
         return $result;

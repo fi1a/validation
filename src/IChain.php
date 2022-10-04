@@ -23,7 +23,7 @@ interface IChain
      *
      * @param mixed $values
      */
-    public function validate($values, ?string $field = null): bool;
+    public function validate($values, ?string $field = null): IResult;
 
     /**
      * Возвращает правила

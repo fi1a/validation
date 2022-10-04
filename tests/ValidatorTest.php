@@ -34,7 +34,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validation = $validator->make([], ['field' => new Required()], []);
         $this->assertInstanceOf(Validation::class, $validation);
-        $this->assertFalse($validation->validate());
+        $this->assertFalse($validation->validate()->isSuccess());
     }
 
     /**
@@ -45,7 +45,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validation = $validator->make(['field' => 1,], ['field' => new Required()], []);
         $this->assertInstanceOf(Validation::class, $validation);
-        $this->assertTrue($validation->validate());
+        $this->assertTrue($validation->validate()->isSuccess());
     }
 
     /**
@@ -60,6 +60,6 @@ class ValidatorTest extends TestCase
             []
         );
         $this->assertInstanceOf(Validation::class, $validation);
-        $this->assertTrue($validation->validate());
+        $this->assertTrue($validation->validate()->isSuccess());
     }
 }
