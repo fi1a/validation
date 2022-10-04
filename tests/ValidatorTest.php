@@ -62,4 +62,19 @@ class ValidatorTest extends TestCase
         $this->assertInstanceOf(Validation::class, $validation);
         $this->assertTrue($validation->validate()->isSuccess());
     }
+
+    /**
+     * Валидация
+     */
+    public function testValidateAllOfAndRequiredFalse(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            ['field' => false,],
+            ['field' => new AllOf([new Required(), new Required(),])],
+            []
+        );
+        $this->assertInstanceOf(Validation::class, $validation);
+        $this->assertFalse($validation->validate()->isSuccess());
+    }
 }
