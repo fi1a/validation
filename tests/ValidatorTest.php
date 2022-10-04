@@ -19,6 +19,8 @@ class ValidatorTest extends TestCase
     public function testMakeEmpty(): void
     {
         $validator = new Validator();
-        $this->assertInstanceOf(Validation::class, $validator->make([], [], []));
+        $validation = $validator->make([], [], []);
+        $this->assertInstanceOf(Validation::class, $validation);
+        $this->assertEquals($validator, $validation->getValidator());
     }
 }

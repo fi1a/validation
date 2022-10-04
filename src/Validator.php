@@ -21,6 +21,8 @@ class Validator implements IValidator
      */
     public function make($values, ?array $rules = null, array $messages = []): IValidation
     {
-        return new Validation();
+        $chain = new AllOf();
+
+        return new Validation($this, $values, $chain, $messages);
     }
 }
