@@ -34,8 +34,9 @@ class AllOf extends AChain
             if (!$ruleName) {
                 throw new InvalidArgumentException('$ruleName argument is required');
             }
-            foreach ($messages as $message) {
-                $result->addError(new Error($ruleName, $fieldName, $message));
+            foreach ($messages as $messageKey => $message) {
+                $messageKey = (string) $messageKey;
+                $result->addError(new Error($ruleName, $fieldName, $messageKey, $message));
             }
         }
     }

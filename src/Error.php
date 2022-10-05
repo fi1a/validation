@@ -25,13 +25,23 @@ class Error implements IError
     private $message;
 
     /**
+     * @var string|null
+     */
+    private $messageKey;
+
+    /**
      * @inheritDoc
      */
-    public function __construct(string $ruleName, ?string $fieldName = null, ?string $message = null)
-    {
+    public function __construct(
+        string $ruleName,
+        ?string $fieldName = null,
+        ?string $messageKey = null,
+        ?string $message = null
+    ) {
         $this->ruleName = $ruleName;
         $this->fieldName = $fieldName;
         $this->message = $message;
+        $this->messageKey = $messageKey;
     }
 
     /**
@@ -56,5 +66,13 @@ class Error implements IError
     public function getMessage(): ?string
     {
         return $this->message;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMessageKey(): ?string
+    {
+        return $this->messageKey;
     }
 }

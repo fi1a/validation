@@ -278,6 +278,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Field "key1:key2" is required', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('key1:key2', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
 
         $validation = $validator->make(
             [
@@ -302,6 +303,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Test message for field "key1:key2"', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('key1:key2', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
 
         $validation = $validator->make(
             [
@@ -327,11 +329,13 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Only for this field "key1:key2"', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('key1:key2', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
         $error = $result->getErrors()[1];
         $this->assertInstanceOf(IError::class, $error);
         $this->assertEquals('Field "key1:key3" is required', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('key1:key3', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
     }
 
     /**
@@ -368,6 +372,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Field "array1:2:id" is required', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('array1:2:id', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
 
         $validation = $validator->make(
             [
@@ -398,6 +403,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Test message "array1:2:id"', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('array1:2:id', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
 
         $validation = $validator->make(
             [
@@ -433,10 +439,12 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Test message "array1:2:id"', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('array1:2:id', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
         $error = $result->getErrors()[1];
         $this->assertInstanceOf(IError::class, $error);
         $this->assertEquals('All "array1:1:name"', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('array1:1:name', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
     }
 }

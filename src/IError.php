@@ -12,7 +12,12 @@ interface IError
     /**
      * Конструктор
      */
-    public function __construct(string $ruleName, ?string $fieldName = null, ?string $message = null);
+    public function __construct(
+        string $ruleName,
+        ?string $fieldName = null,
+        ?string $messageKey = null,
+        ?string $message = null
+    );
 
     /**
      * Возвращает название правила
@@ -28,4 +33,9 @@ interface IError
      * Возвращает сообщение
      */
     public function getMessage(): ?string;
+
+    /**
+     * Возвращает ключ сообщения
+     */
+    public function getMessageKey(): ?string;
 }
