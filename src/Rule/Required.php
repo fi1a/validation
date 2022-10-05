@@ -17,7 +17,7 @@ class Required extends ARule
         $success = !is_null($value) && $value !== '' && $value !== false;
 
         if (!$success) {
-            $this->addMessage('Field "{{fieldName}}" is required');
+            $this->addMessage('Field "{{name}}" is required', 'required');
         }
 
         return $success;

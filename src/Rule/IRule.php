@@ -27,4 +27,11 @@ interface IRule
      * @return string[]
      */
     public function getMessages(): array;
+
+    /**
+     * Возвращает значения для подстановки в сообщения
+     *
+     * @return mixed[]
+     */
+    public function getVariables(): array;
 }

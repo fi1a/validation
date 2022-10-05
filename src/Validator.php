@@ -36,7 +36,7 @@ class Validator implements IValidator
                 }
             }
         }
-        $chain = new AllOf($ruleInstances);
+        $chain = new AllOf($ruleInstances, $messages);
 
         return new Validation($this, $values, $chain, $messages);
     }

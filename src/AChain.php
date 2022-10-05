@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Format\Formatter;
 use Fi1a\Validation\Rule\IRule;
 use InvalidArgumentException;
 
@@ -105,14 +106,15 @@ abstract class AChain implements IChain
                 if (is_array($values)) {
                     $tree = $this->getValue($this->getKeys($internalFieldName), $values);
                     foreach ($tree->flatten() as $flat) {
-                        [$path, $value] = $flat;
+                        [$path, $validationPath, $value] = $flat;
                         $success = $rule->validate($value);
+                        $messages = $this->formatMessages($rule, (string) $path, (string) $validationPath);
                         $this->setSuccess(
                             $result,
                             $success,
                             $rule->getRuleName(),
                             (string) $path,
-                            $rule->getMessages()
+                            $messages
                         );
                     }
 
@@ -123,12 +125,13 @@ abstract class AChain implements IChain
                  */
                 $value = $values;
                 $success = $rule->validate($value);
+                $messages = $this->formatMessages($rule, $internalFieldName, $internalFieldName);
                 $this->setSuccess(
                     $result,
                     $success,
                     $rule->getRuleName(),
                     $internalFieldName,
-                    $rule->getMessages()
+                    $messages
                 );
 
                 continue;
@@ -143,15 +146,48 @@ abstract class AChain implements IChain
     }
 
     /**
+     * Форматирование сообщений
+     *
+     * @return string[]
+     */
+    protected function formatMessages(IRule $rule, string $fieldName, string $validationPath): array
+    {
+        $userMessages = $this->getMessages();
+        $messages = $rule->getMessages();
+        $variables = $rule->getVariables();
+        $variables['name'] = $fieldName;
+        foreach ($messages as $key => $message) {
+            if (array_key_exists($key . '|' . $validationPath, $userMessages)) {
+                $messages[$key] = Formatter::format($userMessages[$key . '|' . $validationPath], $variables);
+
+                continue;
+            }
+            if (array_key_exists($key, $userMessages)) {
+                $messages[$key] = Formatter::format($userMessages[$key], $variables);
+
+                continue;
+            }
+
+            $messages[$key] = Formatter::format($message, $variables);
+        }
+
+        return $messages;
+    }
+
+    /**
      * @param string[] $paths
      * @param mixed $values
      */
-    protected function getValue(array $paths, $values, ?string $realPath = null): IValue
+    protected function getValue(array $paths, $values, ?string $realPath = null, ?string $validationPath = null): IValue
     {
         $path = array_shift($paths);
         if (is_null($realPath)) {
             $realPath = '';
         }
+        if (is_null($validationPath)) {
+            $validationPath = '';
+        }
+        $validationPath .= ($validationPath ? ':' : '') . $path;
         if ($path !== '*') {
             $realPath .= ($realPath ? ':' : '') . $path;
         }
@@ -159,6 +195,7 @@ abstract class AChain implements IChain
         if ($path === '*') {
             if (!is_array($values)) {
                 $return->setPath($realPath);
+                $return->setValidationPath($validationPath);
 
                 return $return;
             }
@@ -170,27 +207,31 @@ abstract class AChain implements IChain
                 $result[] = $this->getValue(
                     $paths,
                     $value,
-                    $realPath . ($realPath ? ':' : '') . $index
+                    $realPath . ($realPath ? ':' : '') . $index,
+                    $validationPath
                 );
             }
 
             $return->setValue($result);
             $return->setArrayAttribute(true);
             $return->setPath($realPath);
+            $return->setValidationPath($validationPath);
 
             return $return;
         }
         if (!is_array($values) || !array_key_exists($path, $values)) {
             $return->setPath($realPath);
+            $return->setValidationPath($validationPath);
 
             return $return;
         }
         if (count($paths) > 0) {
-            return $this->getValue($paths, $values[$path], $realPath);
+            return $this->getValue($paths, $values[$path], $realPath, $validationPath);
         }
 
         $return->setValue($values[$path]);
         $return->setPath($realPath);
+        $return->setValidationPath($validationPath);
 
         return $return;
     }

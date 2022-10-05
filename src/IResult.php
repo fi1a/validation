@@ -27,14 +27,12 @@ interface IResult
     /**
      * Добавить ошибки
      *
-     * @param IError[] $errors
+     * @param IError[]|Errors $errors
      */
-    public function addErrors(array $errors): bool;
+    public function addErrors($errors): bool;
 
     /**
      * Возвращает ошибки
-     *
-     * @return IError[]
      */
-    public function getErrors(): array;
+    public function getErrors(): Errors;
 }

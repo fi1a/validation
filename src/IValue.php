@@ -44,6 +44,16 @@ interface IValue
     public function getPath(): ?string;
 
     /**
+     * Устанавливает путь
+     */
+    public function setValidationPath(string $path): bool;
+
+    /**
+     * Возвращает путь
+     */
+    public function getValidationPath(): ?string;
+
+    /**
      * Формирует список значений из дерева
      *
      * @return mixed[][]

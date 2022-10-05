@@ -25,10 +25,18 @@ abstract class ARule implements IRule
     /**
      * Добавить сообщение об ошибке
      */
-    protected function addMessage(string $message): bool
+    protected function addMessage(string $message, string $key): bool
     {
-        $this->messages[] = $message;
+        $this->messages[$key] = $message;
 
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getVariables(): array
+    {
+        return [];
     }
 }

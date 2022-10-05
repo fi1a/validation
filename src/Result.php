@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
-use Fi1a\Collection\Collection;
-
 /**
  * Результат валидации
  */
@@ -17,7 +15,7 @@ class Result implements IResult
     private $success = false;
 
     /**
-     * @var Collection
+     * @var Errors
      */
     private $errors;
 
@@ -26,7 +24,7 @@ class Result implements IResult
      */
     public function __construct()
     {
-        $this->errors = new Collection(IError::class);
+        $this->errors = new Errors(IError::class);
     }
 
     /**
@@ -60,8 +58,11 @@ class Result implements IResult
     /**
      * @inheritDoc
      */
-    public function addErrors(array $errors): bool
+    public function addErrors($errors): bool
     {
+        if ($errors instanceof Errors) {
+            $errors = $errors->getArrayCopy();
+        }
         $this->errors->exchangeArray(array_merge($this->errors->getArrayCopy(), $errors));
 
         return true;
@@ -70,13 +71,8 @@ class Result implements IResult
     /**
      * @inheritDoc
      */
-    public function getErrors(): array
+    public function getErrors(): Errors
     {
-        /**
-         * @var IError[] $errors
-         */
-        $errors = $this->errors->getArrayCopy();
-
-        return $errors;
+        return $this->errors;
     }
 }

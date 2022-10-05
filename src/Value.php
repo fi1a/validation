@@ -22,6 +22,11 @@ class Value implements IValue
     private $path;
 
     /**
+     * @var string|null
+     */
+    private $validationPath;
+
+    /**
      * @inheritDoc
      */
     public function setValue($value): bool
@@ -78,6 +83,24 @@ class Value implements IValue
     /**
      * @inheritDoc
      */
+    public function setValidationPath(string $path): bool
+    {
+        $this->validationPath = $path;
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValidationPath(): ?string
+    {
+        return $this->validationPath;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function flatten(): array
     {
         if ($this->isArrayAttribute()) {
@@ -90,6 +113,6 @@ class Value implements IValue
             return $result;
         }
 
-        return [[$this->getPath(), $this->getValue()]];
+        return [[$this->getPath(), $this->getValidationPath(), $this->getValue()]];
     }
 }
