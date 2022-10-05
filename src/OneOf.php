@@ -7,9 +7,9 @@ namespace Fi1a\Validation;
 use InvalidArgumentException;
 
 /**
- * Все правила должны удовлетворять условию
+ * Одно из правил должно удовлетворять условию
  */
-class AllOf extends AChain
+class OneOf extends AChain
 {
     /**
      * @inheritDoc
@@ -22,17 +22,17 @@ class AllOf extends AChain
         array $messages = []
     ): void {
         if (is_null($result->isSuccess())) {
-            $result->setSuccess(true);
+            $result->setSuccess(false);
         }
         if ($success instanceof IResult) {
-            $result->setSuccess($result->isSuccess() && $success->isSuccess());
+            $result->setSuccess($result->isSuccess() || $success->isSuccess());
             if (!$success->isSuccess()) {
                 $result->addErrors($success->getErrors());
             }
 
             return;
         }
-        $result->setSuccess($result->isSuccess() && $success);
+        $result->setSuccess($result->isSuccess() || $success);
         if (!$success) {
             if (!$ruleName) {
                 throw new InvalidArgumentException('$ruleName argument is required');

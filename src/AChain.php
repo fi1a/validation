@@ -97,7 +97,6 @@ abstract class AChain implements IChain
     public function validate($values, ?string $fieldName = null): IResult
     {
         $result = new Result();
-        $result->setSuccess(true);
 
         foreach ($this->getRules() as $key => $rule) {
             $internalFieldName = is_null($fieldName) ? (string) $key : $fieldName;

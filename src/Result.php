@@ -10,9 +10,9 @@ namespace Fi1a\Validation;
 class Result implements IResult
 {
     /**
-     * @var bool
+     * @var bool|null
      */
-    private $success = false;
+    private $success;
 
     /**
      * @var Errors
@@ -30,7 +30,7 @@ class Result implements IResult
     /**
      * @inheritDoc
      */
-    public function isSuccess(): bool
+    public function isSuccess(): ?bool
     {
         return $this->success;
     }

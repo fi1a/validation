@@ -12,7 +12,7 @@ interface IResult
     /**
      * Результат валидации
      */
-    public function isSuccess(): bool;
+    public function isSuccess(): ?bool;
 
     /**
      * Установить результат валидации
