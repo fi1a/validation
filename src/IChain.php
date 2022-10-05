@@ -11,6 +11,8 @@ use Fi1a\Validation\Rule\IRule;
  */
 interface IChain
 {
+    public const PATH_SEPARATOR = ':';
+
     /**
      * Конструктор
      *

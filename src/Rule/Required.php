@@ -14,7 +14,7 @@ class Required extends ARule
      */
     public function validate($value): bool
     {
-        $success = (bool) $value;
+        $success = !is_null($value) && $value !== '' && $value !== false;
 
         if (!$success) {
             $this->addMessage('Field "{{fieldName}}" is required');

@@ -99,27 +99,35 @@ abstract class AChain implements IChain
         $result->setSuccess(true);
 
         foreach ($this->getRules() as $key => $rule) {
-            if (is_null($fieldName)) {
-                $fieldName = (string) $key;
-            }
+            $internalFieldName = is_null($fieldName) ? (string) $key : $fieldName;
+
             if ($rule instanceof IRule) {
                 if (is_array($values)) {
-                    /**
-                     * @var mixed $value
-                     */
-                    $value = $values[$fieldName] ?? null;
-                } else {
-                    /**
-                     * @var mixed $value
-                     */
-                    $value = $values;
+                    $tree = $this->getValue($this->getKeys($internalFieldName), $values);
+                    foreach ($tree->flatten() as $flat) {
+                        [$path, $value] = $flat;
+                        $success = $rule->validate($value);
+                        $this->setSuccess(
+                            $result,
+                            $success,
+                            $rule->getRuleName(),
+                            (string) $path,
+                            $rule->getMessages()
+                        );
+                    }
+
+                    continue;
                 }
+                /**
+                 * @var mixed $value
+                 */
+                $value = $values;
                 $success = $rule->validate($value);
                 $this->setSuccess(
                     $result,
                     $success,
                     $rule->getRuleName(),
-                    $fieldName,
+                    $internalFieldName,
                     $rule->getMessages()
                 );
 
@@ -127,10 +135,100 @@ abstract class AChain implements IChain
             }
             $this->setSuccess(
                 $result,
-                $rule->validate($values, $fieldName)
+                $rule->validate($values, $internalFieldName)
             );
         }
 
         return $result;
+    }
+
+    /**
+     * @param string[] $paths
+     * @param mixed $values
+     */
+    protected function getValue(array $paths, $values, ?string $realPath = null): IValue
+    {
+        $path = array_shift($paths);
+        if (is_null($realPath)) {
+            $realPath = '';
+        }
+        if ($path !== '*') {
+            $realPath .= ($realPath ? ':' : '') . $path;
+        }
+        $return = new Value();
+        if ($path === '*') {
+            if (!is_array($values)) {
+                $return->setPath($realPath);
+
+                return $return;
+            }
+            $result = [];
+            /**
+             * @psalm-suppress MixedAssignment
+             */
+            foreach ($values as $index => $value) {
+                $result[] = $this->getValue(
+                    $paths,
+                    $value,
+                    $realPath . ($realPath ? ':' : '') . $index
+                );
+            }
+
+            $return->setValue($result);
+            $return->setArrayAttribute(true);
+            $return->setPath($realPath);
+
+            return $return;
+        }
+        if (!is_array($values) || !array_key_exists($path, $values)) {
+            $return->setPath($realPath);
+
+            return $return;
+        }
+        if (count($paths) > 0) {
+            return $this->getValue($paths, $values[$path], $realPath);
+        }
+
+        $return->setValue($values[$path]);
+        $return->setPath($realPath);
+
+        return $return;
+    }
+
+    /**
+     * Возвращает массив ключей
+     *
+     * @param string $path путь
+     *
+     * @return string[]
+     */
+    protected function getKeys(string $path): array
+    {
+        $current = -1;
+        $index = 0;
+        $paths = [];
+        do {
+            $current++;
+            $symbol = mb_substr($path, $current, 1);
+            $prevSymbol = mb_substr($path, $current - 1, 1);
+
+            if ($symbol === (string) static::PATH_SEPARATOR && $prevSymbol !== '\\') {
+                $index++;
+
+                continue;
+            }
+            if (!isset($paths[$index])) {
+                $paths[$index] = '';
+            }
+            if ($symbol === (string) static::PATH_SEPARATOR && $prevSymbol === '\\') {
+                $paths[$index] = mb_substr($paths[$index], 0, -1);
+            }
+            /**
+             * @psalm-suppress PossiblyUndefinedArrayOffset
+             */
+            $paths[$index] .= $symbol;
+        } while ($current < mb_strlen($path));
+
+        return $paths;
     }
 }
