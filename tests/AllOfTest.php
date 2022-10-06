@@ -21,7 +21,7 @@ class AllOfTest extends TestCase
      */
     public function testRules(): void
     {
-        $chain = new AllOf();
+        $chain = AllOf::create();
         $this->assertCount(0, $chain->getRules());
         $chain->setRules([]);
         $this->assertCount(0, $chain->getRules());
@@ -35,7 +35,7 @@ class AllOfTest extends TestCase
     public function testSetRulesException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $chain = new AllOf();
+        $chain = AllOf::create();
         $chain->setRules([$this]);
     }
 
@@ -44,7 +44,7 @@ class AllOfTest extends TestCase
      */
     public function testValidate(): void
     {
-        $chain = new AllOf(new Required(), new Required());
+        $chain = AllOf::create(new Required(), new Required());
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
         $this->assertTrue($chain->validate(['field' => 1], 'field')->isSuccess());
@@ -59,7 +59,7 @@ class AllOfTest extends TestCase
         $messages = [
             'required' => 'test message',
         ];
-        $chain = new AllOf(new Required(), new Required());
+        $chain = AllOf::create(new Required(), new Required());
         $chain->setMessages($messages);
         $this->assertEquals($messages, $chain->getMessages());
     }
@@ -70,7 +70,7 @@ class AllOfTest extends TestCase
     public function testSetSuccessEmptyRuleException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $chain = new AllOf(new EmptyRuleName(), new EmptyRuleName());
+        $chain = AllOf::create(new EmptyRuleName(), new EmptyRuleName());
         $chain->validate(false);
     }
 
@@ -79,13 +79,13 @@ class AllOfTest extends TestCase
      */
     public function testCall(): void
     {
-        $chain = (new AllOf())->required();
+        $chain = AllOf::create()->required();
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
         $this->assertTrue($chain->validate(['field' => 1], 'field')->isSuccess());
         $this->assertFalse($chain->validate(['field' => false], 'field')->isSuccess());
 
-        $chain = (new AllOf());
+        $chain = AllOf::create();
         $chain->oneOf()->required();
         $chain->oneOf()->isNull();
         $this->assertFalse($chain->validate(1)->isSuccess());
@@ -102,7 +102,7 @@ class AllOfTest extends TestCase
             'required' => 'test message',
         ];
 
-        $chain = new AllOf();
+        $chain = AllOf::create();
         $chain->setMessages($messages);
         $chain->oneOf()->required()->isNull();
         $this->assertTrue($chain->validate(true)->isSuccess());

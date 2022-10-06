@@ -61,7 +61,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validation = $validator->make(
             ['field' => 1,],
-            ['field' => new AllOf(new Required(), new Required())],
+            ['field' => AllOf::create(new Required(), new Required())],
             []
         );
         $this->assertInstanceOf(Validation::class, $validation);
@@ -76,7 +76,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validation = $validator->make(
             ['field' => null,],
-            ['field' => new AllOf(new Required(), new Required())],
+            ['field' => AllOf::create(new Required(), new Required())],
             []
         );
         $this->assertInstanceOf(Validation::class, $validation);
@@ -355,7 +355,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                'key1:key2' => (new AllOf())->allOf()->required(),
+                'key1:key2' => AllOf::create()->allOf()->required(),
             ]
         );
         $validation->setMessages([

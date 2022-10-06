@@ -43,4 +43,12 @@ class AllOf extends AChain
             }
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public static function create(...$rules): IChain
+    {
+        return new AllOf(...$rules);
+    }
 }

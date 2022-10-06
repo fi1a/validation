@@ -44,7 +44,7 @@ class Validator implements IValidator
             }
         }
 
-        $chain = (new AllOf())
+        $chain = AllOf::create()
             ->setRules($ruleInstances)
             ->setMessages($messages);
 

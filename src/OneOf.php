@@ -43,4 +43,12 @@ class OneOf extends AChain
             }
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public static function create(...$rules): IChain
+    {
+        return new OneOf(...$rules);
+    }
 }

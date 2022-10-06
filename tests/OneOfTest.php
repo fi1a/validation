@@ -22,7 +22,7 @@ class OneOfTest extends TestCase
      */
     public function testValidate(): void
     {
-        $chain = new OneOf(new Required(), new IsNull());
+        $chain = OneOf::create(new Required(), new IsNull());
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertTrue($chain->validate(null)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
@@ -36,7 +36,7 @@ class OneOfTest extends TestCase
      */
     public function testValidateWithChain(): void
     {
-        $chain = new OneOf(new AllOf(new Required()), new AllOf(new IsNull()));
+        $chain = OneOf::create(AllOf::create(new Required()), AllOf::create(new IsNull()));
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertTrue($chain->validate(null)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
@@ -51,7 +51,7 @@ class OneOfTest extends TestCase
     public function testSetSuccessEmptyRuleException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $chain = new OneOf(new EmptyRuleName(), new EmptyRuleName());
+        $chain = OneOf::create(new EmptyRuleName(), new EmptyRuleName());
         $chain->validate(false);
     }
 
@@ -60,7 +60,7 @@ class OneOfTest extends TestCase
      */
     public function testCall(): void
     {
-        $chain = (new OneOf());
+        $chain = OneOf::create();
         $chain->allOf()->required();
         $chain->allOf()->isNull();
         $this->assertTrue($chain->validate(1)->isSuccess());

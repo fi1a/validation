@@ -38,9 +38,11 @@ abstract class AChain implements IChain
     private $messages = [];
 
     /**
-     * @inheritDoc
+     * Конструктор
+     *
+     * @param IRule|IChain ...$rules
      */
-    public function __construct(...$rules)
+    protected function __construct(...$rules)
     {
         $this->setRules($rules);
     }
@@ -299,7 +301,10 @@ abstract class AChain implements IChain
      */
     public function allOf(): AllOf
     {
-        $chain = new AllOf();
+        /**
+         * @var AllOf $chain
+         */
+        $chain = AllOf::create();
         $this->rules[] = $chain;
         $chain->setMessages($this->getMessages());
 
@@ -311,7 +316,10 @@ abstract class AChain implements IChain
      */
     public function oneOf(): OneOf
     {
-        $chain = new OneOf();
+        /**
+         * @var OneOf $chain
+         */
+        $chain = OneOf::create();
         $this->rules[] = $chain;
         $chain->setMessages($this->getMessages());
 

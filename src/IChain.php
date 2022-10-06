@@ -17,13 +17,6 @@ interface IChain
     public const PATH_SEPARATOR = ':';
 
     /**
-     * Конструктор
-     *
-     * @param IRule|IChain $rules
-     */
-    public function __construct(...$rules);
-
-    /**
      * Метод валидации
      *
      * @param mixed $values
@@ -71,4 +64,11 @@ interface IChain
      * Одно из правил должно удовлетворять условию
      */
     public function oneOf(): OneOf;
+
+    /**
+     * Фабричный метод
+     *
+     * @param IRule|IChain ...$rules
+     */
+    public static function create(...$rules): IChain;
 }
