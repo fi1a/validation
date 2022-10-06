@@ -42,6 +42,11 @@ class Validator implements IValidator
                     continue;
                 }
                 if (is_array($rule)) {
+                    foreach ($rule as $ruleItem) {
+                        if (!($ruleItem instanceof IRule) && !($ruleItem instanceof IChain)) {
+                            throw new InvalidArgumentException('Argument is not a rule');
+                        }
+                    }
                     $ruleInstances[$fieldName] = AllOf::create(...$rule);
 
                     continue;

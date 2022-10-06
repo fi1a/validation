@@ -546,4 +546,19 @@ class ValidatorTest extends TestCase
         $this->assertEquals('required', $result->getErrors()->first()->getRuleName());
         $this->assertEquals('test message key1', $result->getErrors()->first()->getMessage());
     }
+
+    /**
+     * Правила переданы в массиве
+     */
+    public function testArrayRuleException(): void
+    {
+        $validator = new Validator();
+        $this->expectException(\InvalidArgumentException::class);
+        $validator->make(
+            [],
+            [
+                'key1' => [new Required(), 'isNull'],
+            ]
+        );
+    }
 }
