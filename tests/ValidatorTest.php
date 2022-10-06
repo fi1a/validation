@@ -9,6 +9,7 @@ use Fi1a\Validation\AllOf;
 use Fi1a\Validation\Errors;
 use Fi1a\Validation\Exception\RuleNotFound;
 use Fi1a\Validation\IError;
+use Fi1a\Validation\Rule\IsNull;
 use Fi1a\Validation\Rule\Required;
 use Fi1a\Validation\Validation;
 use Fi1a\Validation\Validator;
@@ -521,5 +522,28 @@ class ValidatorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         Validator::hasRule(static::class);
+    }
+
+    /**
+     * Правила переданы в массиве
+     */
+    public function testArrayRule(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            [
+                'key1' => null,
+            ],
+            [
+                'key1' => [new Required(), new IsNull()],
+            ],
+            [
+                'required' => 'test message {{name}}',
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('required', $result->getErrors()->first()->getRuleName());
+        $this->assertEquals('test message key1', $result->getErrors()->first()->getMessage());
     }
 }

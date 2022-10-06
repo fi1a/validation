@@ -35,9 +35,14 @@ class Validator implements IValidator
          */
         $ruleInstances = [];
         if (is_array($rules)) {
-            foreach ($rules as $field => $rule) {
+            foreach ($rules as $fieldName => $rule) {
                 if ($rule instanceof IRule || $rule instanceof IChain) {
-                    $ruleInstances[$field] = $rule;
+                    $ruleInstances[$fieldName] = $rule;
+
+                    continue;
+                }
+                if (is_array($rule)) {
+                    $ruleInstances[$fieldName] = AllOf::create(...$rule);
 
                     continue;
                 }

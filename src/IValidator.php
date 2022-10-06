@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Validation\Rule\IRule;
+
 /**
  * Валидатор
  */
@@ -20,7 +22,7 @@ interface IValidator
      * Создать класс проверки значений
      *
      * @param mixed[]       $values
-     * @param string[]|null $rules
+     * @param string[]|IRule[][]|IRule[]|IChain[]|null $rules
      * @param string[]      $messages
      *
      * @return mixed

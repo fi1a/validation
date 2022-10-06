@@ -8,6 +8,14 @@ use Fi1a\Collection\Collection;
 
 /**
  * Ошибки
+ *
+ * @method IError first()
+ * @method IError last()
+ * @method IError delete($key)
+ * @method IError put($key, $value)
+ * @method IError putIfAbsent($key, $value)
+ * @method IError replace($key, $value)
+ * @method IError[] column(string $name)
  */
 class Errors extends Collection
 {
