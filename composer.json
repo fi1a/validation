@@ -32,7 +32,10 @@
   "autoload": {
     "psr-4": {
       "Fi1a\\Validation\\": "src"
-    }
+    },
+    "files": [
+      "src/configure.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

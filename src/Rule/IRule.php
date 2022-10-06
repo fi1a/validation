@@ -19,7 +19,7 @@ interface IRule
     /**
      * Возвращает название правила
      */
-    public function getRuleName(): string;
+    public static function getRuleName(): string;
 
     /**
      * Возвращает сообщения об ошибках

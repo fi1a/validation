@@ -8,6 +8,9 @@ use Fi1a\Validation\Rule\IRule;
 
 /**
  * Цепочка правил валидатора
+ *
+ * @method IChain required()
+ * @method IChain isNull()
  */
 interface IChain
 {
@@ -16,10 +19,9 @@ interface IChain
     /**
      * Конструктор
      *
-     * @param IRule[]|IChain[] $rules
-     * @param string[] $messages
+     * @param IRule|IChain $rules
      */
-    public function __construct(array $rules = [], array $messages = []);
+    public function __construct(...$rules);
 
     /**
      * Метод валидации
@@ -39,8 +41,10 @@ interface IChain
      * Устанавливает правила
      *
      * @param IRule[]|IChain[] $rules
+     *
+     * @return static
      */
-    public function setRules(array $rules): bool;
+    public function setRules(array $rules): IChain;
 
     /**
      * Возвращает сообщения об ошибках
@@ -53,6 +57,18 @@ interface IChain
      * Устанавливает сообщения об ошибках
      *
      * @param string[] $messages
+     *
+     * @return static
      */
-    public function setMessages(array $messages): bool;
+    public function setMessages(array $messages): IChain;
+
+    /**
+     * Все правила должны удовлетворять условию
+     */
+    public function allOf(): AllOf;
+
+    /**
+     * Одно из правил должно удовлетворять условию
+     */
+    public function oneOf(): OneOf;
 }

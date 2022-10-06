@@ -15,19 +15,19 @@ class Validation implements IValidation
     private $validator;
 
     /**
-     * @var mixed[]
+     * @var mixed
      */
     private $values;
 
     /**
-     * @var
+     * @var IChain
      */
     private $chain;
 
     /**
      * @var string[]
      */
-    private $messages;
+    private $messages = [];
 
     /**
      * @inheritDoc
@@ -35,9 +35,9 @@ class Validation implements IValidation
     public function __construct(IValidator $validator, array $values, IChain $chain, array $messages)
     {
         $this->validator = $validator;
-        $this->values = $values;
+        $this->setValues($values);
         $this->chain = $chain;
-        $this->messages = $messages;
+        $this->setMessages($messages);
     }
 
     /**
@@ -54,5 +54,42 @@ class Validation implements IValidation
     public function validate(): IResult
     {
         return $this->chain->validate($this->values);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setMessages(array $messages): bool
+    {
+        $this->messages = $messages;
+        $this->chain->setMessages($messages);
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMessages(): array
+    {
+        return $this->messages;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValues()
+    {
+        return $this->values;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setValues($values): bool
+    {
+        $this->values = $values;
+
+        return true;
     }
 }

@@ -26,7 +26,7 @@ class Required extends ARule
     /**
      * @inheritDoc
      */
-    public function getRuleName(): string
+    public static function getRuleName(): string
     {
         return 'required';
     }

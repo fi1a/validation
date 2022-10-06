@@ -17,7 +17,7 @@ class IsNull extends ARule
         $success = is_null($value);
 
         if (!$success) {
-            $this->addMessage('Field "{{name}}" not is null', 'is_null');
+            $this->addMessage('Field "{{name}}" not is null', 'isNull');
         }
 
         return $success;
@@ -26,8 +26,8 @@ class IsNull extends ARule
     /**
      * @inheritDoc
      */
-    public function getRuleName(): string
+    public static function getRuleName(): string
     {
-        return 'is_null';
+        return 'isNull';
     }
 }

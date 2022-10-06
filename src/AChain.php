@@ -40,10 +40,9 @@ abstract class AChain implements IChain
     /**
      * @inheritDoc
      */
-    public function __construct(array $rules = [], array $messages = [])
+    public function __construct(...$rules)
     {
         $this->setRules($rules);
-        $this->setMessages($messages);
     }
 
     /**
@@ -57,7 +56,7 @@ abstract class AChain implements IChain
     /**
      * @inheritDoc
      */
-    public function setRules(array $rules): bool
+    public function setRules(array $rules): IChain
     {
         foreach ($rules as $rule) {
             if (!($rule instanceof IRule) && !($rule instanceof IChain)) {
@@ -67,7 +66,7 @@ abstract class AChain implements IChain
 
         $this->rules = $rules;
 
-        return true;
+        return $this;
     }
 
     /**
@@ -81,14 +80,20 @@ abstract class AChain implements IChain
     /**
      * @inheritDoc
      */
-    public function setMessages(array $messages): bool
+    public function setMessages(array $messages): IChain
     {
         $this->messages = [];
         foreach ($messages as $fieldName => $message) {
             $this->messages[$fieldName] = $message;
         }
+        foreach ($this->rules as $chain) {
+            if (!($chain instanceof IChain)) {
+                continue;
+            }
+            $chain->setMessages($messages);
+        }
 
-        return true;
+        return $this;
     }
 
     /**
@@ -111,7 +116,7 @@ abstract class AChain implements IChain
                         $this->setSuccess(
                             $result,
                             $success,
-                            $rule->getRuleName(),
+                            $rule::getRuleName(),
                             (string) $path,
                             $messages
                         );
@@ -128,7 +133,7 @@ abstract class AChain implements IChain
                 $this->setSuccess(
                     $result,
                     $success,
-                    $rule->getRuleName(),
+                    $rule::getRuleName(),
                     $internalFieldName,
                     $messages
                 );
@@ -270,5 +275,46 @@ abstract class AChain implements IChain
         } while ($current < mb_strlen($path));
 
         return $paths;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __call(string $name, array $arguments)
+    {
+        $class = Validator::getRuleClassByName($name);
+        /**
+         * @psalm-suppress InvalidStringClass
+         * @psalm-suppress UndefinedClass
+         * @var IRule $rule
+         */
+        $rule = new $class(...$arguments);
+        $this->rules[] = $rule;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function allOf(): AllOf
+    {
+        $chain = new AllOf();
+        $this->rules[] = $chain;
+        $chain->setMessages($this->getMessages());
+
+        return $chain;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function oneOf(): OneOf
+    {
+        $chain = new OneOf();
+        $this->rules[] = $chain;
+        $chain->setMessages($this->getMessages());
+
+        return $chain;
     }
 }

@@ -6,6 +6,7 @@ namespace Fi1a\Unit\Validation;
 
 use Fi1a\Unit\Validation\Fixtures\EmptyRuleName;
 use Fi1a\Validation\AllOf;
+use Fi1a\Validation\IError;
 use Fi1a\Validation\Rule\Required;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +44,7 @@ class AllOfTest extends TestCase
      */
     public function testValidate(): void
     {
-        $chain = new AllOf([new Required(), new Required()]);
+        $chain = new AllOf(new Required(), new Required());
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
         $this->assertTrue($chain->validate(['field' => 1], 'field')->isSuccess());
@@ -56,10 +57,10 @@ class AllOfTest extends TestCase
     public function testMessages(): void
     {
         $messages = [
-            'field' => 'message',
+            'required' => 'test message',
         ];
-        $chain = new AllOf([new Required(), new Required()]);
-        $this->assertTrue($chain->setMessages($messages));
+        $chain = new AllOf(new Required(), new Required());
+        $chain->setMessages($messages);
         $this->assertEquals($messages, $chain->getMessages());
     }
 
@@ -69,7 +70,48 @@ class AllOfTest extends TestCase
     public function testSetSuccessEmptyRuleException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $chain = new AllOf([new EmptyRuleName(), new EmptyRuleName()]);
+        $chain = new AllOf(new EmptyRuleName(), new EmptyRuleName());
         $chain->validate(false);
+    }
+
+    /**
+     * Тестирование __call и __callStatic для добавления правил валидации
+     */
+    public function testCall(): void
+    {
+        $chain = (new AllOf())->required();
+        $this->assertTrue($chain->validate(1)->isSuccess());
+        $this->assertFalse($chain->validate(false)->isSuccess());
+        $this->assertTrue($chain->validate(['field' => 1], 'field')->isSuccess());
+        $this->assertFalse($chain->validate(['field' => false], 'field')->isSuccess());
+
+        $chain = (new AllOf());
+        $chain->oneOf()->required();
+        $chain->oneOf()->isNull();
+        $this->assertFalse($chain->validate(1)->isSuccess());
+        $this->assertFalse($chain->validate(false)->isSuccess());
+        $this->assertFalse($chain->validate(null)->isSuccess());
+    }
+
+    /**
+     * Сообщения об ошибках
+     */
+    public function testMessagesDeep(): void
+    {
+        $messages = [
+            'required' => 'test message',
+        ];
+
+        $chain = new AllOf();
+        $chain->setMessages($messages);
+        $chain->oneOf()->required()->isNull();
+        $this->assertTrue($chain->validate(true)->isSuccess());
+        $result = $chain->validate(false);
+        $this->assertFalse($result->isSuccess());
+        /**
+         * @var IError $error
+         */
+        $error = $result->getErrors()->first();
+        $this->assertEquals('test message', $error->getMessage());
     }
 }

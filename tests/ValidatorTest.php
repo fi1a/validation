@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Validation;
 
+use Fi1a\Unit\Validation\Fixtures\FixtureRule;
 use Fi1a\Validation\AllOf;
 use Fi1a\Validation\Errors;
+use Fi1a\Validation\Exception\RuleNotFound;
 use Fi1a\Validation\IError;
 use Fi1a\Validation\Rule\Required;
 use Fi1a\Validation\Validation;
 use Fi1a\Validation\Validator;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -58,7 +61,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validation = $validator->make(
             ['field' => 1,],
-            ['field' => new AllOf([new Required(), new Required(),])],
+            ['field' => new AllOf(new Required(), new Required())],
             []
         );
         $this->assertInstanceOf(Validation::class, $validation);
@@ -73,7 +76,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validation = $validator->make(
             ['field' => null,],
-            ['field' => new AllOf([new Required(), new Required(),])],
+            ['field' => new AllOf(new Required(), new Required())],
             []
         );
         $this->assertInstanceOf(Validation::class, $validation);
@@ -341,6 +344,40 @@ class ValidatorTest extends TestCase
     /**
      * Валидация
      */
+    public function testValidateCheckMessagesDeep(): void
+    {
+        $validator = new Validator();
+
+        $validation = $validator->make(
+            [
+                'key1' => [
+                    'key2' => null,
+                ],
+            ],
+            [
+                'key1:key2' => (new AllOf())->allOf()->required(),
+            ]
+        );
+        $validation->setMessages([
+            'required' => 'Test message for field "{{name}}"',
+        ]);
+
+        $result = $validation->validate();
+        $this->assertInstanceOf(Validation::class, $validation);
+        $this->assertFalse($result->isSuccess());
+        $this->assertInstanceOf(Errors::class, $result->getErrors());
+        $this->assertCount(1, $result->getErrors());
+        $error = $result->getErrors()[0];
+        $this->assertInstanceOf(IError::class, $error);
+        $this->assertEquals('Test message for field "key1:key2"', $error->getMessage());
+        $this->assertEquals('required', $error->getRuleName());
+        $this->assertEquals('key1:key2', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
+    }
+
+    /**
+     * Валидация
+     */
     public function testValidateKeyCheckMessages(): void
     {
         $validator = new Validator();
@@ -406,29 +443,35 @@ class ValidatorTest extends TestCase
         $this->assertEquals('required', $error->getMessageKey());
 
         $validation = $validator->make(
-            [
-                'array1' => [
-                    [
-                        'id' => 'id1',
-                        'name' => 'name1',
-                    ],
-                    [
-                        'id' => 'id2',
-                    ],
-                    [
-                        'name' => 'name3',
-                    ],
-                ],
-            ],
+            [],
             [
                 'array1:*:id' => new Required(),
                 'array1:*:name' => new Required(),
-            ],
-            [
-                'required|array1:*:id' => 'Test message "{{name}}"',
-                'required' => 'All "{{name}}"',
             ]
         );
+        $values = [
+            'array1' => [
+                [
+                    'id' => 'id1',
+                    'name' => 'name1',
+                ],
+                [
+                    'id' => 'id2',
+                ],
+                [
+                    'name' => 'name3',
+                ],
+            ],
+        ];
+        $validation->setValues($values);
+        $this->assertEquals($values, $validation->getValues());
+        $validation->setMessages(array_merge([
+            'required' => 'All "{{name}}"',
+        ], $validation->getMessages()));
+        $validation->setMessages(array_merge([
+            'required|array1:*:id' => 'Test message "{{name}}"',
+        ], $validation->getMessages()));
+
         $result = $validation->validate();
         $this->assertInstanceOf(Validation::class, $validation);
         $this->assertFalse($result->isSuccess());
@@ -446,5 +489,37 @@ class ValidatorTest extends TestCase
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('array1:1:name', $error->getFieldName());
         $this->assertEquals('required', $error->getMessageKey());
+    }
+
+    /**
+     * Методы добавления правил
+     */
+    public function testRuleMethods(): void
+    {
+        $this->assertFalse(Validator::hasRule(FixtureRule::class));
+        $this->assertTrue(Validator::addRule(FixtureRule::class));
+        $this->assertFalse(Validator::addRule(FixtureRule::class));
+        $this->assertTrue(Validator::hasRule(FixtureRule::class));
+        $this->assertIsString(Validator::getRuleClassByName(FixtureRule::getRuleName()));
+        $this->expectException(RuleNotFound::class);
+        Validator::getRuleClassByName('not_found');
+    }
+
+    /**
+     * Методы добавления правил
+     */
+    public function testAddRuleException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Validator::addRule(static::class);
+    }
+
+    /**
+     * Методы добавления правил
+     */
+    public function testHasRuleException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Validator::hasRule(static::class);
     }
 }

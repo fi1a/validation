@@ -7,9 +7,9 @@ namespace Fi1a\Unit\Validation\Fixtures;
 use Fi1a\Validation\Rule\ARule;
 
 /**
- * Пустое название правила валидации
+ * Тестирование методов добавления правил
  */
-class EmptyRuleName extends ARule
+class FixtureRule extends ARule
 {
     /**
      * @inheritDoc
@@ -26,6 +26,6 @@ class EmptyRuleName extends ARule
      */
     public static function getRuleName(): string
     {
-        return '';
+        return 'fixtureRule';
     }
 }

@@ -22,7 +22,7 @@ class OneOfTest extends TestCase
      */
     public function testValidate(): void
     {
-        $chain = new OneOf([new Required(), new IsNull()]);
+        $chain = new OneOf(new Required(), new IsNull());
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertTrue($chain->validate(null)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
@@ -36,7 +36,7 @@ class OneOfTest extends TestCase
      */
     public function testValidateWithChain(): void
     {
-        $chain = new OneOf([new AllOf([new Required()]), new AllOf([new IsNull()])]);
+        $chain = new OneOf(new AllOf(new Required()), new AllOf(new IsNull()));
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertTrue($chain->validate(null)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
@@ -51,7 +51,23 @@ class OneOfTest extends TestCase
     public function testSetSuccessEmptyRuleException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $chain = new OneOf([new EmptyRuleName(), new EmptyRuleName()]);
+        $chain = new OneOf(new EmptyRuleName(), new EmptyRuleName());
         $chain->validate(false);
+    }
+
+    /**
+     * Тестирование __call и __callStatic для добавления правил валидации
+     */
+    public function testCall(): void
+    {
+        $chain = (new OneOf());
+        $chain->allOf()->required();
+        $chain->allOf()->isNull();
+        $this->assertTrue($chain->validate(1)->isSuccess());
+        $this->assertTrue($chain->validate(null)->isSuccess());
+        $this->assertFalse($chain->validate(false)->isSuccess());
+        $this->assertTrue($chain->validate(['field' => 1], 'field')->isSuccess());
+        $this->assertTrue($chain->validate(['field' => null], 'field')->isSuccess());
+        $this->assertFalse($chain->validate(['field' => false], 'field')->isSuccess());
     }
 }
