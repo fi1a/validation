@@ -30,14 +30,25 @@ class Validation implements IValidation
     private $messages = [];
 
     /**
+     * @var string[]
+     */
+    private $titles = [];
+
+    /**
      * @inheritDoc
      */
-    public function __construct(IValidator $validator, array $values, IChain $chain, array $messages)
-    {
+    public function __construct(
+        IValidator $validator,
+        array $values,
+        IChain $chain,
+        array $messages,
+        array $titles
+    ) {
         $this->validator = $validator;
         $this->setValues($values);
         $this->chain = $chain;
         $this->setMessages($messages);
+        $this->setTitles($titles);
     }
 
     /**
@@ -91,5 +102,36 @@ class Validation implements IValidation
         $this->values = $values;
 
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTitle(string $fieldName, string $title): bool
+    {
+        $titles = $this->getTitles();
+        $titles[$fieldName] = $title;
+        $this->setTitles($titles);
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTitles(array $titles): bool
+    {
+        $this->titles = $titles;
+        $this->chain->setTitles($titles);
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTitles(): array
+    {
+        return $this->titles;
     }
 }

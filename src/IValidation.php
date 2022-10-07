@@ -14,8 +14,15 @@ interface IValidation
      *
      * @param mixed[] $values
      * @param string[] $messages
+     * @param string[] $titles
      */
-    public function __construct(IValidator $validator, array $values, IChain $chain, array $messages);
+    public function __construct(
+        IValidator $validator,
+        array $values,
+        IChain $chain,
+        array $messages,
+        array $titles
+    );
 
     /**
      * Возвращает экземпляр класса валидатора
@@ -54,4 +61,23 @@ interface IValidation
      * @param mixed $values
      */
     public function setValues($values): bool;
+
+    /**
+     * Установить заголовок поля
+     */
+    public function setTitle(string $fieldName, string $title): bool;
+
+    /**
+     * Установить заголовки полей
+     *
+     * @param string[] $titles
+     */
+    public function setTitles(array $titles): bool;
+
+    /**
+     * Возвращает заголовки полей
+     *
+     * @return string[]
+     */
+    public function getTitles(): array;
 }

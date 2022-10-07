@@ -29,8 +29,12 @@ class Validator implements IValidator
     /**
      * @inheritDoc
      */
-    public function make($values, ?array $rules = null, array $messages = []): IValidation
-    {
+    public function make(
+        $values,
+        ?array $rules = null,
+        array $messages = [],
+        array $titles = []
+    ): IValidation {
         /**
          * @var IRule[]|IChain[] $ruleInstances
          */
@@ -80,9 +84,10 @@ class Validator implements IValidator
 
         $chain = AllOf::create()
             ->setRules($ruleInstances)
-            ->setMessages($messages);
+            ->setMessages($messages)
+            ->setTitles($titles);
 
-        return new Validation($this, $values, $chain, $messages);
+        return new Validation($this, $values, $chain, $messages, $titles);
     }
 
     /**

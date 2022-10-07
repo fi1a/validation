@@ -21,13 +21,17 @@ interface IValidator
     /**
      * Создать класс проверки значений
      *
-     * @param mixed[]       $values
+     * @param mixed[] $values
      * @param string[]|IRule[][]|IRule[]|IChain[]|null $rules
-     * @param string[]      $messages
-     *
-     * @return mixed
+     * @param string[] $messages
+     * @param string[] $titles
      */
-    public function make(array $values, ?array $rules = null, array $messages = []): IValidation;
+    public function make(
+        array $values,
+        ?array $rules = null,
+        array $messages = [],
+        array $titles = []
+    ): IValidation;
 
     /**
      * Добавить правило валидации

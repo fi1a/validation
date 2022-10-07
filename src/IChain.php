@@ -56,6 +56,20 @@ interface IChain
     public function setMessages(array $messages): IChain;
 
     /**
+     * Установить заголовки полей
+     *
+     * @param string[] $titles
+     */
+    public function setTitles(array $titles): IChain;
+
+    /**
+     * Возвращает заголовки полей
+     *
+     * @return string[]
+     */
+    public function getTitles(): array;
+
+    /**
      * Все правила должны удовлетворять условию
      */
     public function allOf(): AllOf;

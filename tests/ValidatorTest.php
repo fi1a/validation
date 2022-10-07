@@ -702,4 +702,48 @@ class ValidatorTest extends TestCase
             ]
         );
     }
+
+    /**
+     * Правила заданы строкой
+     */
+    public function testTitles(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            [
+                'key1' => null,
+            ],
+            [
+                'key1' => 'required|isNull()',
+            ],
+            [
+                'required' => 'test message {{name}}',
+            ],
+            [
+                'key1' => 'Field title',
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('required', $result->getErrors()->first()->getRuleName());
+        $this->assertEquals('test message Field title', $result->getErrors()->first()->getMessage());
+
+        $validator = new Validator();
+        $validation = $validator->make(
+            [
+                'key1' => null,
+            ],
+            [
+                'key1' => 'required|isNull()',
+            ],
+            [
+                'required' => 'test message {{name}}',
+            ]
+        );
+        $validation->setTitle('key1', 'Field title');
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('required', $result->getErrors()->first()->getRuleName());
+        $this->assertEquals('test message Field title', $result->getErrors()->first()->getMessage());
+    }
 }

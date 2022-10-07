@@ -38,6 +38,11 @@ abstract class AChain implements IChain
     private $messages = [];
 
     /**
+     * @var string[]
+     */
+    private $titles = [];
+
+    /**
      * Конструктор
      *
      * @param IRule|IChain ...$rules
@@ -99,6 +104,33 @@ abstract class AChain implements IChain
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTitles(array $titles): IChain
+    {
+        $this->titles = [];
+        foreach ($titles as $fieldName => $title) {
+            $this->titles[$fieldName] = $title;
+        }
+        foreach ($this->rules as $chain) {
+            if (!($chain instanceof IChain)) {
+                continue;
+            }
+            $chain->setTitles($titles);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTitles(): array
+    {
+        return $this->titles;
     }
 
     /**
@@ -169,8 +201,14 @@ abstract class AChain implements IChain
     {
         $userMessages = $this->getMessages();
         $messages = $rule->getMessages();
-        $variables = $rule->getVariables();
-        $variables['name'] = $fieldName;
+        $titles = $this->getTitles();
+        $fieldTitle = $fieldName;
+        if (array_key_exists($fieldName, $titles)) {
+            $fieldTitle = $titles[$fieldName];
+        }
+        $variables = array_merge([
+            'name' => $fieldTitle,
+        ], $rule->getVariables());
         foreach ($messages as $key => $message) {
             if (array_key_exists($key . '|' . $validationPath, $userMessages)) {
                 $messages[$key] = Formatter::format($userMessages[$key . '|' . $validationPath], $variables);
