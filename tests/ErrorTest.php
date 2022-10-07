@@ -22,5 +22,6 @@ class ErrorTest extends TestCase
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('messageKey', $error->getMessageKey());
         $this->assertEquals('message', $error->getMessage());
+        $this->assertEquals('message', (string) $error);
     }
 }

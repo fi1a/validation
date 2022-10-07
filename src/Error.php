@@ -75,4 +75,12 @@ class Error implements IError
     {
         return $this->messageKey;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function __toString()
+    {
+        return (string) $this->getMessage();
+    }
 }
