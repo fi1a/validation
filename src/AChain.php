@@ -207,9 +207,9 @@ abstract class AChain implements IChain
             'value' => $value->getValue(),
         ], $rule->getVariables());
         foreach ($messages as $key => $message) {
-            if (array_key_exists($key . '|' . (string) $value->getWildcardPath(), $userMessages)) {
+            if (array_key_exists((string) $value->getWildcardPath() . '|' . $key, $userMessages)) {
                 $messages[$key] = Formatter::format(
-                    $userMessages[$key . '|' . (string) $value->getWildcardPath()],
+                    $userMessages[(string) $value->getWildcardPath() . '|' . $key],
                     $variables
                 );
 

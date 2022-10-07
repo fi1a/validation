@@ -321,7 +321,7 @@ class ValidatorTest extends TestCase
                 'key1:key3' => new Required(),
             ],
             [
-                'required|key1:key2' => 'Only for this field "{{name}}"',
+                'key1:key2|required' => 'Only for this field "{{name}}"',
             ]
         );
         $result = $validation->validate();
@@ -471,7 +471,7 @@ class ValidatorTest extends TestCase
             'required' => 'All "{{name}}"',
         ], $validation->getMessages()));
         $validation->setMessages(array_merge([
-            'required|array1:*:id' => 'Test message "{{name}}"',
+            'array1:*:id|required' => 'Test message "{{name}}"',
         ], $validation->getMessages()));
 
         $result = $validation->validate();
