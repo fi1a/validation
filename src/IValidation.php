@@ -12,13 +12,13 @@ interface IValidation
     /**
      * Конструктор
      *
-     * @param mixed[] $values
+     * @param mixed $values
      * @param string[] $messages
      * @param string[] $titles
      */
     public function __construct(
         IValidator $validator,
-        array $values,
+        $values,
         IChain $chain,
         array $messages,
         array $titles

@@ -21,13 +21,13 @@ interface IValidator
     /**
      * Создать класс проверки значений
      *
-     * @param mixed[] $values
+     * @param mixed $values
      * @param string[]|IRule[][]|IRule[]|IChain[]|null $rules
      * @param string[] $messages
      * @param string[] $titles
      */
     public function make(
-        array $values,
+        $values,
         ?array $rules = null,
         array $messages = [],
         array $titles = []

@@ -39,6 +39,21 @@ class Validator implements IValidator
          * @var IRule[]|IChain[] $ruleInstances
          */
         $ruleInstances = [];
+
+        if ($values instanceof IRuleSet) {
+            $values->init();
+            if (!is_array($rules)) {
+                $rules = [];
+            }
+            $rules = array_merge($rules, $values->getRules());
+            $messages = array_merge($messages, $values->getMessages());
+            $titles = array_merge($titles, $values->getTitles());
+            /**
+             * @var mixed $values
+             */
+            $values = $values->getValues();
+        }
+
         if (is_array($rules)) {
             foreach ($rules as $fieldName => $rule) {
                 if ($rule instanceof IRule || $rule instanceof IChain) {

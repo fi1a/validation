@@ -39,7 +39,7 @@ class Validation implements IValidation
      */
     public function __construct(
         IValidator $validator,
-        array $values,
+        $values,
         IChain $chain,
         array $messages,
         array $titles
