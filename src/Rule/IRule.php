@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\IValue;
+
 /**
  * Правило валидации
  */
@@ -11,10 +13,8 @@ interface IRule
 {
     /**
      * Метод валидации
-     *
-     * @param mixed $value
      */
-    public function validate($value): bool;
+    public function validate(IValue $value): bool;
 
     /**
      * Возвращает название правила

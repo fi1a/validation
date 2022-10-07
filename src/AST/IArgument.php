@@ -12,14 +12,14 @@ interface IArgument
     /**
      * Конструктор
      *
-     * @param bool|int|float|string|null $value
+     * @param scalar|null $value
      */
     public function __construct($value);
 
     /**
      * Возвращает значение
      *
-     * @return bool|int|string|null
+     * @return scalar|null
      */
     public function getValue();
 }

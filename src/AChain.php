@@ -114,25 +114,31 @@ abstract class AChain implements IChain
             if ($rule instanceof IRule) {
                 if (is_array($values)) {
                     $tree = $this->getValue($this->getKeys($internalFieldName), $values);
-                    foreach ($tree->flatten() as $flat) {
-                        [$path, $validationPath, $value] = $flat;
+                    foreach ($this->flatten($tree) as $value) {
                         $success = $rule->validate($value);
-                        $messages = $this->formatMessages($rule, (string) $path, (string) $validationPath);
+                        $messages = $this->formatMessages(
+                            $rule,
+                            (string) $value->getPath(),
+                            (string) $value->getWildcardPath()
+                        );
                         $this->setSuccess(
                             $result,
                             $success,
                             $rule::getRuleName(),
-                            (string) $path,
+                            (string) $value->getPath(),
                             $messages
                         );
                     }
 
                     continue;
                 }
-                /**
-                 * @var mixed $value
-                 */
-                $value = $values;
+
+                $value = new Value();
+                $value->setValue($values);
+                $value->setPath($internalFieldName);
+                $value->setWildcardPath($internalFieldName);
+                $value->setPresence(true);
+
                 $success = $rule->validate($value);
                 $messages = $this->formatMessages($rule, $internalFieldName, $internalFieldName);
                 $this->setSuccess(
@@ -159,7 +165,7 @@ abstract class AChain implements IChain
      *
      * @return string[]
      */
-    protected function formatMessages(IRule $rule, string $fieldName, string $validationPath): array
+    private function formatMessages(IRule $rule, string $fieldName, string $validationPath): array
     {
         $userMessages = $this->getMessages();
         $messages = $rule->getMessages();
@@ -187,7 +193,7 @@ abstract class AChain implements IChain
      * @param string[] $paths
      * @param mixed $values
      */
-    protected function getValue(array $paths, $values, ?string $realPath = null, ?string $validationPath = null): IValue
+    private function getValue(array $paths, $values, ?string $realPath = null, ?string $validationPath = null): IValue
     {
         $path = array_shift($paths);
         if (is_null($realPath)) {
@@ -204,7 +210,8 @@ abstract class AChain implements IChain
         if ($path === '*') {
             if (!is_array($values)) {
                 $return->setPath($realPath);
-                $return->setValidationPath($validationPath);
+                $return->setWildcardPath($validationPath);
+                $return->setPresence(false);
 
                 return $return;
             }
@@ -222,15 +229,17 @@ abstract class AChain implements IChain
             }
 
             $return->setValue($result);
-            $return->setArrayAttribute(true);
+            $return->setWildcard(true);
             $return->setPath($realPath);
-            $return->setValidationPath($validationPath);
+            $return->setWildcardPath($validationPath);
+            $return->setPresence(true);
 
             return $return;
         }
         if (!is_array($values) || !array_key_exists($path, $values)) {
             $return->setPath($realPath);
-            $return->setValidationPath($validationPath);
+            $return->setWildcardPath($validationPath);
+            $return->setPresence(false);
 
             return $return;
         }
@@ -240,7 +249,8 @@ abstract class AChain implements IChain
 
         $return->setValue($values[$path]);
         $return->setPath($realPath);
-        $return->setValidationPath($validationPath);
+        $return->setWildcardPath($validationPath);
+        $return->setPresence(true);
 
         return $return;
     }
@@ -252,7 +262,7 @@ abstract class AChain implements IChain
      *
      * @return string[]
      */
-    protected function getKeys(string $path): array
+    private function getKeys(string $path): array
     {
         $current = -1;
         $index = 0;
@@ -280,6 +290,26 @@ abstract class AChain implements IChain
         } while ($current < mb_strlen($path));
 
         return $paths;
+    }
+
+    /**
+     * Возвращает плоский список значений
+     *
+     * @return IValue[]
+     */
+    private function flatten(IValue $value): array
+    {
+        if ($value->isWildcard()) {
+            $result = [];
+            foreach ($value->getValue() as $item) {
+                assert($item instanceof IValue);
+                $result = array_merge($result, $this->flatten($item));
+            }
+
+            return $result;
+        }
+
+        return [$value];
     }
 
     /**

@@ -31,7 +31,7 @@ interface IRule
     /**
      * Возвращает значения аргументов правила
      *
-     * @return string[]|int[]|null[]|bool[]
+     * @return null[]|scalar[]
      */
     public function getArgumentsValues(): array;
 }

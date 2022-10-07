@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+/**
+ * Значение
+ */
 class Value implements IValue
 {
     /**
@@ -14,7 +17,7 @@ class Value implements IValue
     /**
      * @var bool
      */
-    private $arrayAttribute = false;
+    private $wildcard = false;
 
     /**
      * @var string|null
@@ -25,6 +28,11 @@ class Value implements IValue
      * @var string|null
      */
     private $validationPath;
+
+    /**
+     * @var bool
+     */
+    private $presence = false;
 
     /**
      * @inheritDoc
@@ -47,17 +55,17 @@ class Value implements IValue
     /**
      * @inheritDoc
      */
-    public function isArrayAttribute(): bool
+    public function isWildcard(): bool
     {
-        return $this->arrayAttribute;
+        return $this->wildcard;
     }
 
     /**
      * @inheritDoc
      */
-    public function setArrayAttribute(bool $arrayAttribute): bool
+    public function setWildcard(bool $wildcard): bool
     {
-        $this->arrayAttribute = $arrayAttribute;
+        $this->wildcard = $wildcard;
 
         return true;
     }
@@ -83,7 +91,7 @@ class Value implements IValue
     /**
      * @inheritDoc
      */
-    public function setValidationPath(string $path): bool
+    public function setWildcardPath(string $path): bool
     {
         $this->validationPath = $path;
 
@@ -93,7 +101,7 @@ class Value implements IValue
     /**
      * @inheritDoc
      */
-    public function getValidationPath(): ?string
+    public function getWildcardPath(): ?string
     {
         return $this->validationPath;
     }
@@ -101,18 +109,18 @@ class Value implements IValue
     /**
      * @inheritDoc
      */
-    public function flatten(): array
+    public function setPresence(bool $presence): bool
     {
-        if ($this->isArrayAttribute()) {
-            $result = [];
-            foreach ($this->getValue() as $value) {
-                assert($value instanceof IValue);
-                $result = array_merge($result, $value->flatten());
-            }
+        $this->presence = $presence;
 
-            return $result;
-        }
+        return true;
+    }
 
-        return [[$this->getPath(), $this->getValidationPath(), $this->getValue()]];
+    /**
+     * @inheritDoc
+     */
+    public function isPresence(): bool
+    {
+        return $this->presence;
     }
 }

@@ -10,7 +10,7 @@ namespace Fi1a\Validation\AST;
 class Argument implements IArgument
 {
     /**
-     * @var int|string|bool|null
+     * @var scalar|null
      */
     private $value;
 

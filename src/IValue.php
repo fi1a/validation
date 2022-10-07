@@ -26,12 +26,12 @@ interface IValue
     /**
      * Значение является массивом
      */
-    public function isArrayAttribute(): bool;
+    public function isWildcard(): bool;
 
     /**
      * Установить флаг определяющий является значение массивом или нет
      */
-    public function setArrayAttribute(bool $arrayAttribute): bool;
+    public function setWildcard(bool $wildcard): bool;
 
     /**
      * Устанавливает путь
@@ -46,17 +46,20 @@ interface IValue
     /**
      * Устанавливает путь
      */
-    public function setValidationPath(string $path): bool;
+    public function setWildcardPath(string $path): bool;
 
     /**
      * Возвращает путь
      */
-    public function getValidationPath(): ?string;
+    public function getWildcardPath(): ?string;
 
     /**
-     * Формирует список значений из дерева
-     *
-     * @return mixed[][]
+     * Наличие значения
      */
-    public function flatten(): array;
+    public function setPresence(bool $presence): bool;
+
+    /**
+     * Возвращает наличие значения
+     */
+    public function isPresence(): bool;
 }
