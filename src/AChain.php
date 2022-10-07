@@ -148,11 +148,7 @@ abstract class AChain implements IChain
                     $tree = $this->getValue($this->getKeys($internalFieldName), $values);
                     foreach ($this->flatten($tree) as $value) {
                         $success = $rule->validate($value);
-                        $messages = $this->formatMessages(
-                            $rule,
-                            (string) $value->getPath(),
-                            (string) $value->getWildcardPath()
-                        );
+                        $messages = $this->formatMessages($rule, $value);
                         $this->setSuccess(
                             $result,
                             $success,
@@ -172,7 +168,7 @@ abstract class AChain implements IChain
                 $value->setPresence(true);
 
                 $success = $rule->validate($value);
-                $messages = $this->formatMessages($rule, $internalFieldName, $internalFieldName);
+                $messages = $this->formatMessages($rule, $value);
                 $this->setSuccess(
                     $result,
                     $success,
@@ -197,21 +193,25 @@ abstract class AChain implements IChain
      *
      * @return string[]
      */
-    private function formatMessages(IRule $rule, string $fieldName, string $validationPath): array
+    private function formatMessages(IRule $rule, IValue $value): array
     {
         $userMessages = $this->getMessages();
         $messages = $rule->getMessages();
         $titles = $this->getTitles();
-        $fieldTitle = $fieldName;
-        if (array_key_exists($fieldName, $titles)) {
-            $fieldTitle = $titles[$fieldName];
+        $fieldTitle = (string) $value->getPath();
+        if (array_key_exists((string) $value->getPath(), $titles)) {
+            $fieldTitle = $titles[(string) $value->getPath()];
         }
         $variables = array_merge([
             'name' => $fieldTitle,
+            'value' => $value->getValue(),
         ], $rule->getVariables());
         foreach ($messages as $key => $message) {
-            if (array_key_exists($key . '|' . $validationPath, $userMessages)) {
-                $messages[$key] = Formatter::format($userMessages[$key . '|' . $validationPath], $variables);
+            if (array_key_exists($key . '|' . (string) $value->getWildcardPath(), $userMessages)) {
+                $messages[$key] = Formatter::format(
+                    $userMessages[$key . '|' . (string) $value->getWildcardPath()],
+                    $variables
+                );
 
                 continue;
             }

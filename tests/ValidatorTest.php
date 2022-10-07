@@ -746,4 +746,30 @@ class ValidatorTest extends TestCase
         $this->assertEquals('required', $result->getErrors()->first()->getRuleName());
         $this->assertEquals('test message Field title', $result->getErrors()->first()->getMessage());
     }
+
+    /**
+     * Вывод в сообщении об ошибке значения поля
+     */
+    public function testFormatMessageWithValue(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            [
+                'key1' => null,
+            ],
+            [
+                'key1' => 'required|isNull()',
+            ],
+            [
+                'required' => 'test message {{name}} {{value}}',
+            ],
+            [
+                'key1' => 'Field title',
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('required', $result->getErrors()->first()->getRuleName());
+        $this->assertEquals('test message Field title null', $result->getErrors()->first()->getMessage());
+    }
 }
