@@ -11,12 +11,31 @@ use Fi1a\Validation\Rule\ARule;
  */
 class FixtureRule extends ARule
 {
+    private $variables = [];
+
+    /**
+     * Конструктор
+     *
+     * @param null    $null
+     */
+    public function __construct(bool $bool1, bool $bool2, $null, int $int, float $float, string $string)
+    {
+        $this->variables = [
+            'bool1' => $bool1,
+            'bool2' => $bool2,
+            'null' => $null,
+            'float' => $float,
+            'int' => $int,
+            'string' => $string,
+        ];
+    }
+
     /**
      * @inheritDoc
      */
     public function validate($value): bool
     {
-        $this->messages[] = 'Error';
+        $this->addMessage('Error', 'fixtureRule');
 
         return false;
     }
@@ -27,5 +46,13 @@ class FixtureRule extends ARule
     public static function getRuleName(): string
     {
         return 'fixtureRule';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getVariables(): array
+    {
+        return array_merge(parent::getVariables(), $this->variables);
     }
 }

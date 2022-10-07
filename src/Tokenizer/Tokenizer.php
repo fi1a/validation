@@ -224,7 +224,8 @@ class Tokenizer extends AParseFunction
 
                 return;
             }
-            if (($symbol === '"' && !$single) || ($symbol === '\'' && !$quote) && $prevSymbol !== '\\') {
+            // @codingStandardsIgnoreStart
+            if ((($symbol === '"' && !$single) || ($symbol === '\'' && !$quote)) && $prevSymbol !== '\\') {
                 $this->setParseFunction('parseQuote');
                 if ($image) {
                     $type = Token::T_ARGUMENT;
@@ -232,6 +233,7 @@ class Tokenizer extends AParseFunction
 
                 return;
             }
+            // @codingStandardsIgnoreEnd
 
             foreach (array_keys(static::$values) as $value) {
                 $key = mb_strtolower(mb_substr($source, $current, mb_strlen((string) $value)));

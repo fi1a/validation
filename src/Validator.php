@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Validation\AST\AST;
 use Fi1a\Validation\Exception\RuleNotFound;
 use Fi1a\Validation\Rule\IRule;
 use InvalidArgumentException;
@@ -51,6 +52,29 @@ class Validator implements IValidator
 
                     continue;
                 }
+                /** @psalm-suppress RedundantConditionGivenDocblockType */
+                if (is_string($rule)) {
+                    $ast = new AST($rule);
+                    $allOff = AllOf::create();
+                    /**
+                     * @var \Fi1a\Validation\AST\IRule $astRule
+                     */
+                    foreach ($ast->getRules() as $astRule) {
+                        $ruleClass = static::getRuleClassByName($astRule->getRuleName());
+                        $arguments = $astRule->getArgumentsValues();
+                        /**
+                         * @var IRule $ruleInstance
+                         * @psalm-suppress InvalidStringClass
+                         */
+                        $ruleInstance = new $ruleClass(...$arguments);
+                        $allOff->addRule($ruleInstance);
+                    }
+                    $ruleInstances[$fieldName] = $allOff;
+
+                    continue;
+                }
+
+                throw new InvalidArgumentException('Unknown rule type');
             }
         }
 

@@ -179,6 +179,30 @@ class TokenizerTest extends TestCase
                     Token::T_ARGUMENT, Token::T_CLOSE_PARENTHESES,
                 ],
             ],
+            // 13
+            [
+                'required(\'\\\'123\\\'\')',
+                6,
+                [
+                    'required', '(', '\'', '\\\'123\\\'', '\'', ')',
+                ],
+                [
+                    Token::T_RULE, Token::T_OPEN_PARENTHESES, Token::T_QUOTE, Token::T_ARGUMENT,
+                    Token::T_QUOTE, Token::T_CLOSE_PARENTHESES,
+                ],
+            ],
+            // 14
+            [
+                'required("\\\"123\\\"")',
+                6,
+                [
+                    'required', '(', '"', '\\\"123\\\"', '"', ')',
+                ],
+                [
+                    Token::T_RULE, Token::T_OPEN_PARENTHESES, Token::T_QUOTE, Token::T_ARGUMENT,
+                    Token::T_QUOTE, Token::T_CLOSE_PARENTHESES,
+                ],
+            ],
         ];
     }
 

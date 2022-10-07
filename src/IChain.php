@@ -71,4 +71,11 @@ interface IChain
      * @param IRule|IChain ...$rules
      */
     public static function create(...$rules): IChain;
+
+    /**
+     * Добавить правило
+     *
+     * @param IRule|IChain $rule
+     */
+    public function addRule($rule): IChain;
 }

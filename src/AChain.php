@@ -64,6 +64,9 @@ abstract class AChain implements IChain
             if (!($rule instanceof IRule) && !($rule instanceof IChain)) {
                 throw new InvalidArgumentException('The rule must implement the interface ' . IRule::class);
             }
+            if ($rule instanceof IChain) {
+                $rule->setMessages($this->getMessages());
+            }
         }
 
         $this->rules = $rules;
@@ -324,5 +327,21 @@ abstract class AChain implements IChain
         $chain->setMessages($this->getMessages());
 
         return $chain;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addRule($rule): IChain
+    {
+        if (!($rule instanceof IRule) && !($rule instanceof IChain)) {
+            throw new InvalidArgumentException('The rule must implement the interface ' . IRule::class);
+        }
+
+        $rules = $this->getRules();
+        $rules[] = $rule;
+        $this->setRules($rules);
+
+        return $this;
     }
 }

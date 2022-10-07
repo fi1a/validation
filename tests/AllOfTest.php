@@ -114,4 +114,14 @@ class AllOfTest extends TestCase
         $error = $result->getErrors()->first();
         $this->assertEquals('test message', $error->getMessage());
     }
+
+    /**
+     * Исключение при добавлении правила
+     */
+    public function testAddRuleException(): void
+    {
+        $chain = AllOf::create();
+        $this->expectException(InvalidArgumentException::class);
+        $chain->addRule($this);
+    }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Unit\Validation;
 
 use Fi1a\Unit\Validation\Fixtures\FixtureRule;
+use Fi1a\Validation\AST\Exception\ParseRuleException;
 use Fi1a\Validation\AllOf;
 use Fi1a\Validation\Errors;
 use Fi1a\Validation\Exception\RuleNotFound;
@@ -558,6 +559,146 @@ class ValidatorTest extends TestCase
             [],
             [
                 'key1' => [new Required(), 'isNull'],
+            ]
+        );
+    }
+
+    /**
+     * Правила заданы строкой
+     */
+    public function testStringRules(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            [
+                'key1' => null,
+            ],
+            [
+                'key1' => 'required|isNull()',
+            ],
+            [
+                'required' => 'test message {{name}}',
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('required', $result->getErrors()->first()->getRuleName());
+        $this->assertEquals('test message key1', $result->getErrors()->first()->getMessage());
+    }
+
+    /**
+     * Правила заданы строкой
+     *
+     * @depends testRuleMethods
+     */
+    public function testStringRulesWithArguments(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            [
+                'key1' => null,
+                'key2' => null,
+            ],
+            [
+                'key1' => 'fixtureRule ( true, false, null, 100, 100.10, "\" 200 \"" )'
+                    . '|fixtureRule ( true, false, null, 100, 100.10, "\" 200 \"" )',
+                'key2' => 'fixtureRule ( true, false, null, 100, 100.10, \'\\\' 200 \\\'\' )',
+            ],
+            [
+                'fixtureRule' => '{{bool1}}, {{bool2}}, {{null}}, {{int}}, {{float}}, {{string}}',
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('fixtureRule', $result->getErrors()->first()->getRuleName());
+        $this->assertEquals('true, false, null, 100, 100.1, " 200 "', $result->getErrors()->first()->getMessage());
+        $this->assertEquals('fixtureRule', $result->getErrors()->last()->getRuleName());
+        $this->assertEquals('true, false, null, 100, 100.1, \' 200 \'', $result->getErrors()->last()->getMessage());
+    }
+
+    /**
+     * Правила переданы в массиве
+     */
+    public function testUnknowTypeRuleException(): void
+    {
+        $validator = new Validator();
+        $this->expectException(\InvalidArgumentException::class);
+        $validator->make(
+            [],
+            [
+                'key1' => $this,
+            ]
+        );
+    }
+
+    /**
+     * Данные для теста testParseRuleException
+     *
+     * @return string[]
+     */
+    public function dataParseRuleException(): array
+    {
+        return [
+            //0
+            [
+                'fixtureRule(',
+            ],
+            //1
+            [
+                'fixtureRule( ',
+            ],
+            //2
+            [
+                'fixtureRule( 1 ',
+            ],
+            //3
+            [
+                'fixtureRule( 1 ,',
+            ],
+            //4
+            [
+                'fixtureRule( 1 , )',
+            ],
+            //5
+            [
+                'fixtureRule( 1 , ',
+            ],
+            //6
+            [
+                'fixtureRule( , )',
+            ],
+            //7
+            [
+                'fixtureRule("',
+            ],
+            //8
+            [
+                'fixtureRule("100',
+            ],
+            //9
+            [
+                'fixtureRule("100"',
+            ],
+            //10
+            [
+                'fixtureRule("100" "100',
+            ],
+        ];
+    }
+
+    /**
+     * Ошибки формата правил
+     *
+     * @dataProvider dataParseRuleException
+     */
+    public function testParseRuleException(string $rule): void
+    {
+        $this->expectException(ParseRuleException::class);
+        $validator = new Validator();
+        $validator->make(
+            [],
+            [
+                'key1' => $rule,
             ]
         );
     }
