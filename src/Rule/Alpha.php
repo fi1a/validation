@@ -7,7 +7,7 @@ namespace Fi1a\Validation\Rule;
 use Fi1a\Validation\IValue;
 
 /**
- * Является ли значение строкой
+ * Является ли значение строкой без чисел
  */
 class Alpha extends ARule
 {
@@ -21,7 +21,7 @@ class Alpha extends ARule
         }
 
         $success = is_string($value->getValue())
-            && preg_match('/^[\pL\pM]+$/mu', (string) $value->getValue());
+            && preg_match('/^[\pL\pM]+$/mu', (string) $value->getValue()) > 0;
 
         if (!$success) {
             $this->addMessage('The {{if(name)}}"{{name}}" {{endif}}only allows alphabet characters', 'alpha');

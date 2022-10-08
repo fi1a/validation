@@ -13,6 +13,7 @@ use Fi1a\Validation\Rule\IRule;
  * @method IChain isNull()
  * @method IChain numeric()
  * @method IChain alpha()
+ * @method IChain alphaNumeric()
  */
 interface IChain
 {

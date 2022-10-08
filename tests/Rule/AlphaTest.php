@@ -9,12 +9,12 @@ use Fi1a\Validation\Validator;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Является ли значение строкой
+ * Является ли значение строкой без чисел
  */
 class AlphaTest extends TestCase
 {
     /**
-     * Является ли значение строкой
+     * Является ли значение строкой без чисел
      */
     public function testAlpha(): void
     {
@@ -23,7 +23,7 @@ class AlphaTest extends TestCase
     }
 
     /**
-     * Является ли значение строкой
+     * Является ли значение строкой без чисел
      */
     public function testAlphaValidator(): void
     {
