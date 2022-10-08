@@ -14,6 +14,7 @@ use Fi1a\Validation\Rule\IRule;
  * @method IChain numeric()
  * @method IChain alpha()
  * @method IChain alphaNumeric()
+ * @method IChain email()
  */
 interface IChain
 {

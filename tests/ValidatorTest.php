@@ -280,7 +280,7 @@ class ValidatorTest extends TestCase
         $this->assertCount(1, $result->getErrors());
         $error = $result->getErrors()[0];
         $this->assertInstanceOf(IError::class, $error);
-        $this->assertEquals('Field "key1:key2" is required', $error->getMessage());
+        $this->assertEquals('Значение "key1:key2" является обязательным', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('key1:key2', $error->getFieldName());
         $this->assertEquals('required', $error->getMessageKey());
@@ -337,7 +337,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals('required', $error->getMessageKey());
         $error = $result->getErrors()[1];
         $this->assertInstanceOf(IError::class, $error);
-        $this->assertEquals('Field "key1:key3" is required', $error->getMessage());
+        $this->assertEquals('Значение "key1:key3" является обязательным', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('key1:key3', $error->getFieldName());
         $this->assertEquals('required', $error->getMessageKey());
@@ -408,7 +408,7 @@ class ValidatorTest extends TestCase
         $this->assertCount(1, $result->getErrors());
         $error = $result->getErrors()[0];
         $this->assertInstanceOf(IError::class, $error);
-        $this->assertEquals('Field "array1:2:id" is required', $error->getMessage());
+        $this->assertEquals('Значение "array1:2:id" является обязательным', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('array1:2:id', $error->getFieldName());
         $this->assertEquals('required', $error->getMessageKey());

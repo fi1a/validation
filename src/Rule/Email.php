@@ -6,10 +6,12 @@ namespace Fi1a\Validation\Rule;
 
 use Fi1a\Validation\IValue;
 
+use const FILTER_VALIDATE_EMAIL;
+
 /**
- * Является ли значение числом
+ * Является ли значение email
  */
-class Numeric extends ARule
+class Email extends ARule
 {
     /**
      * @inheritDoc
@@ -20,10 +22,10 @@ class Numeric extends ARule
             return true;
         }
 
-        $success = is_numeric($value->getValue());
+        $success = filter_var((string) $value->getValue(), FILTER_VALIDATE_EMAIL) !== false;
 
         if (!$success) {
-            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}не является числом', 'numeric');
+            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}не является email адресом', 'email');
         }
 
         return $success;
@@ -34,6 +36,6 @@ class Numeric extends ARule
      */
     public static function getRuleName(): string
     {
-        return 'numeric';
+        return 'email';
     }
 }

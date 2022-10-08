@@ -27,7 +27,7 @@ class AlphaNumeric extends ARule
 
         if (!$success) {
             $this->addMessage(
-                'The field {{if(name)}}"{{name}}" {{endif}}only allows alphabet and numeric',
+                'В значении {{if(name)}}"{{name}}" {{endif}}разрешены только символы алфавита и цифры',
                 'alphaNumeric'
             );
         }

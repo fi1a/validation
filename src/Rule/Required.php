@@ -19,7 +19,7 @@ class Required extends ARule
         $success = !is_null($value->getValue()) && $value->getValue() !== '' && $value->getValue() !== false;
 
         if (!$success) {
-            $this->addMessage('Field {{if(name)}}"{{name}}" {{endif}}is required', 'required');
+            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}является обязательным', 'required');
         }
 
         return $success;

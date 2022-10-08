@@ -24,7 +24,10 @@ class Alpha extends ARule
             && preg_match('/^[\pL\pM]+$/mu', (string) $value->getValue()) > 0;
 
         if (!$success) {
-            $this->addMessage('The {{if(name)}}"{{name}}" {{endif}}only allows alphabet characters', 'alpha');
+            $this->addMessage(
+                'В значениии {{if(name)}}"{{name}}" {{endif}}разрешены только символы алфавита',
+                'alpha'
+            );
         }
 
         return $success;
