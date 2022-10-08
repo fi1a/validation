@@ -19,7 +19,7 @@ class IsNull extends ARule
         $success = is_null($value->getValue());
 
         if (!$success) {
-            $this->addMessage('Field "{{name}}" not is null', 'isNull');
+            $this->addMessage('Field {{if(name)}}"{{name}}" {{endif}}not is null', 'isNull');
         }
 
         return $success;

@@ -7,19 +7,23 @@ namespace Fi1a\Validation\Rule;
 use Fi1a\Validation\IValue;
 
 /**
- * Обязательное значение
+ * Является ли значение числом
  */
-class Required extends ARule
+class Numeric extends ARule
 {
     /**
      * @inheritDoc
      */
     public function validate(IValue $value): bool
     {
-        $success = !is_null($value->getValue()) && $value->getValue() !== '' && $value->getValue() !== false;
+        if (!$value->isPresence()) {
+            return true;
+        }
+
+        $success = is_numeric($value->getValue());
 
         if (!$success) {
-            $this->addMessage('Field {{if(name)}}"{{name}}" {{endif}}is required', 'required');
+            $this->addMessage('The field {{if(name)}}"{{name}}" {{endif}}must be numeric', 'numeric');
         }
 
         return $success;
@@ -30,6 +34,6 @@ class Required extends ARule
      */
     public static function getRuleName(): string
     {
-        return 'required';
+        return 'numeric';
     }
 }
