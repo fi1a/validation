@@ -16,6 +16,7 @@ use Fi1a\Validation\Rule\IRule;
  * @method IChain alphaNumeric()
  * @method IChain email()
  * @method IChain min(float $min)
+ * @method IChain max(float $max)
  */
 interface IChain
 {
