@@ -617,6 +617,31 @@ class ValidatorTest extends TestCase
     }
 
     /**
+     * Правила заданы строкой
+     *
+     * @depends testRuleMethods
+     */
+    public function testStringRulesWithEmptyStringArgument(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            [
+                'key1' => null,
+            ],
+            [
+                'key1' => 'fixtureRule(true, false, null, 100, 100.10, "")',
+            ],
+            [
+                'fixtureRule' => '{{bool1}}, {{bool2}}, {{null}}, {{int}}, {{float}}, {{string}}',
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('fixtureRule', $result->getErrors()->first()->getRuleName());
+        $this->assertEquals('true, false, null, 100, 100.1, ', $result->getErrors()->first()->getMessage());
+    }
+
+    /**
      * Правила переданы в массиве
      */
     public function testUnknowTypeRuleException(): void
