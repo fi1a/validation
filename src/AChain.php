@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Closure;
 use Fi1a\Format\Formatter;
 use Fi1a\Validation\Rule\IRule;
 use InvalidArgumentException;
@@ -41,6 +42,11 @@ abstract class AChain implements IChain
      * @var string[]
      */
     private $titles = [];
+
+    /**
+     * @var bool
+     */
+    private $internalAsArray = true;
 
     /**
      * Конструктор
@@ -136,15 +142,18 @@ abstract class AChain implements IChain
     /**
      * @inheritDoc
      */
-    public function validate($values, ?string $fieldName = null): IResult
+    public function validate($values, $fieldName = null): IResult
     {
         $result = new Result();
+        if (is_null($fieldName)) {
+            $this->setInternalAsArray(false);
+        }
 
         foreach ($this->getRules() as $key => $rule) {
-            $internalFieldName = is_null($fieldName) ? (string) $key : $fieldName;
+            $internalFieldName = is_null($fieldName) || $fieldName === false ? (string) $key : (string) $fieldName;
 
             if ($rule instanceof IRule) {
-                if (is_array($values)) {
+                if (is_array($values) && $this->internalAsArray === true) {
                     $tree = $this->getValue($this->getKeys($internalFieldName), $values);
                     foreach ($this->flatten($tree) as $value) {
                         $success = $rule->validate($value);
@@ -179,13 +188,33 @@ abstract class AChain implements IChain
 
                 continue;
             }
+
             $this->setSuccess(
                 $result,
                 $rule->validate($values, $internalFieldName)
             );
         }
 
+        $this->setInternalAsArray(true);
+
         return $result;
+    }
+
+    /**
+     * Не использовать значение как массив
+     */
+    protected function setInternalAsArray(bool $internalAsArray): void
+    {
+        $this->internalAsArray = $internalAsArray;
+        foreach ($this->getRules() as $rule) {
+            if ($rule instanceof IChain) {
+                $func = Closure::bind(function (bool $internalAsArray) {
+                    $this->setInternalAsArray($internalAsArray);
+                }, $rule, get_class($rule));
+                /** @psalm-suppress PossiblyInvalidFunctionCall */
+                $func($internalAsArray);
+            }
+        }
     }
 
     /**

@@ -64,7 +64,7 @@ class Validation implements IValidation
      */
     public function validate(): IResult
     {
-        return $this->chain->validate($this->values);
+        return $this->chain->validate($this->values, false);
     }
 
     /**

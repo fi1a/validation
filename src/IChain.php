@@ -18,6 +18,7 @@ use Fi1a\Validation\Rule\IRule;
  * @method IChain min(float $min)
  * @method IChain max(float $max)
  * @method IChain between(float $min, float $max)
+ * @method IChain isArray()
  */
 interface IChain
 {
@@ -27,8 +28,9 @@ interface IChain
      * Метод валидации
      *
      * @param mixed $values
+     * @param bool|string|null $fieldName
      */
-    public function validate($values, ?string $fieldName = null): IResult;
+    public function validate($values, $fieldName = null): IResult;
 
     /**
      * Возвращает правила
