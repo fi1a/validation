@@ -12,6 +12,7 @@ use Fi1a\Validation\Rule\IRule;
  * @method IChain required()
  * @method IChain isNull()
  * @method IChain numeric()
+ * @method IChain alpha()
  */
 interface IChain
 {
