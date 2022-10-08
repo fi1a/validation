@@ -17,6 +17,7 @@ use Fi1a\Validation\Rule\IRule;
  * @method IChain email()
  * @method IChain min(float $min)
  * @method IChain max(float $max)
+ * @method IChain between(float $min, float $max)
  */
 interface IChain
 {
