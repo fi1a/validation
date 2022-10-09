@@ -7,7 +7,7 @@ namespace Fi1a\Unit\Validation;
 use Fi1a\Unit\Validation\Fixtures\EmptyRuleName;
 use Fi1a\Validation\AllOf;
 use Fi1a\Validation\OneOf;
-use Fi1a\Validation\Rule\IsNull;
+use Fi1a\Validation\Rule\NullRule;
 use Fi1a\Validation\Rule\Required;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ class OneOfTest extends TestCase
      */
     public function testValidate(): void
     {
-        $chain = OneOf::create(new Required(), new IsNull());
+        $chain = OneOf::create(new Required(), new NullRule());
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertTrue($chain->validate(null)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
@@ -36,7 +36,7 @@ class OneOfTest extends TestCase
      */
     public function testValidateWithChain(): void
     {
-        $chain = OneOf::create(AllOf::create(new Required()), AllOf::create(new IsNull()));
+        $chain = OneOf::create(AllOf::create(new Required()), AllOf::create(new NullRule()));
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertTrue($chain->validate(null)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
@@ -62,7 +62,7 @@ class OneOfTest extends TestCase
     {
         $chain = OneOf::create();
         $chain->allOf()->required();
-        $chain->allOf()->isNull();
+        $chain->allOf()->null();
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertTrue($chain->validate(null)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());

@@ -362,7 +362,7 @@ class Tokenizer extends AParseFunction
      * Парсинг открытия оператора
      *
      *         -
-     * required|isNull
+     * required|null
      *         -
      *
      * @param IToken[]    $tokens

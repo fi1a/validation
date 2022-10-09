@@ -87,7 +87,7 @@ class AllOfTest extends TestCase
 
         $chain = AllOf::create();
         $chain->oneOf()->required();
-        $chain->oneOf()->isNull();
+        $chain->oneOf()->null();
         $this->assertFalse($chain->validate(1)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
         $this->assertFalse($chain->validate(null)->isSuccess());
@@ -104,7 +104,7 @@ class AllOfTest extends TestCase
 
         $chain = AllOf::create();
         $chain->setMessages($messages);
-        $chain->oneOf()->required()->isNull();
+        $chain->oneOf()->required()->null();
         $this->assertTrue($chain->validate(true)->isSuccess());
         $result = $chain->validate(false);
         $this->assertFalse($result->isSuccess());

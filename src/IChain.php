@@ -10,7 +10,7 @@ use Fi1a\Validation\Rule\IRule;
  * Цепочка правил валидатора
  *
  * @method IChain required()
- * @method IChain isNull()
+ * @method IChain null()
  * @method IChain numeric()
  * @method IChain alpha()
  * @method IChain alphaNumeric()

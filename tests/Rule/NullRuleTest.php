@@ -11,15 +11,15 @@ use PHPUnit\Framework\TestCase;
 /**
  * Является ли значение null
  */
-class IsNullTest extends TestCase
+class NullRuleTest extends TestCase
 {
     /**
      * Является ли значение null
      */
     public function testIsNull(): void
     {
-        $this->assertTrue(AllOf::create()->isNull()->validate(null)->isSuccess());
-        $this->assertFalse(AllOf::create()->isNull()->validate(false)->isSuccess());
+        $this->assertTrue(AllOf::create()->null()->validate(null)->isSuccess());
+        $this->assertFalse(AllOf::create()->null()->validate(false)->isSuccess());
     }
 
     /**
@@ -28,7 +28,7 @@ class IsNullTest extends TestCase
     public function testIsNullValidator(): void
     {
         $validator = new Validator();
-        $validation = $validator->make(['foo' => null], ['foo' => 'isNull']);
+        $validation = $validator->make(['foo' => null], ['foo' => 'null']);
         $this->assertTrue($validation->validate()->isSuccess());
         $validation->setValues(['foo' => false]);
         $this->assertFalse($validation->validate()->isSuccess());

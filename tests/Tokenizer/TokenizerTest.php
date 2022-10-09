@@ -31,9 +31,9 @@ class TokenizerTest extends TestCase
             ],
             // 1
             [
-                'required|isNull',
+                'required|null',
                 3,
-                ['required', '|', 'isNull'],
+                ['required', '|', 'null'],
                 [Token::T_RULE, Token::T_SEPARATOR, Token::T_RULE],
             ],
             // 2
@@ -45,9 +45,9 @@ class TokenizerTest extends TestCase
             ],
             // 3
             [
-                'required()|isNull()',
+                'required()|null()',
                 7,
-                ['required', '(', ')', '|', 'isNull', '(', ')'],
+                ['required', '(', ')', '|', 'null', '(', ')'],
                 [
                     Token::T_RULE, Token::T_OPEN_PARENTHESES, Token::T_CLOSE_PARENTHESES, Token::T_SEPARATOR,
                     Token::T_RULE, Token::T_OPEN_PARENTHESES, Token::T_CLOSE_PARENTHESES,

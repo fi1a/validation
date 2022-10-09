@@ -10,7 +10,7 @@ use Fi1a\Validation\AllOf;
 use Fi1a\Validation\Errors;
 use Fi1a\Validation\Exception\RuleNotFound;
 use Fi1a\Validation\IError;
-use Fi1a\Validation\Rule\IsNull;
+use Fi1a\Validation\Rule\NullRule;
 use Fi1a\Validation\Rule\Required;
 use Fi1a\Validation\Validation;
 use Fi1a\Validation\Validator;
@@ -536,7 +536,7 @@ class ValidatorTest extends TestCase
                 'key1' => null,
             ],
             [
-                'key1' => [new Required(), new IsNull()],
+                'key1' => [new Required(), new NullRule()],
             ],
             [
                 'required' => 'test message {{name}}',
@@ -574,7 +574,7 @@ class ValidatorTest extends TestCase
                 'key1' => null,
             ],
             [
-                'key1' => 'required|isNull()',
+                'key1' => 'required|null()',
             ],
             [
                 'required' => 'test message {{name}}',
@@ -739,7 +739,7 @@ class ValidatorTest extends TestCase
                 'key1' => null,
             ],
             [
-                'key1' => 'required|isNull()',
+                'key1' => 'required|null()',
             ],
             [
                 'required' => 'test message {{name}}',
@@ -759,7 +759,7 @@ class ValidatorTest extends TestCase
                 'key1' => null,
             ],
             [
-                'key1' => 'required|isNull()',
+                'key1' => 'required|null()',
             ],
             [
                 'required' => 'test message {{name}}',
@@ -783,7 +783,7 @@ class ValidatorTest extends TestCase
                 'key1' => null,
             ],
             [
-                'key1' => 'required|isNull()',
+                'key1' => 'required|null()',
             ],
             [
                 'required' => 'test message {{name}} {{value}}',

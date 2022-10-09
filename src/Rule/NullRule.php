@@ -9,7 +9,7 @@ use Fi1a\Validation\IValue;
 /**
  * Является ли значение null
  */
-class IsNull extends ARule
+class NullRule extends ARule
 {
     /**
      * @inheritDoc
@@ -30,6 +30,6 @@ class IsNull extends ARule
      */
     public static function getRuleName(): string
     {
-        return 'isNull';
+        return 'null';
     }
 }
