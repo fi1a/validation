@@ -7,7 +7,7 @@ namespace Fi1a\Unit\Validation;
 use Fi1a\Unit\Validation\Fixtures\EmptyRuleName;
 use Fi1a\Validation\AllOf;
 use Fi1a\Validation\IError;
-use Fi1a\Validation\Rule\Required;
+use Fi1a\Validation\Rule\RequiredRule;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -25,7 +25,7 @@ class AllOfTest extends TestCase
         $this->assertCount(0, $chain->getRules());
         $chain->setRules([]);
         $this->assertCount(0, $chain->getRules());
-        $chain->setRules([new Required()]);
+        $chain->setRules([new RequiredRule()]);
         $this->assertCount(1, $chain->getRules());
     }
 
@@ -44,7 +44,7 @@ class AllOfTest extends TestCase
      */
     public function testValidate(): void
     {
-        $chain = AllOf::create(new Required(), new Required());
+        $chain = AllOf::create(new RequiredRule(), new RequiredRule());
         $this->assertTrue($chain->validate(1)->isSuccess());
         $this->assertFalse($chain->validate(false)->isSuccess());
         $this->assertTrue($chain->validate(['field' => 1], 'field')->isSuccess());
@@ -59,7 +59,7 @@ class AllOfTest extends TestCase
         $messages = [
             'required' => 'test message',
         ];
-        $chain = AllOf::create(new Required(), new Required());
+        $chain = AllOf::create(new RequiredRule(), new RequiredRule());
         $chain->setMessages($messages);
         $this->assertEquals($messages, $chain->getMessages());
     }

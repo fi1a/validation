@@ -9,7 +9,7 @@ use Fi1a\Validation\IValue;
 /**
  * Обязательное значение
  */
-class Required extends ARule
+class RequiredRule extends ARule
 {
     /**
      * @inheritDoc

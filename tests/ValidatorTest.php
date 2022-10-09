@@ -11,7 +11,7 @@ use Fi1a\Validation\Errors;
 use Fi1a\Validation\Exception\RuleNotFound;
 use Fi1a\Validation\IError;
 use Fi1a\Validation\Rule\NullRule;
-use Fi1a\Validation\Rule\Required;
+use Fi1a\Validation\Rule\RequiredRule;
 use Fi1a\Validation\Validation;
 use Fi1a\Validation\Validator;
 use InvalidArgumentException;
@@ -39,7 +39,7 @@ class ValidatorTest extends TestCase
     public function testValidateRequiredFalse(): void
     {
         $validator = new Validator();
-        $validation = $validator->make([], ['field' => new Required()], []);
+        $validation = $validator->make([], ['field' => new RequiredRule()], []);
         $this->assertInstanceOf(Validation::class, $validation);
         $this->assertFalse($validation->validate()->isSuccess());
     }
@@ -50,7 +50,7 @@ class ValidatorTest extends TestCase
     public function testValidateRequiredTrue(): void
     {
         $validator = new Validator();
-        $validation = $validator->make(['field' => 1,], ['field' => new Required()], []);
+        $validation = $validator->make(['field' => 1,], ['field' => new RequiredRule()], []);
         $this->assertInstanceOf(Validation::class, $validation);
         $this->assertTrue($validation->validate()->isSuccess());
     }
@@ -63,7 +63,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validation = $validator->make(
             ['field' => 1,],
-            ['field' => AllOf::create(new Required(), new Required())],
+            ['field' => AllOf::create(new RequiredRule(), new RequiredRule())],
             []
         );
         $this->assertInstanceOf(Validation::class, $validation);
@@ -78,7 +78,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validation = $validator->make(
             ['field' => null,],
-            ['field' => AllOf::create(new Required(), new Required())],
+            ['field' => AllOf::create(new RequiredRule(), new RequiredRule())],
             []
         );
         $this->assertInstanceOf(Validation::class, $validation);
@@ -110,9 +110,9 @@ class ValidatorTest extends TestCase
                 'key' => 'key1',
             ],
             [
-                'array:*:id' => new Required(),
-                'array:*:name' => new Required(),
-                'key' => new Required(),
+                'array:*:id' => new RequiredRule(),
+                'array:*:name' => new RequiredRule(),
+                'key' => new RequiredRule(),
             ],
             []
         );
@@ -165,10 +165,10 @@ class ValidatorTest extends TestCase
                 'key:key' => 'key1',
             ],
             [
-                'array1:*:id' => new Required(),
-                'array1:*:name' => new Required(),
-                'array1:*:array2:*:foo' => new Required(),
-                'key\:key' => new Required(),
+                'array1:*:id' => new RequiredRule(),
+                'array1:*:name' => new RequiredRule(),
+                'array1:*:array2:*:foo' => new RequiredRule(),
+                'key\:key' => new RequiredRule(),
             ],
             []
         );
@@ -198,7 +198,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                'array1:array2:*:id' => new Required(),
+                'array1:array2:*:id' => new RequiredRule(),
             ],
             []
         );
@@ -226,7 +226,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                'array1:array2:*:id' => new Required(),
+                'array1:array2:*:id' => new RequiredRule(),
             ],
             []
         );
@@ -247,7 +247,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                'array1:array2:*:id' => new Required(),
+                'array1:array2:*:id' => new RequiredRule(),
             ],
             []
         );
@@ -268,7 +268,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                'key1:key2' => new Required(),
+                'key1:key2' => new RequiredRule(),
             ],
             [
             ]
@@ -292,7 +292,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                'key1:key2' => new Required(),
+                'key1:key2' => new RequiredRule(),
             ],
             [
                 'required' => 'Test message for field "{{name}}"',
@@ -317,8 +317,8 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                'key1:key2' => new Required(),
-                'key1:key3' => new Required(),
+                'key1:key2' => new RequiredRule(),
+                'key1:key3' => new RequiredRule(),
             ],
             [
                 'key1:key2|required' => 'Only for this field "{{name}}"',
@@ -396,7 +396,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                'array1:*:id' => new Required(),
+                'array1:*:id' => new RequiredRule(),
             ],
             [
             ]
@@ -426,7 +426,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                'array1:*:id' => new Required(),
+                'array1:*:id' => new RequiredRule(),
             ],
             [
                 'required' => 'Test message "{{name}}"',
@@ -447,8 +447,8 @@ class ValidatorTest extends TestCase
         $validation = $validator->make(
             [],
             [
-                'array1:*:id' => new Required(),
-                'array1:*:name' => new Required(),
+                'array1:*:id' => new RequiredRule(),
+                'array1:*:name' => new RequiredRule(),
             ]
         );
         $values = [
@@ -536,7 +536,7 @@ class ValidatorTest extends TestCase
                 'key1' => null,
             ],
             [
-                'key1' => [new Required(), new NullRule()],
+                'key1' => [new RequiredRule(), new NullRule()],
             ],
             [
                 'required' => 'test message {{name}}',
@@ -558,7 +558,7 @@ class ValidatorTest extends TestCase
         $validator->make(
             [],
             [
-                'key1' => [new Required(), 'isNull'],
+                'key1' => [new RequiredRule(), 'isNull'],
             ]
         );
     }

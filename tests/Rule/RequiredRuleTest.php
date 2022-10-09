@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Обязательное значение
  */
-class RequiredTest extends TestCase
+class RequiredRuleTest extends TestCase
 {
     /**
      * Обязательное значение
