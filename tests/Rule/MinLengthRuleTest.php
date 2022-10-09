@@ -16,7 +16,7 @@ class MinLengthRuleTest extends TestCase
     /**
      * Проверка на минимальную длину строки
      */
-    public function testMin(): void
+    public function testMinLength(): void
     {
         $this->assertTrue(AllOf::create()->minLength(5)->validate('123456')->isSuccess());
         $this->assertTrue(AllOf::create()->minLength(5)->validate(123456)->isSuccess());
@@ -27,7 +27,7 @@ class MinLengthRuleTest extends TestCase
     /**
      * Проверка на минимальную длину строки
      */
-    public function testMinValidator(): void
+    public function testMinLengthValidator(): void
     {
         $validator = new Validator();
         $validation = $validator->make(['foo' => 'abc def gh'], ['foo' => 'minLength(5)']);

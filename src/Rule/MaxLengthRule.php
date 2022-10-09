@@ -7,21 +7,21 @@ namespace Fi1a\Validation\Rule;
 use Fi1a\Validation\ValueInterface;
 
 /**
- * Проверка на минимальную длину строки
+ * Проверка на максимальную длину строки
  */
-class MinLengthRule extends AbstractRule
+class MaxLengthRule extends AbstractRule
 {
     /**
      * @var int
      */
-    private $min;
+    private $max;
 
     /**
      * Конструктор
      */
-    public function __construct(int $min)
+    public function __construct(int $max)
     {
-        $this->min = $min;
+        $this->max = $max;
     }
 
     /**
@@ -33,12 +33,12 @@ class MinLengthRule extends AbstractRule
             return true;
         }
 
-        $success = mb_strlen((string) $value->getValue()) > $this->min;
+        $success = mb_strlen((string) $value->getValue()) < $this->max;
 
         if (!$success) {
             $this->addMessage(
-                'Длина значения {{if(name)}}"{{name}}" {{endif}}должна быть больше {{min}}',
-                'minLength'
+                'Длина значения {{if(name)}}"{{name}}" {{endif}}должна быть меньше {{max}}',
+                'maxLength'
             );
         }
 
@@ -50,7 +50,7 @@ class MinLengthRule extends AbstractRule
      */
     public function getVariables(): array
     {
-        return array_merge(parent::getVariables(), ['min' => $this->min]);
+        return array_merge(parent::getVariables(), ['max' => $this->max]);
     }
 
     /**
@@ -58,6 +58,6 @@ class MinLengthRule extends AbstractRule
      */
     public static function getRuleName(): string
     {
-        return 'minLength';
+        return 'maxLength';
     }
 }
