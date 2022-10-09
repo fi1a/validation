@@ -20,6 +20,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface between(float $min, float $max)
  * @method ChainInterface array()
  * @method ChainInterface boolean()
+ * @method ChainInterface integer()
  */
 interface ChainInterface
 {
