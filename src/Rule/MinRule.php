@@ -39,10 +39,9 @@ class MinRule extends AbstractRule
         if (!$value->isPresence()) {
             return true;
         }
-        if (!is_numeric($value->getValue())) {
-            return false;
-        }
-        $success = $value->getValue() > $this->min;
+
+        $success = is_numeric($value->getValue());
+        $success = $success && $value->getValue() > $this->min;
 
         if (!$success) {
             $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть минимум {{min}}', 'min');
