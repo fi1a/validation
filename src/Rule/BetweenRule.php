@@ -53,10 +53,8 @@ class BetweenRule extends AbstractRule
         if (!$value->isPresence()) {
             return true;
         }
-        if (!is_numeric($value->getValue())) {
-            return false;
-        }
-        $success = $this->max > $value->getValue() && $this->min < $value->getValue();
+        $success = is_numeric($value->getValue());
+        $success = $success && $this->max > $value->getValue() && $this->min < $value->getValue();
 
         if (!$success) {
             $this->addMessage(
