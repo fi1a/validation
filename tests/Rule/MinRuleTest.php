@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Проверка на минимальное значение
  */
-class MinTest extends TestCase
+class MinRuleTest extends TestCase
 {
     /**
      * Проверка на минимальное значение

@@ -10,7 +10,7 @@ use InvalidArgumentException;
 /**
  * Проверка на минимальное значение
  */
-class Min extends ARule
+class MinRule extends ARule
 {
     /**
      * @var int|float
