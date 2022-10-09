@@ -9,7 +9,7 @@ use Fi1a\Validation\IValue;
 /**
  * Является ли значение строкой без чисел
  */
-class Alpha extends ARule
+class AlphaRule extends ARule
 {
     /**
      * @inheritDoc
