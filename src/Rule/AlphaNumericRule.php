@@ -9,7 +9,7 @@ use Fi1a\Validation\IValue;
 /**
  * Является ли значение строкой
  */
-class AlphaNumeric extends ARule
+class AlphaNumericRule extends ARule
 {
     /**
      * @inheritDoc

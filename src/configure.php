@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Fi1a\Validation\Rule\AlphaNumeric;
+use Fi1a\Validation\Rule\AlphaNumericRule;
 use Fi1a\Validation\Rule\AlphaRule;
 use Fi1a\Validation\Rule\ArrayRule;
 use Fi1a\Validation\Rule\Between;
@@ -18,7 +18,7 @@ Validator::addRule(Required::class);
 Validator::addRule(NullRule::class);
 Validator::addRule(Numeric::class);
 Validator::addRule(AlphaRule::class);
-Validator::addRule(AlphaNumeric::class);
+Validator::addRule(AlphaNumericRule::class);
 Validator::addRule(Email::class);
 Validator::addRule(Min::class);
 Validator::addRule(Max::class);
