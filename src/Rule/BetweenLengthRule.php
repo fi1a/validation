@@ -8,36 +8,25 @@ use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
 /**
- * Проверка на максимальное и мимальное значение
+ * Проверка на максимальную и минимальную длину строки
  */
-class BetweenRule extends AbstractRule
+class BetweenLengthRule extends AbstractRule
 {
     /**
-     * @var int|float
+     * @var int
      */
     private $min;
 
     /**
-     * @var int|float
+     * @var int
      */
     private $max;
 
     /**
      * Конструктор
-     *
-     * @param float|int $min
-     * @param float|int $max
      */
-    public function __construct($min, $max)
+    public function __construct(int $min, int $max)
     {
-        /** @psalm-suppress DocblockTypeContradiction */
-        if (!is_numeric($min)) {
-            throw new InvalidArgumentException('Аргумент $min должен быть числом');
-        }
-        /** @psalm-suppress DocblockTypeContradiction */
-        if (!is_numeric($max)) {
-            throw new InvalidArgumentException('Аргумент $max должен быть числом');
-        }
         if ($min >= $max) {
             throw new InvalidArgumentException('Аргумент $max должен быть больше $min');
         }
@@ -53,13 +42,14 @@ class BetweenRule extends AbstractRule
         if (!$value->isPresence()) {
             return true;
         }
-        $success = is_numeric($value->getValue());
-        $success = $success && $this->max > $value->getValue() && $this->min < $value->getValue();
+
+        $length = mb_strlen((string) $value->getValue());
+        $success = $this->max > $length && $this->min < $length;
 
         if (!$success) {
             $this->addMessage(
-                'Значение {{if(name)}}"{{name}}" {{endif}}должно быть больше {{min}} и меньше {{max}}',
-                'between'
+                'Длина значения {{if(name)}}"{{name}}" {{endif}}должна быть больше {{min}} и меньше {{max}}',
+                'betweenLength'
             );
         }
 
@@ -82,6 +72,6 @@ class BetweenRule extends AbstractRule
      */
     public static function getRuleName(): string
     {
-        return 'between';
+        return 'betweenLength';
     }
 }

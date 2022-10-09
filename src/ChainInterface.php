@@ -24,6 +24,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface json()
  * @method ChainInterface minLength(int $min)
  * @method ChainInterface maxLength(int $max)
+ * @method ChainInterface betweenLength(int $min, int $max)
  */
 interface ChainInterface
 {
