@@ -19,11 +19,8 @@ class AlphaNumericRule extends AbstractRule
         if (!$value->isPresence()) {
             return true;
         }
-        if (!is_string($value->getValue()) && !is_numeric($value->getValue())) {
-            return false;
-        }
-
-        $success = preg_match('/^[\pL\pM\pN]+$/mu', (string) $value->getValue()) > 0;
+        $success = is_string($value->getValue()) || is_numeric($value->getValue());
+        $success = $success && preg_match('/^[\pL\pM\pN]+$/mu', (string) $value->getValue()) > 0;
 
         if (!$success) {
             $this->addMessage(
