@@ -10,7 +10,7 @@ use InvalidArgumentException;
 /**
  * Проверка на максимальное и мимальное значение
  */
-class Between extends ARule
+class BetweenRule extends ARule
 {
     /**
      * @var int|float
