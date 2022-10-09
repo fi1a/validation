@@ -10,6 +10,9 @@ use Fi1a\Validation\AST\Exception\ParseRuleException;
 use Fi1a\Validation\Tokenizer\Token;
 use Fi1a\Validation\Tokenizer\Tokenizer;
 
+use const FILTER_VALIDATE_FLOAT;
+use const FILTER_VALIDATE_INT;
+
 /**
  * AST
  */
@@ -134,10 +137,10 @@ class AST implements ASTInterface
                     $value = str_replace('\"', '"', $value);
                 } elseif ($isSingle) {
                     $value = str_replace("\'", "'", $value);
-                } elseif (is_numeric($value) && stripos($value, '.') !== false) {
-                    $value = (float) $value;
-                } elseif (is_numeric($value) && stripos($value, '.') === false) {
+                } elseif (filter_var($value, FILTER_VALIDATE_INT) !== false) {
                     $value = (int) $value;
+                } elseif (filter_var($value, FILTER_VALIDATE_FLOAT) !== false) {
+                    $value = (float) $value;
                 }
 
                 $arguments[] = new Argument($value);
