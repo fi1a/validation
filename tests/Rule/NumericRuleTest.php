@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Является ли значение числом
  */
-class NumericTest extends TestCase
+class NumericRuleTest extends TestCase
 {
     /**
      * Является ли значение числом

@@ -9,7 +9,7 @@ use Fi1a\Validation\IValue;
 /**
  * Является ли значение числом
  */
-class Numeric extends ARule
+class NumericRule extends ARule
 {
     /**
      * @inheritDoc
