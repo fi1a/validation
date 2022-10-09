@@ -21,6 +21,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface array()
  * @method ChainInterface boolean()
  * @method ChainInterface integer()
+ * @method ChainInterface json()
  */
 interface ChainInterface
 {
