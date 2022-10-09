@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Является ли значение email
  */
-class EmailTest extends TestCase
+class EmailRuleTest extends TestCase
 {
     /**
      * Является ли значение email

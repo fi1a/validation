@@ -11,7 +11,7 @@ use const FILTER_VALIDATE_EMAIL;
 /**
  * Является ли значение email
  */
-class Email extends ARule
+class EmailRule extends ARule
 {
     /**
      * @inheritDoc
