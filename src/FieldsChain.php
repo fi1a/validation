@@ -7,10 +7,10 @@ namespace Fi1a\Validation;
 /**
  * Цепочка объявления правил
  */
-class FieldsChain implements IFieldsChain
+class FieldsChain implements FieldsChainInterface
 {
     /**
-     * @var IChain|null
+     * @var ChainInterface|null
      */
     private $chain;
 
@@ -22,7 +22,7 @@ class FieldsChain implements IFieldsChain
     /**
      * @inheritDoc
      */
-    public function on(?string $scenario): IFieldsChain
+    public function on(?string $scenario): FieldsChainInterface
     {
         $this->scenario = $scenario;
 
@@ -68,7 +68,7 @@ class FieldsChain implements IFieldsChain
     /**
      * @inheritDoc
      */
-    public function getChain(): ?IChain
+    public function getChain(): ?ChainInterface
     {
         return $this->chain;
     }

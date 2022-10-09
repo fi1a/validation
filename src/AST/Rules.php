@@ -9,6 +9,6 @@ use Fi1a\Collection\DataType\ArrayObject;
 /**
  * Правила
  */
-class Rules extends ArrayObject implements IRules
+class Rules extends ArrayObject implements RulesInterface
 {
 }

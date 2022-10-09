@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
-use Fi1a\Validation\Rule\IRule;
+use Fi1a\Validation\Rule\RuleInterface;
 
 /**
  * Цепочка правил валидатора
  *
- * @method IChain required()
- * @method IChain null()
- * @method IChain numeric()
- * @method IChain alpha()
- * @method IChain alphaNumeric()
- * @method IChain email()
- * @method IChain min(float $min)
- * @method IChain max(float $max)
- * @method IChain between(float $min, float $max)
- * @method IChain array()
+ * @method ChainInterface required()
+ * @method ChainInterface null()
+ * @method ChainInterface numeric()
+ * @method ChainInterface alpha()
+ * @method ChainInterface alphaNumeric()
+ * @method ChainInterface email()
+ * @method ChainInterface min(float $min)
+ * @method ChainInterface max(float $max)
+ * @method ChainInterface between(float $min, float $max)
+ * @method ChainInterface array()
  */
-interface IChain
+interface ChainInterface
 {
     public const PATH_SEPARATOR = ':';
 
@@ -30,23 +30,23 @@ interface IChain
      * @param mixed $values
      * @param bool|string|null $fieldName
      */
-    public function validate($values, $fieldName = null): IResult;
+    public function validate($values, $fieldName = null): ResultInterface;
 
     /**
      * Возвращает правила
      *
-     * @return IRule[]|IChain[]
+     * @return RuleInterface[]|ChainInterface[]
      */
     public function getRules(): array;
 
     /**
      * Устанавливает правила
      *
-     * @param IRule[]|IChain[] $rules
+     * @param RuleInterface[]|ChainInterface[] $rules
      *
      * @return static
      */
-    public function setRules(array $rules): IChain;
+    public function setRules(array $rules): ChainInterface;
 
     /**
      * Возвращает сообщения об ошибках
@@ -62,14 +62,14 @@ interface IChain
      *
      * @return static
      */
-    public function setMessages(array $messages): IChain;
+    public function setMessages(array $messages): ChainInterface;
 
     /**
      * Установить заголовки полей
      *
      * @param string[] $titles
      */
-    public function setTitles(array $titles): IChain;
+    public function setTitles(array $titles): ChainInterface;
 
     /**
      * Возвращает заголовки полей
@@ -91,14 +91,14 @@ interface IChain
     /**
      * Фабричный метод
      *
-     * @param IRule|IChain ...$rules
+     * @param RuleInterface|ChainInterface ...$rules
      */
-    public static function create(...$rules): IChain;
+    public static function create(...$rules): ChainInterface;
 
     /**
      * Добавить правило
      *
-     * @param IRule|IChain $rule
+     * @param RuleInterface|ChainInterface $rule
      */
-    public function addRule($rule): IChain;
+    public function addRule($rule): ChainInterface;
 }

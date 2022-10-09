@@ -7,7 +7,7 @@ namespace Fi1a\Validation;
 /**
  * Значение
  */
-interface IValue
+interface ValueInterface
 {
     /**
      * Установить значение

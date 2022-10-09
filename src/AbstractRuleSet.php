@@ -7,7 +7,7 @@ namespace Fi1a\Validation;
 /**
  * Абстрактный класс набора правил
  */
-abstract class ARuleSet implements IRuleSet
+abstract class AbstractRuleSet implements RuleSetInterface
 {
     /**
      * @var string[]
@@ -30,7 +30,7 @@ abstract class ARuleSet implements IRuleSet
     protected $scenario;
 
     /**
-     * @var IFieldsChain[][]
+     * @var FieldsChainInterface[][]
      */
     protected $fieldChains = [];
 
@@ -87,7 +87,7 @@ abstract class ARuleSet implements IRuleSet
     /**
      * @inheritDoc
      */
-    public function setValues($values): IRuleSet
+    public function setValues($values): RuleSetInterface
     {
         $this->values = $values;
 
@@ -105,7 +105,7 @@ abstract class ARuleSet implements IRuleSet
     /**
      * @inheritDoc
      */
-    public function setScenario(?string $scenario): IRuleSet
+    public function setScenario(?string $scenario): RuleSetInterface
     {
         $this->scenario = $scenario;
 
@@ -115,7 +115,7 @@ abstract class ARuleSet implements IRuleSet
     /**
      * Возвращает цепочку для объявления правил
      */
-    public function fields(string ...$fields): IFieldsChain
+    public function fields(string ...$fields): FieldsChainInterface
     {
         $fieldsChain = new FieldsChain();
         foreach ($fields as $field) {

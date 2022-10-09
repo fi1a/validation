@@ -7,7 +7,7 @@ namespace Fi1a\Validation;
 /**
  * Ошибка
  */
-interface IError
+interface ErrorInterface
 {
     /**
      * Конструктор

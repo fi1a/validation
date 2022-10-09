@@ -7,7 +7,7 @@ namespace Fi1a\Validation\AST;
 /**
  * Аргумент правила
  */
-interface IArgument
+interface ArgumentInterface
 {
     /**
      * Конструктор

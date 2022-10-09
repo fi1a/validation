@@ -13,10 +13,10 @@ use Fi1a\Validation\Tokenizer\Tokenizer;
 /**
  * AST
  */
-class AST implements IAST
+class AST implements ASTInterface
 {
     /**
-     * @var IRules
+     * @var RulesInterface
      */
     private $rules;
 
@@ -206,7 +206,7 @@ class AST implements IAST
     /**
      * @inheritDoc
      */
-    public function getRules(): IRules
+    public function getRules(): RulesInterface
     {
         return $this->rules;
     }

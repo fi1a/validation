@@ -7,10 +7,10 @@ namespace Fi1a\Validation;
 /**
  * Значение
  */
-class Value implements IValue
+class Value implements ValueInterface
 {
     /**
-     * @var mixed|IValue|null
+     * @var mixed|ValueInterface|null
      */
     private $value;
 

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
-use Fi1a\Validation\IValue;
+use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
 /**
  * Проверка на максимальное и мимальное значение
  */
-class BetweenRule extends ARule
+class BetweenRule extends AbstractRule
 {
     /**
      * @var int|float
@@ -48,7 +48,7 @@ class BetweenRule extends ARule
     /**
      * @inheritDoc
      */
-    public function validate(IValue $value): bool
+    public function validate(ValueInterface $value): bool
     {
         if (!$value->isPresence()) {
             return true;

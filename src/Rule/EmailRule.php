@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
-use Fi1a\Validation\IValue;
+use Fi1a\Validation\ValueInterface;
 
 use const FILTER_VALIDATE_EMAIL;
 
 /**
  * Является ли значение email
  */
-class EmailRule extends ARule
+class EmailRule extends AbstractRule
 {
     /**
      * @inheritDoc
      */
-    public function validate(IValue $value): bool
+    public function validate(ValueInterface $value): bool
     {
         if (!$value->isPresence()) {
             return true;

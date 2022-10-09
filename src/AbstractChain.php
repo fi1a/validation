@@ -6,22 +6,22 @@ namespace Fi1a\Validation;
 
 use Closure;
 use Fi1a\Format\Formatter;
-use Fi1a\Validation\Rule\IRule;
+use Fi1a\Validation\Rule\RuleInterface;
 use InvalidArgumentException;
 
 /**
  * Абстрактный класс цепочки правил
  */
-abstract class AChain implements IChain
+abstract class AbstractChain implements ChainInterface
 {
     /**
      * Логика успешной валидации
      *
-     * @param bool|IResult $success
-     * @param string[] $messages
+     * @param bool|ResultInterface $success
+     * @param string[]             $messages
      */
     abstract protected function setSuccess(
-        IResult $result,
+        ResultInterface $result,
         $success,
         ?string $ruleName = null,
         ?string $fieldName = null,
@@ -29,7 +29,7 @@ abstract class AChain implements IChain
     ): void;
 
     /**
-     * @var IRule[]|IChain[]
+     * @var RuleInterface[]|ChainInterface[]
      */
     private $rules = [];
 
@@ -51,7 +51,7 @@ abstract class AChain implements IChain
     /**
      * Конструктор
      *
-     * @param IRule|IChain ...$rules
+     * @param RuleInterface|ChainInterface ...$rules
      */
     protected function __construct(...$rules)
     {
@@ -69,13 +69,13 @@ abstract class AChain implements IChain
     /**
      * @inheritDoc
      */
-    public function setRules(array $rules): IChain
+    public function setRules(array $rules): ChainInterface
     {
         foreach ($rules as $rule) {
-            if (!($rule instanceof IRule) && !($rule instanceof IChain)) {
-                throw new InvalidArgumentException('The rule must implement the interface ' . IRule::class);
+            if (!($rule instanceof RuleInterface) && !($rule instanceof ChainInterface)) {
+                throw new InvalidArgumentException('The rule must implement the interface ' . RuleInterface::class);
             }
-            if ($rule instanceof IChain) {
+            if ($rule instanceof ChainInterface) {
                 $rule->setMessages($this->getMessages());
             }
         }
@@ -96,14 +96,14 @@ abstract class AChain implements IChain
     /**
      * @inheritDoc
      */
-    public function setMessages(array $messages): IChain
+    public function setMessages(array $messages): ChainInterface
     {
         $this->messages = [];
         foreach ($messages as $fieldName => $message) {
             $this->messages[$fieldName] = $message;
         }
         foreach ($this->rules as $chain) {
-            if (!($chain instanceof IChain)) {
+            if (!($chain instanceof ChainInterface)) {
                 continue;
             }
             $chain->setMessages($messages);
@@ -115,14 +115,14 @@ abstract class AChain implements IChain
     /**
      * @inheritDoc
      */
-    public function setTitles(array $titles): IChain
+    public function setTitles(array $titles): ChainInterface
     {
         $this->titles = [];
         foreach ($titles as $fieldName => $title) {
             $this->titles[$fieldName] = $title;
         }
         foreach ($this->rules as $chain) {
-            if (!($chain instanceof IChain)) {
+            if (!($chain instanceof ChainInterface)) {
                 continue;
             }
             $chain->setTitles($titles);
@@ -142,7 +142,7 @@ abstract class AChain implements IChain
     /**
      * @inheritDoc
      */
-    public function validate($values, $fieldName = null): IResult
+    public function validate($values, $fieldName = null): ResultInterface
     {
         $result = new Result();
         if (is_null($fieldName)) {
@@ -152,7 +152,7 @@ abstract class AChain implements IChain
         foreach ($this->getRules() as $key => $rule) {
             $internalFieldName = is_null($fieldName) || $fieldName === false ? (string) $key : (string) $fieldName;
 
-            if ($rule instanceof IRule) {
+            if ($rule instanceof RuleInterface) {
                 if (is_array($values) && $this->internalAsArray === true) {
                     $tree = $this->getValue($this->getKeys($internalFieldName), $values);
                     foreach ($this->flatten($tree) as $value) {
@@ -207,7 +207,7 @@ abstract class AChain implements IChain
     {
         $this->internalAsArray = $internalAsArray;
         foreach ($this->getRules() as $rule) {
-            if ($rule instanceof IChain) {
+            if ($rule instanceof ChainInterface) {
                 $func = Closure::bind(function (bool $internalAsArray) {
                     $this->setInternalAsArray($internalAsArray);
                 }, $rule, get_class($rule));
@@ -222,7 +222,7 @@ abstract class AChain implements IChain
      *
      * @return string[]
      */
-    private function formatMessages(IRule $rule, IValue $value): array
+    private function formatMessages(RuleInterface $rule, ValueInterface $value): array
     {
         $userMessages = $this->getMessages();
         $messages = $rule->getMessages();
@@ -260,8 +260,12 @@ abstract class AChain implements IChain
      * @param string[] $paths
      * @param mixed $values
      */
-    private function getValue(array $paths, $values, ?string $realPath = null, ?string $validationPath = null): IValue
-    {
+    private function getValue(
+        array $paths,
+        $values,
+        ?string $realPath = null,
+        ?string $validationPath = null
+    ): ValueInterface {
         $path = array_shift($paths);
         if (is_null($realPath)) {
             $realPath = '';
@@ -362,14 +366,14 @@ abstract class AChain implements IChain
     /**
      * Возвращает плоский список значений
      *
-     * @return IValue[]
+     * @return ValueInterface[]
      */
-    private function flatten(IValue $value): array
+    private function flatten(ValueInterface $value): array
     {
         if ($value->isWildcard()) {
             $result = [];
             foreach ($value->getValue() as $item) {
-                assert($item instanceof IValue);
+                assert($item instanceof ValueInterface);
                 $result = array_merge($result, $this->flatten($item));
             }
 
@@ -388,7 +392,7 @@ abstract class AChain implements IChain
         /**
          * @psalm-suppress InvalidStringClass
          * @psalm-suppress UndefinedClass
-         * @var IRule $rule
+         * @var RuleInterface $rule
          */
         $rule = new $class(...$arguments);
         $this->rules[] = $rule;
@@ -429,10 +433,10 @@ abstract class AChain implements IChain
     /**
      * @inheritDoc
      */
-    public function addRule($rule): IChain
+    public function addRule($rule): ChainInterface
     {
-        if (!($rule instanceof IRule) && !($rule instanceof IChain)) {
-            throw new InvalidArgumentException('The rule must implement the interface ' . IRule::class);
+        if (!($rule instanceof RuleInterface) && !($rule instanceof ChainInterface)) {
+            throw new InvalidArgumentException('The rule must implement the interface ' . RuleInterface::class);
         }
 
         $rules = $this->getRules();

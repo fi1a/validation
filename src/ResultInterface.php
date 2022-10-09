@@ -7,7 +7,7 @@ namespace Fi1a\Validation;
 /**
  * Результат валидации
  */
-interface IResult
+interface ResultInterface
 {
     /**
      * Результат валидации
@@ -22,12 +22,12 @@ interface IResult
     /**
      * Добавить ошибку
      */
-    public function addError(IError $error): bool;
+    public function addError(ErrorInterface $error): bool;
 
     /**
      * Добавить ошибки
      *
-     * @param IError[]|Errors $errors
+     * @param ErrorInterface[]|Errors $errors
      */
     public function addErrors($errors): bool;
 

@@ -7,7 +7,7 @@ namespace Fi1a\Validation\AST;
 /**
  * Правило
  */
-class Rule implements IRule
+class Rule implements RuleInterface
 {
     /**
      * @var string
@@ -15,7 +15,7 @@ class Rule implements IRule
     private $ruleName;
 
     /**
-     * @var IArgument[]
+     * @var ArgumentInterface[]
      */
     private $arguments;
 

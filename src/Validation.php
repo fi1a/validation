@@ -7,10 +7,10 @@ namespace Fi1a\Validation;
 /**
  * Класс проверки значений
  */
-class Validation implements IValidation
+class Validation implements ValidationInterface
 {
     /**
-     * @var IValidator
+     * @var ValidatorInterface
      */
     private $validator;
 
@@ -20,7 +20,7 @@ class Validation implements IValidation
     private $values;
 
     /**
-     * @var IChain
+     * @var ChainInterface
      */
     private $chain;
 
@@ -38,9 +38,9 @@ class Validation implements IValidation
      * @inheritDoc
      */
     public function __construct(
-        IValidator $validator,
+        ValidatorInterface $validator,
         $values,
-        IChain $chain,
+        ChainInterface $chain,
         array $messages,
         array $titles
     ) {
@@ -54,7 +54,7 @@ class Validation implements IValidation
     /**
      * @inheritDoc
      */
-    public function getValidator(): IValidator
+    public function getValidator(): ValidatorInterface
     {
         return $this->validator;
     }
@@ -62,7 +62,7 @@ class Validation implements IValidation
     /**
      * @inheritDoc
      */
-    public function validate(): IResult
+    public function validate(): ResultInterface
     {
         return $this->chain->validate($this->values, false);
     }

@@ -9,6 +9,6 @@ use Fi1a\Collection\DataType\IArrayObject;
 /**
  * Правила
  */
-interface IRules extends IArrayObject
+interface RulesInterface extends IArrayObject
 {
 }

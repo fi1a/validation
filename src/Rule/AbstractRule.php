@@ -7,7 +7,7 @@ namespace Fi1a\Validation\Rule;
 /**
  * Абстрактный класс правила валидации
  */
-abstract class ARule implements IRule
+abstract class AbstractRule implements RuleInterface
 {
     /**
      * @var string[]

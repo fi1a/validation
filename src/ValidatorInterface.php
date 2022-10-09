@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
-use Fi1a\Validation\Rule\IRule;
+use Fi1a\Validation\Rule\RuleInterface;
 
 /**
  * Валидатор
  */
-interface IValidator
+interface ValidatorInterface
 {
     /**
      * Конструктор
@@ -21,17 +21,17 @@ interface IValidator
     /**
      * Создать класс проверки значений
      *
-     * @param mixed $values
-     * @param string[]|IRule[][]|IRule[]|IChain[]|null $rules
-     * @param string[] $messages
-     * @param string[] $titles
+     * @param mixed                                                            $values
+     * @param string[]|RuleInterface[][]|RuleInterface[]|ChainInterface[]|null $rules
+     * @param string[]                                                         $messages
+     * @param string[]                                                         $titles
      */
     public function make(
         $values,
         ?array $rules = null,
         array $messages = [],
         array $titles = []
-    ): IValidation;
+    ): ValidationInterface;
 
     /**
      * Добавить правило валидации

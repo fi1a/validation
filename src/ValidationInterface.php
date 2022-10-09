@@ -7,7 +7,7 @@ namespace Fi1a\Validation;
 /**
  * Класс проверки значений
  */
-interface IValidation
+interface ValidationInterface
 {
     /**
      * Конструктор
@@ -17,9 +17,9 @@ interface IValidation
      * @param string[] $titles
      */
     public function __construct(
-        IValidator $validator,
+        ValidatorInterface $validator,
         $values,
-        IChain $chain,
+        ChainInterface $chain,
         array $messages,
         array $titles
     );
@@ -27,12 +27,12 @@ interface IValidation
     /**
      * Возвращает экземпляр класса валидатора
      */
-    public function getValidator(): IValidator;
+    public function getValidator(): ValidatorInterface;
 
     /**
      * Метод валидации
      */
-    public function validate(): IResult;
+    public function validate(): ResultInterface;
 
     /**
      * Устанавливает сообщения об ошибках

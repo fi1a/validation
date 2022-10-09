@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
-use Fi1a\Validation\IValue;
+use Fi1a\Validation\ValueInterface;
 
 /**
  * Обязательное значение
  */
-class RequiredRule extends ARule
+class RequiredRule extends AbstractRule
 {
     /**
      * @inheritDoc
      */
-    public function validate(IValue $value): bool
+    public function validate(ValueInterface $value): bool
     {
         $success = !is_null($value->getValue()) && $value->getValue() !== '' && $value->getValue() !== false;
 

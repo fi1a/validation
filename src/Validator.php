@@ -6,13 +6,13 @@ namespace Fi1a\Validation;
 
 use Fi1a\Validation\AST\AST;
 use Fi1a\Validation\Exception\RuleNotFound;
-use Fi1a\Validation\Rule\IRule;
+use Fi1a\Validation\Rule\RuleInterface;
 use InvalidArgumentException;
 
 /**
  * Валидатор
  */
-class Validator implements IValidator
+class Validator implements ValidatorInterface
 {
     /**
      * @var string[]
@@ -34,13 +34,13 @@ class Validator implements IValidator
         ?array $rules = null,
         array $messages = [],
         array $titles = []
-    ): IValidation {
+    ): ValidationInterface {
         /**
-         * @var IRule[]|IChain[] $ruleInstances
+         * @var RuleInterface[]|ChainInterface[] $ruleInstances
          */
         $ruleInstances = [];
 
-        if ($values instanceof IRuleSet) {
+        if ($values instanceof RuleSetInterface) {
             $values->init();
             if (!is_array($rules)) {
                 $rules = [];
@@ -56,14 +56,14 @@ class Validator implements IValidator
 
         if (is_array($rules)) {
             foreach ($rules as $fieldName => $rule) {
-                if ($rule instanceof IRule || $rule instanceof IChain) {
+                if ($rule instanceof RuleInterface || $rule instanceof ChainInterface) {
                     $ruleInstances[$fieldName] = $rule;
 
                     continue;
                 }
                 if (is_array($rule)) {
                     foreach ($rule as $ruleItem) {
-                        if (!($ruleItem instanceof IRule) && !($ruleItem instanceof IChain)) {
+                        if (!($ruleItem instanceof RuleInterface) && !($ruleItem instanceof ChainInterface)) {
                             throw new InvalidArgumentException('Argument is not a rule');
                         }
                     }
@@ -76,13 +76,13 @@ class Validator implements IValidator
                     $ast = new AST($rule);
                     $allOff = AllOf::create();
                     /**
-                     * @var \Fi1a\Validation\AST\IRule $astRule
+                     * @var \Fi1a\Validation\AST\RuleInterface $astRule
                      */
                     foreach ($ast->getRules() as $astRule) {
                         $ruleClass = static::getRuleClassByName($astRule->getRuleName());
                         $arguments = $astRule->getArgumentsValues();
                         /**
-                         * @var IRule $ruleInstance
+                         * @var RuleInterface $ruleInstance
                          * @psalm-suppress InvalidStringClass
                          */
                         $ruleInstance = new $ruleClass(...$arguments);
@@ -110,8 +110,8 @@ class Validator implements IValidator
      */
     public static function addRule(string $ruleClass): bool
     {
-        if (!is_subclass_of($ruleClass, IRule::class)) {
-            throw new InvalidArgumentException('The class must implement the interface ' . IRule::class);
+        if (!is_subclass_of($ruleClass, RuleInterface::class)) {
+            throw new InvalidArgumentException('The class must implement the interface ' . RuleInterface::class);
         }
         if (static::hasRule($ruleClass)) {
             return false;
@@ -126,8 +126,8 @@ class Validator implements IValidator
      */
     public static function hasRule(string $ruleClass): bool
     {
-        if (!is_subclass_of($ruleClass, IRule::class)) {
-            throw new InvalidArgumentException('The class must implement the interface ' . IRule::class);
+        if (!is_subclass_of($ruleClass, RuleInterface::class)) {
+            throw new InvalidArgumentException('The class must implement the interface ' . RuleInterface::class);
         }
 
         return array_key_exists(mb_strtolower($ruleClass::getRuleName()), static::$ruleClasses);

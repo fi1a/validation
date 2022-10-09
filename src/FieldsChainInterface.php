@@ -7,12 +7,12 @@ namespace Fi1a\Validation;
 /**
  * Интерфейс цепочки объявления правил
  */
-interface IFieldsChain
+interface FieldsChainInterface
 {
     /**
      * Цепочка для определнного сценария
      */
-    public function on(?string $scenario): IFieldsChain;
+    public function on(?string $scenario): FieldsChainInterface;
 
     /**
      * Возвращает сценарий
@@ -32,5 +32,5 @@ interface IFieldsChain
     /**
      * Возвращает цепочку правил
      */
-    public function getChain(): ?IChain;
+    public function getChain(): ?ChainInterface;
 }

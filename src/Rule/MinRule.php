@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
-use Fi1a\Validation\IValue;
+use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
 /**
  * Проверка на минимальное значение
  */
-class MinRule extends ARule
+class MinRule extends AbstractRule
 {
     /**
      * @var int|float
@@ -34,7 +34,7 @@ class MinRule extends ARule
     /**
      * @inheritDoc
      */
-    public function validate(IValue $value): bool
+    public function validate(ValueInterface $value): bool
     {
         if (!$value->isPresence()) {
             return true;

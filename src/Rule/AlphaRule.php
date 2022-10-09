@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
-use Fi1a\Validation\IValue;
+use Fi1a\Validation\ValueInterface;
 
 /**
  * Является ли значение строкой без чисел
  */
-class AlphaRule extends ARule
+class AlphaRule extends AbstractRule
 {
     /**
      * @inheritDoc
      */
-    public function validate(IValue $value): bool
+    public function validate(ValueInterface $value): bool
     {
         if (!$value->isPresence()) {
             return true;

@@ -9,13 +9,13 @@ use InvalidArgumentException;
 /**
  * Одно из правил должно удовлетворять условию
  */
-class OneOf extends AChain
+class OneOf extends AbstractChain
 {
     /**
      * @inheritDoc
      */
     protected function setSuccess(
-        IResult $result,
+        ResultInterface $result,
         $success,
         ?string $ruleName = null,
         ?string $fieldName = null,
@@ -24,7 +24,7 @@ class OneOf extends AChain
         if (is_null($result->isSuccess())) {
             $result->setSuccess(false);
         }
-        if ($success instanceof IResult) {
+        if ($success instanceof ResultInterface) {
             $result->setSuccess($result->isSuccess() || $success->isSuccess());
             if (!$success->isSuccess()) {
                 $result->addErrors($success->getErrors());
@@ -47,7 +47,7 @@ class OneOf extends AChain
     /**
      * @inheritDoc
      */
-    public static function create(...$rules): IChain
+    public static function create(...$rules): ChainInterface
     {
         return new OneOf(...$rules);
     }

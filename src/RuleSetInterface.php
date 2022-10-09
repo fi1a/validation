@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
-use Fi1a\Validation\Rule\IRule;
+use Fi1a\Validation\Rule\RuleInterface;
 
 /**
  * Набор правил
  */
-interface IRuleSet
+interface RuleSetInterface
 {
     /**
      * Конструктор
@@ -23,7 +23,7 @@ interface IRuleSet
      *
      * @param mixed $values
      */
-    public function setValues($values): IRuleSet;
+    public function setValues($values): RuleSetInterface;
 
     /**
      *  Возвращает значения
@@ -35,7 +35,7 @@ interface IRuleSet
     /**
      * Установить сценарий
      */
-    public function setScenario(?string $scenario): IRuleSet;
+    public function setScenario(?string $scenario): RuleSetInterface;
 
     /**
      * Возвращает сообщения
@@ -54,7 +54,7 @@ interface IRuleSet
     /**
      * Возвращает набор правил
      *
-     * @return IRule[]|IChain[]
+     * @return RuleInterface[]|ChainInterface[]
      */
     public function getRules(): array;
 
@@ -66,5 +66,5 @@ interface IRuleSet
     /**
      * Возвращает цепочку для объявления правил
      */
-    public function fields(string ...$fields): IFieldsChain;
+    public function fields(string ...$fields): FieldsChainInterface;
 }

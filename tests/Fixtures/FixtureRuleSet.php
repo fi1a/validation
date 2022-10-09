@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Validation\Fixtures;
 
-use Fi1a\Validation\ARuleSet;
+use Fi1a\Validation\AbstractRuleSet;
 
 /**
  * Набор правил
  */
-class FixtureRuleSet extends ARuleSet
+class FixtureRuleSet extends AbstractRuleSet
 {
     /**
      * @inheritDoc

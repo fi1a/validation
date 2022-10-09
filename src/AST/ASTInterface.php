@@ -7,7 +7,7 @@ namespace Fi1a\Validation\AST;
 /**
  * Интерфейс AST
  */
-interface IAST
+interface ASTInterface
 {
     /**
      * Конструктор
@@ -17,5 +17,5 @@ interface IAST
     /**
      * Возвращает список правил
      */
-    public function getRules(): IRules;
+    public function getRules(): RulesInterface;
 }

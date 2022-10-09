@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Validation\Fixtures;
 
-use Fi1a\Validation\Rule\ARule;
+use Fi1a\Validation\Rule\AbstractRule;
 
 /**
  * Пустое название правила валидации
  */
-class EmptyRuleName extends ARule
+class EmptyRuleName extends AbstractRule
 {
     /**
      * @inheritDoc

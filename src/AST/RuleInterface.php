@@ -7,12 +7,12 @@ namespace Fi1a\Validation\AST;
 /**
  * Правило
  */
-interface IRule
+interface RuleInterface
 {
     /**
      * Конструктор
      *
-     * @param IArgument[]  $arguments
+     * @param ArgumentInterface[] $arguments
      */
     public function __construct(string $ruleName, array $arguments);
 
@@ -24,7 +24,7 @@ interface IRule
     /**
      * Возвращает аргументы правила
      *
-     * @return IArgument[]
+     * @return ArgumentInterface[]
      */
     public function getArguments(): array;
 

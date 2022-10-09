@@ -7,7 +7,7 @@ namespace Fi1a\Validation;
 /**
  * Результат валидации
  */
-class Result implements IResult
+class Result implements ResultInterface
 {
     /**
      * @var bool|null
@@ -24,7 +24,7 @@ class Result implements IResult
      */
     public function __construct()
     {
-        $this->errors = new Errors(IError::class);
+        $this->errors = new Errors(ErrorInterface::class);
     }
 
     /**
@@ -48,7 +48,7 @@ class Result implements IResult
     /**
      * @inheritDoc
      */
-    public function addError(IError $error): bool
+    public function addError(ErrorInterface $error): bool
     {
         $this->errors->add($error);
 

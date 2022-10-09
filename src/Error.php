@@ -7,7 +7,7 @@ namespace Fi1a\Validation;
 /**
  * Ошибка
  */
-class Error implements IError
+class Error implements ErrorInterface
 {
     /**
      * @var string

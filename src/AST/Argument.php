@@ -7,7 +7,7 @@ namespace Fi1a\Validation\AST;
 /**
  * Аргумент правила
  */
-class Argument implements IArgument
+class Argument implements ArgumentInterface
 {
     /**
      * @var scalar|null

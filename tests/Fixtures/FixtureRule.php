@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Validation\Fixtures;
 
-use Fi1a\Validation\Rule\ARule;
+use Fi1a\Validation\Rule\AbstractRule;
 
 /**
  * Тестирование методов добавления правил
  */
-class FixtureRule extends ARule
+class FixtureRule extends AbstractRule
 {
     private $variables = [];
 
