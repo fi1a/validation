@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Является ли значение строкой с числами
  */
-class AlphaNumericTest extends TestCase
+class AlphaNumericRuleTest extends TestCase
 {
     /**
      * Является ли значение строкой с числами

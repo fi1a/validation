@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Проверка на максимальное и мимальное значение
  */
-class BetweenTest extends TestCase
+class BetweenRuleTest extends TestCase
 {
     /**
      * Проверка на максимальное и мимальное значение
