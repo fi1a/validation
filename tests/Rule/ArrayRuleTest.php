@@ -11,24 +11,24 @@ use PHPUnit\Framework\TestCase;
 /**
  * Является ли значение массивом
  */
-class IsArrayTest extends TestCase
+class ArrayRuleTest extends TestCase
 {
     /**
      * Является ли значение массивом
      */
-    public function testIsArray(): void
+    public function testArray(): void
     {
-        $this->assertTrue(AllOf::create()->isArray()->validate([1, 2, 3])->isSuccess());
-        $this->assertFalse(AllOf::create()->isArray()->validate(false)->isSuccess());
+        $this->assertTrue(AllOf::create()->array()->validate([1, 2, 3])->isSuccess());
+        $this->assertFalse(AllOf::create()->array()->validate(false)->isSuccess());
     }
 
     /**
      * Является ли значение массивом
      */
-    public function testIsArrayValidator(): void
+    public function testArrayValidator(): void
     {
         $validator = new Validator();
-        $validation = $validator->make(['foo' => [1, 2, 3]], ['foo' => 'isArray']);
+        $validation = $validator->make(['foo' => [1, 2, 3]], ['foo' => 'array']);
         $this->assertTrue($validation->validate()->isSuccess());
         $validation->setValues(['foo' => false]);
         $this->assertFalse($validation->validate()->isSuccess());

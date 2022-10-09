@@ -9,7 +9,7 @@ use Fi1a\Validation\IValue;
 /**
  * Является ли значение массивом
  */
-class IsArray extends ARule
+class ArrayRule extends ARule
 {
     /**
      * @inheritDoc
@@ -23,7 +23,7 @@ class IsArray extends ARule
         $success = is_array($value->getValue());
 
         if (!$success) {
-            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}не является массивом', 'isArray');
+            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}не является массивом', 'array');
         }
 
         return $success;
@@ -34,6 +34,6 @@ class IsArray extends ARule
      */
     public static function getRuleName(): string
     {
-        return 'isArray';
+        return 'array';
     }
 }

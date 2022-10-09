@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use Fi1a\Validation\Rule\Alpha;
 use Fi1a\Validation\Rule\AlphaNumeric;
+use Fi1a\Validation\Rule\ArrayRule;
 use Fi1a\Validation\Rule\Between;
 use Fi1a\Validation\Rule\Email;
-use Fi1a\Validation\Rule\IsArray;
 use Fi1a\Validation\Rule\Max;
 use Fi1a\Validation\Rule\Min;
 use Fi1a\Validation\Rule\NullRule;
@@ -23,4 +23,4 @@ Validator::addRule(Email::class);
 Validator::addRule(Min::class);
 Validator::addRule(Max::class);
 Validator::addRule(Between::class);
-Validator::addRule(IsArray::class);
+Validator::addRule(ArrayRule::class);

@@ -18,7 +18,7 @@ use Fi1a\Validation\Rule\IRule;
  * @method IChain min(float $min)
  * @method IChain max(float $max)
  * @method IChain between(float $min, float $max)
- * @method IChain isArray()
+ * @method IChain array()
  */
 interface IChain
 {
