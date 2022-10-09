@@ -19,6 +19,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface max(float $max)
  * @method ChainInterface between(float $min, float $max)
  * @method ChainInterface array()
+ * @method ChainInterface boolean()
  */
 interface ChainInterface
 {
