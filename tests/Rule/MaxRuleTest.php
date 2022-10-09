@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Проверка на максимальное значение
  */
-class MaxTest extends TestCase
+class MaxRuleTest extends TestCase
 {
     /**
      * Проверка на максимальное значение

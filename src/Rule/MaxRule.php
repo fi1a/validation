@@ -10,7 +10,7 @@ use InvalidArgumentException;
 /**
  * Проверка на максимальное значение
  */
-class Max extends ARule
+class MaxRule extends ARule
 {
     /**
      * @var int|float
