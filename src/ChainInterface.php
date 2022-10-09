@@ -28,6 +28,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface minCount(int $min)
  * @method ChainInterface maxCount(int $max)
  * @method ChainInterface betweenCount(int $min, int $max)
+ * @method ChainInterface in(...$in)
  */
 interface ChainInterface
 {
