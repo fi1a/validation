@@ -39,10 +39,9 @@ class MaxRule extends AbstractRule
         if (!$value->isPresence()) {
             return true;
         }
-        if (!is_numeric($value->getValue())) {
-            return false;
-        }
-        $success = $value->getValue() < $this->max;
+
+        $success = is_numeric($value->getValue());
+        $success = $success && $value->getValue() < $this->max;
 
         if (!$success) {
             $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть максимум {{max}}', 'max');
