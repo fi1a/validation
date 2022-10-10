@@ -16,7 +16,12 @@ class RequiredRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        $success = !is_null($value->getValue()) && $value->getValue() !== '' && $value->getValue() !== false;
+        if (is_array($value->getValue())) {
+            /** @psalm-suppress MixedArgument */
+            $success = count($value->getValue()) > 0;
+        } else {
+            $success = !is_null($value->getValue()) && $value->getValue() !== '' && $value->getValue() !== false;
+        }
 
         if (!$success) {
             $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}является обязательным', 'required');
