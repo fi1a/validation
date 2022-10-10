@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Validation;
 
+use Fi1a\Unit\Validation\Fixtures\EmptyValues;
 use Fi1a\Unit\Validation\Fixtures\FixtureRule;
 use Fi1a\Validation\AST\Exception\ParseRuleException;
 use Fi1a\Validation\AllOf;
@@ -14,7 +15,9 @@ use Fi1a\Validation\Rule\NullRule;
 use Fi1a\Validation\Rule\RequiredRule;
 use Fi1a\Validation\Validation;
 use Fi1a\Validation\Validator;
+use Fi1a\Validation\Value;
 use InvalidArgumentException;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -796,5 +799,15 @@ class ValidatorTest extends TestCase
         $this->assertFalse($result->isSuccess());
         $this->assertEquals('required', $result->getErrors()->first()->getRuleName());
         $this->assertEquals('test message Field title null', $result->getErrors()->first()->getMessage());
+    }
+
+    /**
+     * Исключение
+     */
+    public function testValueException(): void
+    {
+        $this->expectException(LogicException::class);
+        $rule = new EmptyValues();
+        $rule->validate(new Value());
     }
 }

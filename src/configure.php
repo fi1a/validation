@@ -22,6 +22,7 @@ use Fi1a\Validation\Rule\MinRule;
 use Fi1a\Validation\Rule\NullRule;
 use Fi1a\Validation\Rule\NumericRule;
 use Fi1a\Validation\Rule\RequiredRule;
+use Fi1a\Validation\Rule\SameRule;
 use Fi1a\Validation\Validator;
 
 Validator::addRule(RequiredRule::class);
@@ -44,3 +45,4 @@ Validator::addRule(MinCountRule::class);
 Validator::addRule(MaxCountRule::class);
 Validator::addRule(BetweenCountRule::class);
 Validator::addRule(InRule::class);
+Validator::addRule(SameRule::class);

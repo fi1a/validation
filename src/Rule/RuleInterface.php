@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Validation\Rule;
 
 use Fi1a\Validation\ValueInterface;
+use Fi1a\Validation\ValuesInterface;
 
 /**
  * Правило валидации
@@ -34,4 +35,9 @@ interface RuleInterface
      * @return mixed[]
      */
     public function getVariables(): array;
+
+    /**
+     * Установить валидируемые значения
+     */
+    public function setValues(ValuesInterface $values): bool;
 }
