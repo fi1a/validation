@@ -28,6 +28,14 @@ abstract class AbstractChain implements ChainInterface
     ): void;
 
     /**
+     * Подготовка результата
+     */
+    protected function prepareResult(ResultInterface $result): ResultInterface
+    {
+        return $result;
+    }
+
+    /**
      * @var RuleInterface[]|ChainInterface[]
      */
     private $rules = [];
@@ -194,7 +202,7 @@ abstract class AbstractChain implements ChainInterface
             );
         }
 
-        return $result;
+        return $this->prepareResult($result);
     }
 
     /**

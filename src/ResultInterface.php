@@ -35,4 +35,9 @@ interface ResultInterface
      * Возвращает ошибки
      */
     public function getErrors(): Errors;
+
+    /**
+     * Очищает все ошибки
+     */
+    public function clearErrors(): bool;
 }

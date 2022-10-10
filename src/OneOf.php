@@ -39,9 +39,22 @@ class OneOf extends AbstractChain
             }
             foreach ($messages as $messageKey => $message) {
                 $messageKey = (string) $messageKey;
-                $result->addError(new Error($ruleName, $fieldName, $messageKey, $message));
+                $error = new Error($ruleName, $fieldName, $messageKey, $message);
+                $result->addError($error);
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function prepareResult(ResultInterface $result): ResultInterface
+    {
+        if ($result->isSuccess()) {
+            $result->clearErrors();
+        }
+
+        return $result;
     }
 
     /**

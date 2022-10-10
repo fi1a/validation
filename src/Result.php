@@ -75,4 +75,14 @@ class Result implements ResultInterface
     {
         return $this->errors;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function clearErrors(): bool
+    {
+        $this->errors = new Errors(ErrorInterface::class);
+
+        return true;
+    }
 }
