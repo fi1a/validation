@@ -31,6 +31,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface in(...$in)
  * @method ChainInterface notIn(...$notIn)
  * @method ChainInterface same(string $fieldName, ?string $fieldTitle = null)
+ * @method ChainInterface date(string $format = 'd.m.Y')
  */
 interface ChainInterface
 {
