@@ -6,15 +6,16 @@ namespace Fi1a\Unit\Validation\Rule;
 
 use Fi1a\Validation\AllOf;
 use Fi1a\Validation\Validator;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Разрешенные значения
+ * Допустимые значения
  */
 class InRuleTest extends TestCase
 {
     /**
-     * Разрешенные значения
+     * Допустимые значения
      */
     public function testIn(): void
     {
@@ -23,7 +24,7 @@ class InRuleTest extends TestCase
     }
 
     /**
-     * Разрешенные значения
+     * Допустимые значения
      */
     public function testInValidator(): void
     {
@@ -34,5 +35,16 @@ class InRuleTest extends TestCase
         $this->assertFalse($validation->validate()->isSuccess());
         $validation = $validator->make([], ['foo' => 'in(1, 2, 3)']);
         $this->assertTrue($validation->validate()->isSuccess());
+    }
+
+    /**
+     * Исключение при пустых допустимых значениях
+     */
+    public function testInException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $validator = new Validator();
+        $validation = $validator->make(['foo' => 1], ['foo' => 'in()']);
+        $validation->validate();
     }
 }

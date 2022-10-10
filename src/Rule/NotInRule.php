@@ -9,25 +9,25 @@ use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
 /**
- * Допустимые значения
+ * Не допустимые значения
  */
-class InRule extends AbstractRule
+class NotInRule extends AbstractRule
 {
     /**
      * @var MapArrayObject
      */
-    private $in;
+    private $notIn;
 
     /**
      * Конструктор
      *
-     * @param mixed ...$in
+     * @param mixed ...$notIn
      */
-    public function __construct(...$in)
+    public function __construct(...$notIn)
     {
-        $this->in = new MapArrayObject($in);
-        if ($this->in->isEmpty()) {
-            throw new InvalidArgumentException('Не переданы значения $in');
+        $this->notIn = new MapArrayObject($notIn);
+        if ($this->notIn->isEmpty()) {
+            throw new InvalidArgumentException('Не переданы значения $notIn');
         }
     }
 
@@ -40,12 +40,12 @@ class InRule extends AbstractRule
             return true;
         }
 
-        $success = $this->in->hasValue($value->getValue());
+        $success = !$this->notIn->hasValue($value->getValue());
 
         if (!$success) {
             $this->addMessage(
-                '{{if(name)}}Для "{{name}}" р{{else}}Р{{endif}}азрешены только значения {{in}}',
-                'in'
+                '{{if(name)}}Для "{{name}}" не{{else}}Не{{endif}} разрешены значения {{notIn}}',
+                'notIn'
             );
         }
 
@@ -59,7 +59,7 @@ class InRule extends AbstractRule
     {
         return array_merge(
             parent::getVariables(),
-            ['in' => $this->in->wraps('"')->join(', ')]
+            ['notIn' => $this->notIn->wraps('"')->join(', ')]
         );
     }
 
@@ -68,6 +68,6 @@ class InRule extends AbstractRule
      */
     public static function getRuleName(): string
     {
-        return 'in';
+        return 'notIn';
     }
 }

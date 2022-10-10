@@ -29,6 +29,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface maxCount(int $max)
  * @method ChainInterface betweenCount(int $min, int $max)
  * @method ChainInterface in(...$in)
+ * @method ChainInterface notIn(...$notIn)
  * @method ChainInterface same(string $fieldName, ?string $fieldTitle = null)
  */
 interface ChainInterface
