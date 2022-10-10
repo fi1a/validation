@@ -55,7 +55,7 @@ class SameRule extends AbstractRule
 
         if (!$success) {
             $this->addMessage(
-                'Значение {{if(name)}}"{{name}}" {{endif}}должно совпадать{{if(same)}} с {{same}}{{endif}}',
+                'Значение {{if(name)}}"{{name}}" {{endif}}должно совпадать{{if(same)}} с "{{same}}"{{endif}}',
                 'same'
             );
         }
@@ -68,7 +68,7 @@ class SameRule extends AbstractRule
      */
     public function getVariables(): array
     {
-        return array_merge(parent::getVariables(), ['same' => $this->fieldTitle]);
+        return array_merge(parent::getVariables(), ['same' => $this->fieldTitle ?: $this->fieldName]);
     }
 
     /**
