@@ -161,7 +161,7 @@ abstract class AbstractChain implements ChainInterface
                 if (is_array($values->getValues()) && $values->asArray() && is_array($value)) {
                     foreach ($value as $item) {
                         $success = $rule->validate($item);
-                        $messages = $this->formatMessages($rule, $item);
+                        $messages = $this->formatMessages($rule, $item, $values);
                         $this->setSuccess(
                             $result,
                             $success,
@@ -176,7 +176,7 @@ abstract class AbstractChain implements ChainInterface
 
                 assert($value instanceof ValueInterface);
                 $success = $rule->validate($value);
-                $messages = $this->formatMessages($rule, $value);
+                $messages = $this->formatMessages($rule, $value, $values);
                 $this->setSuccess(
                     $result,
                     $success,
@@ -202,7 +202,7 @@ abstract class AbstractChain implements ChainInterface
      *
      * @return string[]
      */
-    private function formatMessages(RuleInterface $rule, ValueInterface $value): array
+    private function formatMessages(RuleInterface $rule, ValueInterface $value, ValuesInterface $values): array
     {
         $userMessages = $this->getMessages();
         $messages = $rule->getMessages();
@@ -210,6 +210,9 @@ abstract class AbstractChain implements ChainInterface
         $fieldTitle = (string) $value->getPath();
         if (array_key_exists((string) $value->getPath(), $titles)) {
             $fieldTitle = $titles[(string) $value->getPath()];
+        }
+        if (!$values->asArray()) {
+            $fieldTitle = '';
         }
         $variables = array_merge([
             'name' => $fieldTitle,

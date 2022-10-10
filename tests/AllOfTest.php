@@ -124,4 +124,14 @@ class AllOfTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $chain->addRule($this);
     }
+
+    /**
+     * Отсутствии имени поля при валидации одного поля
+     */
+    public function testEmptyFieldName(): void
+    {
+        $result = AllOf::create()->required()->validate(null);
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('Значение является обязательным', $result->getErrors()->first()->getMessage());
+    }
 }
