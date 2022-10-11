@@ -43,43 +43,11 @@ interface ResultInterface
 
     /**
      * Возвращает данные участвующие в проверке
-     *
-     * @return mixed
      */
-    public function getValidatedValues();
+    public function getValues(): ResultValuesInterface;
 
     /**
      * Устанавливает данные участвующие в проверке
-     *
-     * @param mixed $values
      */
-    public function setValidatedValues($values): bool;
-
-    /**
-     * Возвращает данные не прошедшие проверку
-     *
-     * @return mixed
-     */
-    public function getInvalidValues();
-
-    /**
-     * Устанавливает данные не прошедшие проверку
-     *
-     * @param mixed $values
-     */
-    public function setInvalidValues($values): bool;
-
-    /**
-     * Возвращает данные прошедшие проверку
-     *
-     * @return mixed
-     */
-    public function getValidValues();
-
-    /**
-     * Устанавливает данные прошедшие проверку
-     *
-     * @param mixed $values
-     */
-    public function setValidValues($values): bool;
+    public function setValues(ResultValuesInterface $values): bool;
 }

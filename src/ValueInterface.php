@@ -72,4 +72,24 @@ interface ValueInterface
      * Возвращает наличие значения
      */
     public function isPresence(): bool;
+
+    /**
+     * Установить название правила
+     */
+    public function setRuleName(string $ruleName): bool;
+
+    /**
+     * Вернуть название правила
+     */
+    public function getRuleName(): ?string;
+
+    /**
+     * Валидное значение для правила или нет
+     */
+    public function isValid(): ?bool;
+
+    /**
+     * Установить флаг валидности значения для правила
+     */
+    public function setValid(bool $valid): bool;
 }

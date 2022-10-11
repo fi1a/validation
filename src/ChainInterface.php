@@ -79,14 +79,14 @@ interface ChainInterface
     /**
      * Установить заголовки полей
      *
-     * @param string[] $titles
+     * @param string[]|null[] $titles
      */
     public function setTitles(array $titles): ChainInterface;
 
     /**
      * Возвращает заголовки полей
      *
-     * @return string[]
+     * @return string[]|null[]
      */
     public function getTitles(): array;
 

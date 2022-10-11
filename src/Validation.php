@@ -30,7 +30,7 @@ class Validation implements ValidationInterface
     private $messages = [];
 
     /**
-     * @var string[]
+     * @var string[]|null[]
      */
     private $titles = [];
 

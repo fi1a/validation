@@ -40,6 +40,16 @@ class Value implements ValueInterface
     private $presence = false;
 
     /**
+     * @var string|null
+     */
+    private $ruleName = null;
+
+    /**
+     * @var bool|null
+     */
+    private $valid;
+
+    /**
      * @inheritDoc
      */
     public function setValue($value): bool
@@ -145,5 +155,41 @@ class Value implements ValueInterface
     public function isPresence(): bool
     {
         return $this->presence;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setRuleName(string $ruleName): bool
+    {
+        $this->ruleName = $ruleName;
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRuleName(): ?string
+    {
+        return $this->ruleName;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isValid(): ?bool
+    {
+        return $this->valid;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setValid(bool $valid): bool
+    {
+        $this->valid = $valid;
+
+        return true;
     }
 }

@@ -82,7 +82,7 @@ interface ValidationInterface
     /**
      * Возвращает заголовки полей
      *
-     * @return string[]
+     * @return string[]|null[]
      */
     public function getTitles(): array;
 }

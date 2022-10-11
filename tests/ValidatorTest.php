@@ -933,46 +933,19 @@ class ValidatorTest extends TestCase
             'tags:*:id' => 'required|integer',
         ]);
         $result = $validation->validate();
-        $this->assertEquals([
-            'user' => [
-                'id' => '-no-valid-',
-                'name' => 'User name',
-            ],
-            'tags' => [
-                [
-                    'id' => 1,
-                ],
-                [
-                    'id' => null,
-                ],
-            ],
-        ], $result->getValidatedValues());
-        $this->assertEquals([
-            'user' => [
-                'id' => '-no-valid-',
-            ],
-            'tags' => [
-                1 => [
-                    'id' => null,
-                ],
-            ],
-        ], $result->getInvalidValues());
-        $this->assertEquals([
-            'user' => [
-                'name' => 'User name',
-            ],
-            'tags' => [
-                [
-                    'id' => 1,
-                ],
-                [
-                    'id' => null,
-                ],
-            ],
-        ], $result->getValidValues());
-
-        $this->assertEquals(100, AllOf::create()->required()->validate(100)->getValidatedValues());
-        $this->assertEquals(null, AllOf::create()->required()->validate(null)->getInvalidValues());
-        $this->assertEquals(100, AllOf::create()->required()->validate(100)->getValidValues());
+        $this->assertCount(11, $result->getValues());
+        $this->assertEquals('required', $result->getValues()->first()->getRuleName());
+        $this->assertCount(8, $result->getValues()->getValid());
+        $this->assertCount(3, $result->getValues()->getInvalid());
+        $this->assertCount(1, AllOf::create()->required()->validate(100)->getValues());
+        $this->assertCount(2, AllOf::create()->required()->min(10)->validate(100)->getValues());
+        $this->assertCount(
+            2,
+            AllOf::create()->required()->min(10)->validate(100)->getValues()->getValid()
+        );
+        $this->assertCount(
+            0,
+            AllOf::create()->required()->min(10)->validate(100)->getValues()->getInvalid()
+        );
     }
 }

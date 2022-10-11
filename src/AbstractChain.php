@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
-use Fi1a\Collection\DataType\PathAccess;
 use Fi1a\Format\Formatter;
 use Fi1a\Validation\Rule\RuleInterface;
 use InvalidArgumentException;
@@ -47,7 +46,7 @@ abstract class AbstractChain implements ChainInterface
     private $messages = [];
 
     /**
-     * @var string[]
+     * @var string[]|null[]
      */
     private $titles = [];
 
@@ -120,10 +119,7 @@ abstract class AbstractChain implements ChainInterface
      */
     public function setTitles(array $titles): ChainInterface
     {
-        $this->titles = [];
-        foreach ($titles as $fieldName => $title) {
-            $this->titles[$fieldName] = $title;
-        }
+        $this->titles = $titles;
         foreach ($this->rules as $chain) {
             if (!($chain instanceof ChainInterface)) {
                 continue;
@@ -151,9 +147,8 @@ abstract class AbstractChain implements ChainInterface
             $values = new Values($values);
         }
         $result = new Result();
-        $validatedValues = [];
-        $invalidValues = [];
-        $validValues = [];
+        $resultValues = new ResultValues(ValueInterface::class);
+
         if (is_null($fieldName)) {
             $values->setAsArray(false);
         }
@@ -165,18 +160,12 @@ abstract class AbstractChain implements ChainInterface
                 $rule->setTitles($this->getTitles());
                 $value = $values->getValue($internalFieldName);
                 if (is_array($values->getValues()) && $values->asArray() && is_array($value)) {
-                    $validatedValues = new PathAccess();
-                    $invalidValues = new PathAccess();
-                    $validValues = new PathAccess();
                     foreach ($value as $item) {
+                        $item->setRuleName($rule::getRuleName());
                         $success = $rule->validate($item);
+                        $item->setValid($success);
                         if ($item->isPresence()) {
-                            $validatedValues->set($item->getPath(), $item->getValue());
-                            if (!$success) {
-                                $invalidValues->set($item->getPath(), $item->getValue());
-                            } else {
-                                $validValues->set($item->getPath(), $item->getValue());
-                            }
+                            $resultValues[] = $item;
                         }
                         $messages = $this->formatMessages($rule, $item, $values);
                         $this->setSuccess(
@@ -188,49 +177,15 @@ abstract class AbstractChain implements ChainInterface
                         );
                     }
 
-                    $validatedValues = $validatedValues->getArrayCopy();
-                    $invalidValues = $invalidValues->getArrayCopy();
-                    $validValues = $validValues->getArrayCopy();
-
                     continue;
                 }
 
                 assert($value instanceof ValueInterface);
+                $value->setRuleName($rule::getRuleName());
                 $success = $rule->validate($value);
+                $value->setValid($success);
                 if ($value->isPresence()) {
-                    if ($value->getPath()) {
-                        $validatedValues = new PathAccess(is_array($validatedValues) ? $validatedValues : []);
-                        $validatedValues->set($value->getPath(), $value->getValue());
-                        $validatedValues = $validatedValues->getArrayCopy();
-                    } else {
-                        /**
-                         * @var mixed $validatedValues
-                         */
-                        $validatedValues = $value->getValue();
-                    }
-                    if (!$success) {
-                        if ($value->getPath()) {
-                            $invalidValues = new PathAccess(is_array($invalidValues) ? $invalidValues : []);
-                            $invalidValues->set($value->getPath(), $value->getValue());
-                            $invalidValues = $invalidValues->getArrayCopy();
-                        } else {
-                            /**
-                             * @var mixed $invalidValues
-                             */
-                            $invalidValues = $value->getValue();
-                        }
-                    } else {
-                        if ($value->getPath()) {
-                            $validValues = new PathAccess(is_array($validValues) ? $validValues : []);
-                            $validValues->set($value->getPath(), $value->getValue());
-                            $validValues = $validValues->getArrayCopy();
-                        } else {
-                            /**
-                             * @var mixed $validValues
-                             */
-                            $validValues = $value->getValue();
-                        }
-                    }
+                    $resultValues[] = $value;
                 }
                 $messages = $this->formatMessages($rule, $value, $values);
                 $this->setSuccess(
@@ -245,48 +200,13 @@ abstract class AbstractChain implements ChainInterface
             }
 
             $chainResult = $rule->validate($values, $internalFieldName);
-            if (is_array($chainResult->getValidatedValues()) && is_array($validatedValues)) {
-                /**
-                 * @psalm-suppress MixedArgument
-                 */
-                $validatedValues = array_replace_recursive($validatedValues, $chainResult->getValidatedValues());
-            } else {
-                /**
-                 * @var mixed $validatedValues
-                 */
-                $validatedValues = $chainResult->getValidatedValues();
-            }
-            if (!$chainResult->isSuccess()) {
-                if (is_array($chainResult->getInvalidValues()) && is_array($invalidValues)) {
-                    /**
-                     * @psalm-suppress MixedArgument
-                     */
-                    $invalidValues = array_replace_recursive($invalidValues, $chainResult->getInvalidValues());
-                } else {
-                    /**
-                     * @var mixed $invalidValues
-                     */
-                    $invalidValues = $chainResult->getInvalidValues();
-                }
-            } else {
-                if (is_array($chainResult->getValidValues()) && is_array($validValues)) {
-                    /**
-                     * @psalm-suppress MixedArgument
-                     */
-                    $validValues = array_replace_recursive($validValues, $chainResult->getValidValues());
-                } else {
-                    /**
-                     * @var mixed $validValues
-                     */
-                    $validValues = $chainResult->getInvalidValues();
-                }
-            }
+            $resultValues->exchangeArray(
+                array_merge($resultValues->getArrayCopy(), $chainResult->getValues()->getArrayCopy())
+            );
             $this->setSuccess($result, $chainResult);
         }
 
-        $result->setValidatedValues($validatedValues);
-        $result->setInvalidValues($invalidValues);
-        $result->setValidValues($validValues);
+        $result->setValues($resultValues);
 
         return $this->prepareResult($result);
     }

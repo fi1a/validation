@@ -20,19 +20,9 @@ class Result implements ResultInterface
     private $errors;
 
     /**
-     * @var mixed
+     * @var ResultValuesInterface
      */
-    private $validatedValues;
-
-    /**
-     * @var mixed
-     */
-    private $invalidValues;
-
-    /**
-     * @var mixed
-     */
-    private $validValues;
+    private $values;
 
     /**
      * @inheritDoc
@@ -40,6 +30,7 @@ class Result implements ResultInterface
     public function __construct()
     {
         $this->errors = new Errors(ErrorInterface::class);
+        $this->values = new ResultValues(ValueInterface::class);
     }
 
     /**
@@ -104,53 +95,17 @@ class Result implements ResultInterface
     /**
      * @inheritDoc
      */
-    public function getValidatedValues()
+    public function getValues(): ResultValuesInterface
     {
-        return $this->validatedValues;
+        return $this->values;
     }
 
     /**
      * @inheritDoc
      */
-    public function setValidatedValues($values): bool
+    public function setValues(ResultValuesInterface $values): bool
     {
-        $this->validatedValues = $values;
-
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getInvalidValues()
-    {
-        return $this->invalidValues;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setInvalidValues($values): bool
-    {
-        $this->invalidValues = $values;
-
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getValidValues()
-    {
-        return $this->validValues;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setValidValues($values): bool
-    {
-        $this->validValues = $values;
+        $this->values = $values;
 
         return true;
     }
