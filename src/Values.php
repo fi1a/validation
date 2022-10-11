@@ -35,8 +35,8 @@ class Values implements ValuesInterface
         if (!is_array($this->getValues()) || !$this->asArray()) {
             $value = new Value();
             $value->setValue($this->values);
-            $value->setPath($fieldName);
-            $value->setWildcardPath($fieldName);
+            $value->setPath('');
+            $value->setWildcardPath('');
             $value->setPresence(true);
 
             return $value;

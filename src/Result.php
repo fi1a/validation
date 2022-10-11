@@ -20,6 +20,11 @@ class Result implements ResultInterface
     private $errors;
 
     /**
+     * @var mixed
+     */
+    private $validatedValues;
+
+    /**
      * @inheritDoc
      */
     public function __construct()
@@ -82,6 +87,24 @@ class Result implements ResultInterface
     public function clearErrors(): bool
     {
         $this->errors = new Errors(ErrorInterface::class);
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValidatedValues()
+    {
+        return $this->validatedValues;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setValidatedValues($values): bool
+    {
+        $this->validatedValues = $values;
 
         return true;
     }

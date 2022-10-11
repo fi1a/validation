@@ -40,4 +40,18 @@ interface ResultInterface
      * Очищает все ошибки
      */
     public function clearErrors(): bool;
+
+    /**
+     * Возвращает данные участвующие в проверке
+     *
+     * @return mixed
+     */
+    public function getValidatedValues();
+
+    /**
+     * Устанавливает данные участвующие в проверке
+     *
+     * @param mixed $values
+     */
+    public function setValidatedValues($values): bool;
 }

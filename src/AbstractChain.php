@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Collection\DataType\PathAccess;
 use Fi1a\Format\Formatter;
 use Fi1a\Validation\Rule\RuleInterface;
 use InvalidArgumentException;
@@ -155,6 +156,7 @@ abstract class AbstractChain implements ChainInterface
             $values = new Values($values);
         }
         $result = new Result();
+        $validatedValues = [];
         if (is_null($fieldName)) {
             $values->setAsArray(false);
         }
@@ -166,8 +168,12 @@ abstract class AbstractChain implements ChainInterface
                 $rule->setTitles($this->getTitles());
                 $value = $values->getValue($internalFieldName);
                 if (is_array($values->getValues()) && $values->asArray() && is_array($value)) {
+                    $validatedValues = new PathAccess();
                     foreach ($value as $item) {
                         $success = $rule->validate($item);
+                        if ($item->isPresence()) {
+                            $validatedValues->set($item->getPath(), $item->getValue());
+                        }
                         $messages = $this->formatMessages($rule, $item, $values);
                         $this->setSuccess(
                             $result,
@@ -178,11 +184,25 @@ abstract class AbstractChain implements ChainInterface
                         );
                     }
 
+                    $validatedValues = $validatedValues->getArrayCopy();
+
                     continue;
                 }
 
                 assert($value instanceof ValueInterface);
                 $success = $rule->validate($value);
+                if ($value->isPresence()) {
+                    if ($value->getPath()) {
+                        $validatedValues = new PathAccess(is_array($validatedValues) ? $validatedValues : []);
+                        $validatedValues->set($value->getPath(), $value->getValue());
+                        $validatedValues = $validatedValues->getArrayCopy();
+                    } else {
+                        /**
+                         * @var mixed $validatedValues
+                         */
+                        $validatedValues = $value->getValue();
+                    }
+                }
                 $messages = $this->formatMessages($rule, $value, $values);
                 $this->setSuccess(
                     $result,
@@ -195,11 +215,22 @@ abstract class AbstractChain implements ChainInterface
                 continue;
             }
 
-            $this->setSuccess(
-                $result,
-                $rule->validate($values, $internalFieldName)
-            );
+            $chainResult = $rule->validate($values, $internalFieldName);
+            if (is_array($chainResult->getValidatedValues()) && is_array($validatedValues)) {
+                /**
+                 * @psalm-suppress MixedArgument
+                 */
+                $validatedValues = array_replace_recursive($validatedValues, $chainResult->getValidatedValues());
+            } else {
+                /**
+                 * @var mixed $validatedValues
+                 */
+                $validatedValues = $chainResult->getValidatedValues();
+            }
+            $this->setSuccess($result, $chainResult);
         }
+
+        $result->setValidatedValues($validatedValues);
 
         return $this->prepareResult($result);
     }

@@ -900,4 +900,54 @@ class ValidatorTest extends TestCase
         $rule = new EmptyValues();
         $rule->validate(new Value());
     }
+
+    /**
+     * Данные участвующие в проверке
+     */
+    public function testValidatedValues(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make([
+            'user' => [
+                'id' => '-no-valid-',
+                'name' => 'User name',
+            ],
+            'tags' => [
+                [
+                    'id' => 1,
+                ],
+                [
+                    'id' => null,
+                ],
+            ],
+            'no-rule' => 1,
+            'no-rule-array' => [
+                [
+                    'id' => 1,
+                ],
+            ],
+        ], [
+            'user:id' => 'required|integer',
+            'user:name' => 'required|max(40)|min(2)',
+            'tags' => 'array|minCount(1)',
+            'tags:id' => 'required|integer',
+        ]);
+        $result = $validation->validate();
+        $this->assertEquals([
+            'user' => [
+                'id' => '-no-valid-',
+                'name' => 'User name',
+            ],
+            'tags' => [
+                [
+                    'id' => 1,
+                ],
+                [
+                    'id' => null,
+                ],
+            ],
+        ], $result->getValidatedValues());
+
+        $this->assertEquals(100, AllOf::create()->required()->validate(100)->getValidatedValues());
+    }
 }
