@@ -40,4 +40,11 @@ interface RuleInterface
      * Установить валидируемые значения
      */
     public function setValues(ValuesInterface $values): bool;
+
+    /**
+     * Установить заголовки полей
+     *
+     * @param string[]|null[] $titles
+     */
+    public function setTitles(array $titles): bool;
 }

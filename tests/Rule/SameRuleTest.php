@@ -10,18 +10,23 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Совпадают ли значения
+ * Совпадают ли значения с указанным полем
  */
 class SameRuleTest extends TestCase
 {
     /**
-     * Совпадают ли значения
+     * Совпадают ли значения с указанным полем
      */
     public function testSame(): void
     {
-        $this->assertFalse(
-            AllOf::create()->same('field1', 'fieldTitle')->validate(200)->isSuccess()
-        );
+        $result = AllOf::create()
+            ->setTitles(['field1' => 'Name field1'])
+            ->same('field1')
+            ->validate(200);
+
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('Значение должно совпадать с "Name field1"', $result->getErrors()->first()->getMessage());
+
         $this->assertTrue(
             AllOf::create()
                 ->same('bar')
@@ -31,7 +36,7 @@ class SameRuleTest extends TestCase
     }
 
     /**
-     * Совпадают ли значения
+     * Совпадают ли значения с указанным полем
      */
     public function testSameValidator(): void
     {

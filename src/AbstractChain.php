@@ -161,11 +161,10 @@ abstract class AbstractChain implements ChainInterface
 
         foreach ($this->getRules() as $key => $rule) {
             $internalFieldName = is_null($fieldName) || $fieldName === false ? (string) $key : (string) $fieldName;
-
             if ($rule instanceof RuleInterface) {
                 $rule->setValues($values);
+                $rule->setTitles($this->getTitles());
                 $value = $values->getValue($internalFieldName);
-
                 if (is_array($values->getValues()) && $values->asArray() && is_array($value)) {
                     foreach ($value as $item) {
                         $success = $rule->validate($item);
@@ -216,8 +215,11 @@ abstract class AbstractChain implements ChainInterface
         $messages = $rule->getMessages();
         $titles = $this->getTitles();
         $fieldTitle = (string) $value->getPath();
-        if (array_key_exists((string) $value->getPath(), $titles)) {
-            $fieldTitle = $titles[(string) $value->getPath()];
+        if (!$value->isWildcardItem()) {
+            $fieldTitle = (string) $value->getWildcardPath();
+        }
+        if (array_key_exists((string) $value->getWildcardPath(), $titles)) {
+            $fieldTitle = $titles[(string) $value->getWildcardPath()];
         }
         if (!$values->asArray()) {
             $fieldTitle = '';

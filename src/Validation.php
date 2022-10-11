@@ -81,6 +81,22 @@ class Validation implements ValidationInterface
     /**
      * @inheritDoc
      */
+    public function setMessage(string $key, ?string $message): bool
+    {
+        $messages = $this->getMessages();
+        if (!$message) {
+            unset($messages[$key]);
+        } else {
+            $messages[$key] = $message;
+        }
+        $this->setMessages($messages);
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getMessages(): array
     {
         return $this->messages;
@@ -107,7 +123,7 @@ class Validation implements ValidationInterface
     /**
      * @inheritDoc
      */
-    public function setTitle(string $fieldName, string $title): bool
+    public function setTitle(string $fieldName, ?string $title): bool
     {
         $titles = $this->getTitles();
         $titles[$fieldName] = $title;

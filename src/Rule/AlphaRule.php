@@ -7,7 +7,7 @@ namespace Fi1a\Validation\Rule;
 use Fi1a\Validation\ValueInterface;
 
 /**
- * Является ли значение строкой без чисел
+ * Является ли значение только буквенным(без чисел)
  */
 class AlphaRule extends AbstractRule
 {

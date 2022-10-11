@@ -42,7 +42,7 @@ class Values implements ValuesInterface
             return $value;
         }
 
-        $value = $this->getValueInternal($this->getKeys($fieldName), $this->values);
+        $value = $this->getValueInternal($this->getKeys($fieldName), $fieldName, $this->values);
         if (!$value->isWildcard()) {
             return $value;
         }
@@ -82,18 +82,14 @@ class Values implements ValuesInterface
      */
     private function getValueInternal(
         array $paths,
+        string $validationPath,
         $values,
-        ?string $realPath = null,
-        ?string $validationPath = null
+        ?string $realPath = null
     ): ValueInterface {
         $path = array_shift($paths);
         if (is_null($realPath)) {
             $realPath = '';
         }
-        if (is_null($validationPath)) {
-            $validationPath = '';
-        }
-        $validationPath .= ($validationPath ? ':' : '') . $path;
         if ($path !== '*') {
             $realPath .= ($realPath ? ':' : '') . $path;
         }
@@ -113,9 +109,9 @@ class Values implements ValuesInterface
             foreach ($values as $index => $value) {
                 $result[] = $this->getValueInternal(
                     $paths,
+                    $validationPath,
                     $value,
-                    $realPath . ($realPath ? ':' : '') . $index,
-                    $validationPath
+                    $realPath . ($realPath ? ':' : '') . $index
                 );
             }
 
@@ -131,11 +127,12 @@ class Values implements ValuesInterface
             $return->setPath($realPath);
             $return->setWildcardPath($validationPath);
             $return->setPresence(false);
+            $return->setWildcard(in_array('*', $paths));
 
             return $return;
         }
         if (count($paths) > 0) {
-            return $this->getValueInternal($paths, $values[$path], $realPath, $validationPath);
+            return $this->getValueInternal($paths, $validationPath, $values[$path], $realPath);
         }
 
         $return->setValue($values[$path]);
@@ -188,17 +185,21 @@ class Values implements ValuesInterface
      *
      * @return ValueInterface[]
      */
-    private function flatten(ValueInterface $value): array
+    private function flatten(ValueInterface $value, bool $wildcardItem = false): array
     {
         if ($value->isWildcard()) {
             $result = [];
+            if (!is_array($value->getValue())) {
+                return $result;
+            }
             foreach ($value->getValue() as $item) {
                 assert($item instanceof ValueInterface);
-                $result = array_merge($result, $this->flatten($item));
+                $result = array_merge($result, $this->flatten($item, true));
             }
 
             return $result;
         }
+        $value->setWildcardItem($wildcardItem);
 
         return [$value];
     }

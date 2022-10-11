@@ -24,6 +24,11 @@ abstract class AbstractRule implements RuleInterface
     protected $values;
 
     /**
+     * @var string[]|null[]
+     */
+    protected $titles = [];
+
+    /**
      * @inheritDoc
      */
     public function getMessages(): array
@@ -71,5 +76,27 @@ abstract class AbstractRule implements RuleInterface
         $this->values = $values;
 
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTitles(array $titles): bool
+    {
+        $this->titles = $titles;
+
+        return true;
+    }
+
+    /**
+     * Возвращает заголовок для поля
+     */
+    protected function getTitle(string $fieldName): ?string
+    {
+        if (array_key_exists($fieldName, $this->titles)) {
+            return $this->titles[$fieldName];
+        }
+
+        return null;
     }
 }

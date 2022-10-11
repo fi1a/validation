@@ -7,7 +7,7 @@ namespace Fi1a\Validation\Rule;
 use Fi1a\Validation\ValueInterface;
 
 /**
- * Является ли значение строкой
+ * Значение должно быть буквенно-цифровым
  */
 class AlphaNumericRule extends AbstractRule
 {

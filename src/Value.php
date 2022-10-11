@@ -20,6 +20,11 @@ class Value implements ValueInterface
     private $wildcard = false;
 
     /**
+     * @var bool
+     */
+    private $wildcardItem = false;
+
+    /**
      * @var string|null
      */
     private $path;
@@ -66,6 +71,24 @@ class Value implements ValueInterface
     public function setWildcard(bool $wildcard): bool
     {
         $this->wildcard = $wildcard;
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isWildcardItem(): bool
+    {
+        return $this->wildcardItem;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setWildcardItem(bool $wildcardItem): bool
+    {
+        $this->wildcardItem = $wildcardItem;
 
         return true;
     }

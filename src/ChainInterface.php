@@ -30,7 +30,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface betweenCount(int $min, int $max)
  * @method ChainInterface in(...$in)
  * @method ChainInterface notIn(...$notIn)
- * @method ChainInterface same(string $fieldName, ?string $fieldTitle = null)
+ * @method ChainInterface same(string $fieldName)
  * @method ChainInterface date(string $format = 'd.m.Y')
  * @method ChainInterface regex(string $regex)
  */

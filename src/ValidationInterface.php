@@ -42,6 +42,11 @@ interface ValidationInterface
     public function setMessages(array $messages): bool;
 
     /**
+     * Устанавливает сообщение об ошибке
+     */
+    public function setMessage(string $key, ?string $message): bool;
+
+    /**
      * Возвращает сообщения об ошибках
      *
      * @return string[]
@@ -65,12 +70,12 @@ interface ValidationInterface
     /**
      * Установить заголовок поля
      */
-    public function setTitle(string $fieldName, string $title): bool;
+    public function setTitle(string $fieldName, ?string $title): bool;
 
     /**
      * Установить заголовки полей
      *
-     * @param string[] $titles
+     * @param string[]|null[] $titles
      */
     public function setTitles(array $titles): bool;
 

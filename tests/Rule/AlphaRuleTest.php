@@ -9,21 +9,22 @@ use Fi1a\Validation\Validator;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Является ли значение строкой без чисел
+ * Является ли значение только буквенным(без чисел)
  */
 class AlphaRuleTest extends TestCase
 {
     /**
-     * Является ли значение строкой без чисел
+     * Является ли значение только буквенным(без чисел)
      */
     public function testAlpha(): void
     {
         $this->assertTrue(AllOf::create()->alpha()->validate('abc')->isSuccess());
         $this->assertFalse(AllOf::create()->alpha()->validate(100)->isSuccess());
+        $this->assertFalse(AllOf::create()->alpha()->validate('abc100')->isSuccess());
     }
 
     /**
-     * Является ли значение строкой без чисел
+     * Является ли значение только буквенным(без чисел)
      */
     public function testAlphaValidator(): void
     {

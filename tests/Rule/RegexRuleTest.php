@@ -10,12 +10,12 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Проверка на регулярно выражение
+ * Проверка на регулярное выражение
  */
 class RegexRuleTest extends TestCase
 {
     /**
-     * Проверка на регулярно выражение
+     * Проверка на регулярное выражение
      */
     public function testRegex(): void
     {
@@ -24,7 +24,7 @@ class RegexRuleTest extends TestCase
     }
 
     /**
-     * Проверка на регулярно выражение
+     * Проверка на регулярное выражение
      */
     public function testRegexValidator(): void
     {

@@ -9,12 +9,12 @@ use Fi1a\Validation\Validator;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Является ли значение email
+ * Является ли значение email адресом
  */
 class EmailRuleTest extends TestCase
 {
     /**
-     * Является ли значение email
+     * Является ли значение email адресом
      */
     public function testEmail(): void
     {
@@ -23,7 +23,7 @@ class EmailRuleTest extends TestCase
     }
 
     /**
-     * Является ли значение email
+     * Является ли значение email адресом
      */
     public function testEmailValidator(): void
     {

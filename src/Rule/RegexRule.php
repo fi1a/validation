@@ -8,7 +8,7 @@ use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
 /**
- * Проверка на регулярно выражение
+ * Проверка на регулярное выражение
  */
 class RegexRule extends AbstractRule
 {

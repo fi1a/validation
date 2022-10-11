@@ -9,7 +9,7 @@ use Fi1a\Validation\ValuesInterface;
 use InvalidArgumentException;
 
 /**
- * Совпадают ли значения
+ * Совпадают ли значения с указанным полем
  */
 class SameRule extends AbstractRule
 {
@@ -18,19 +18,13 @@ class SameRule extends AbstractRule
      */
     private $fieldName;
 
-    /**
-     * @var string|null
-     */
-    private $fieldTitle;
-
-    public function __construct(string $fieldName, ?string $fieldTitle = null)
+    public function __construct(string $fieldName)
     {
         if (!$fieldName) {
             throw new InvalidArgumentException('Аргумент $fieldName не может быть пустым');
         }
 
         $this->fieldName = $fieldName;
-        $this->fieldTitle = $fieldTitle;
     }
 
     /**
@@ -68,7 +62,12 @@ class SameRule extends AbstractRule
      */
     public function getVariables(): array
     {
-        return array_merge(parent::getVariables(), ['same' => $this->fieldTitle ?: $this->fieldName]);
+        $fieldTitle = $this->getTitle($this->fieldName);
+        if (!$fieldTitle) {
+            $fieldTitle = $this->fieldName;
+        }
+
+        return array_merge(parent::getVariables(), ['same' => $fieldTitle]);
     }
 
     /**

@@ -34,6 +34,16 @@ interface ValueInterface
     public function setWildcard(bool $wildcard): bool;
 
     /**
+     * Значение из массива
+     */
+    public function isWildcardItem(): bool;
+
+    /**
+     * Установить флаг определяющий является значение из массива или нет
+     */
+    public function setWildcardItem(bool $wildcardItem): bool;
+
+    /**
      * Устанавливает путь
      */
     public function setPath(string $path): bool;

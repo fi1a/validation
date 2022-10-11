@@ -9,7 +9,7 @@ use Fi1a\Validation\ValueInterface;
 use const FILTER_VALIDATE_EMAIL;
 
 /**
- * Является ли значение email
+ * Является ли значение email адресом
  */
 class EmailRule extends AbstractRule
 {

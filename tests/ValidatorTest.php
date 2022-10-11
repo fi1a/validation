@@ -11,6 +11,7 @@ use Fi1a\Validation\AllOf;
 use Fi1a\Validation\ErrorInterface;
 use Fi1a\Validation\Errors;
 use Fi1a\Validation\Exception\RuleNotFound;
+use Fi1a\Validation\Rule\ArrayRule;
 use Fi1a\Validation\Rule\NullRule;
 use Fi1a\Validation\Rule\RequiredRule;
 use Fi1a\Validation\Validation;
@@ -391,29 +392,43 @@ class ValidatorTest extends TestCase
                 'array1' => [
                     [
                         'id' => 'id1',
+                        'name' => 'name1',
                     ],
                     [
                         'id' => 'id2',
+                        'name' => 'name2',
                     ],
                     [],
                 ],
             ],
             [
                 'array1:*:id' => new RequiredRule(),
+                'array1:*:name' => new RequiredRule(),
             ],
             [
             ]
         );
+        $validation->setTitles([
+            'array1:*:name' => 'Название',
+        ]);
         $result = $validation->validate();
         $this->assertInstanceOf(Validation::class, $validation);
         $this->assertFalse($result->isSuccess());
         $this->assertInstanceOf(Errors::class, $result->getErrors());
-        $this->assertCount(1, $result->getErrors());
+        $this->assertCount(2, $result->getErrors());
+
         $error = $result->getErrors()[0];
         $this->assertInstanceOf(ErrorInterface::class, $error);
         $this->assertEquals('Значение "array1:2:id" является обязательным', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('array1:2:id', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
+
+        $error = $result->getErrors()[1];
+        $this->assertInstanceOf(ErrorInterface::class, $error);
+        $this->assertEquals('Значение "Название" является обязательным', $error->getMessage());
+        $this->assertEquals('required', $error->getRuleName());
+        $this->assertEquals('array1:2:name', $error->getFieldName());
         $this->assertEquals('required', $error->getMessageKey());
 
         $validation = $validator->make(
@@ -493,6 +508,81 @@ class ValidatorTest extends TestCase
         $this->assertEquals('All "array1:1:name"', $error->getMessage());
         $this->assertEquals('required', $error->getRuleName());
         $this->assertEquals('array1:1:name', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
+
+        $validation = $validator->make(
+            [],
+            [
+                'array1' => [new RequiredRule(), new ArrayRule()],
+                'array1:*:id' => new RequiredRule(),
+            ],
+            [
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertInstanceOf(Validation::class, $validation);
+        $this->assertFalse($result->isSuccess());
+        $this->assertInstanceOf(Errors::class, $result->getErrors());
+        $this->assertCount(1, $result->getErrors());
+
+        $error = $result->getErrors()[0];
+        $this->assertInstanceOf(ErrorInterface::class, $error);
+        $this->assertEquals('Значение "array1" является обязательным', $error->getMessage());
+        $this->assertEquals('required', $error->getRuleName());
+        $this->assertEquals('array1', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
+
+        $validation = $validator->make(
+            [],
+            [
+                'array1' => [new RequiredRule(), new ArrayRule()],
+                'array1:id' => new RequiredRule(),
+            ]
+        );
+        $validation->setMessage('array1|required', '{{name}} required');
+        $validation->setMessage('array1:id|required', '{{name}} required2');
+
+        $result = $validation->validate();
+        $this->assertInstanceOf(Validation::class, $validation);
+        $this->assertFalse($result->isSuccess());
+        $this->assertInstanceOf(Errors::class, $result->getErrors());
+        $this->assertCount(2, $result->getErrors());
+
+        $error = $result->getErrors()[0];
+        $this->assertInstanceOf(ErrorInterface::class, $error);
+        $this->assertEquals('array1 required', $error->getMessage());
+        $this->assertEquals('required', $error->getRuleName());
+        $this->assertEquals('array1', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
+
+        $error = $result->getErrors()[1];
+        $this->assertInstanceOf(ErrorInterface::class, $error);
+        $this->assertEquals('array1:id required2', $error->getMessage());
+        $this->assertEquals('required', $error->getRuleName());
+        $this->assertEquals('array1:id', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
+
+        $validation->setMessage('array1|required', null);
+        $validation->setMessage('array1:id|required', null);
+
+        $result = $validation->validate();
+        $this->assertInstanceOf(Validation::class, $validation);
+        $this->assertFalse($result->isSuccess());
+        $this->assertInstanceOf(Errors::class, $result->getErrors());
+        $this->assertCount(2, $result->getErrors());
+
+        $error = $result->getErrors()[0];
+        $this->assertInstanceOf(ErrorInterface::class, $error);
+        $this->assertEquals('Значение "array1" является обязательным', $error->getMessage());
+        $this->assertEquals('required', $error->getRuleName());
+        $this->assertEquals('array1', $error->getFieldName());
+        $this->assertEquals('required', $error->getMessageKey());
+
+        $error = $result->getErrors()[1];
+        $this->assertInstanceOf(ErrorInterface::class, $error);
+        $this->assertEquals('Значение "array1:id" является обязательным', $error->getMessage());
+        $this->assertEquals('required', $error->getRuleName());
+        $this->assertEquals('array1:id', $error->getFieldName());
         $this->assertEquals('required', $error->getMessageKey());
     }
 

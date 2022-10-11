@@ -9,12 +9,12 @@ use Fi1a\Validation\Validator;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Является ли значение строкой с числами
+ * Значение должно быть буквенно-цифровым
  */
 class AlphaNumericRuleTest extends TestCase
 {
     /**
-     * Является ли значение строкой с числами
+     * Значение должно быть буквенно-цифровым
      */
     public function testAlphaNumeric(): void
     {
@@ -29,7 +29,7 @@ class AlphaNumericRuleTest extends TestCase
     }
 
     /**
-     * Является ли значение строкой с числами
+     * Значение должно быть буквенно-цифровым
      */
     public function testAlphaNumericValidator(): void
     {

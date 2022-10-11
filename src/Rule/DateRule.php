@@ -14,13 +14,21 @@ class DateRule extends AbstractRule
     /**
      * @var string
      */
+    protected static $defaultFormat = 'd.m.Y';
+
+    /**
+     * @var string
+     */
     private $format;
 
     /**
      * Конструктор
      */
-    public function __construct(string $format = 'd.m.Y')
+    public function __construct(?string $format = null)
     {
+        if (!$format) {
+            $format = static::$defaultFormat;
+        }
         $this->format = $format;
     }
 
