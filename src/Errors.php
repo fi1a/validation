@@ -5,24 +5,17 @@ declare(strict_types=1);
 namespace Fi1a\Validation;
 
 use Fi1a\Collection\Collection;
+use Fi1a\Collection\DataType\PathAccess;
 
 /**
  * Ошибки
- *
- * @method ErrorInterface first()
- * @method ErrorInterface last()
- * @method ErrorInterface delete($key)
- * @method ErrorInterface put($key, $value)
- * @method ErrorInterface putIfAbsent($key, $value)
- * @method ErrorInterface replace($key, $value)
- * @method ErrorInterface[] column(string $name)
  */
-class Errors extends Collection
+class Errors extends Collection implements ErrorsInterface
 {
     /**
-     * Возвращает первую ошибку для поля
+     * @inheritDoc
      */
-    public function firstOfAll(): Errors
+    public function firstOfAll(): ErrorsInterface
     {
         $errors = new Errors(ErrorInterface::class);
         $inResult = [];
@@ -39,9 +32,9 @@ class Errors extends Collection
     }
 
     /**
-     * Возвращает все ошибки для конкретного поля
+     * @inheritDoc
      */
-    public function allForField(string $fieldName): Errors
+    public function allForField(string $fieldName): ErrorsInterface
     {
         $errors = new Errors(ErrorInterface::class);
         foreach ($this as $error) {
@@ -56,7 +49,7 @@ class Errors extends Collection
     }
 
     /**
-     * Возвращает первую ошибку для конкретного поля
+     * @inheritDoc
      */
     public function firstOfField(string $fieldName): ?ErrorInterface
     {
@@ -73,9 +66,9 @@ class Errors extends Collection
     }
 
     /**
-     * Возвращает все ошибки для конкретного правила
+     * @inheritDoc
      */
-    public function allForRule(string $ruleName): Errors
+    public function allForRule(string $ruleName): ErrorsInterface
     {
         $errors = new Errors(ErrorInterface::class);
         foreach ($this as $error) {
@@ -84,6 +77,45 @@ class Errors extends Collection
                 continue;
             }
             $errors[] = $error;
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function asArray(bool $flat = true): array
+    {
+        $errors = [];
+        if (!$flat) {
+            $errors = new PathAccess();
+        }
+        foreach ($this as $error) {
+            assert($error instanceof ErrorInterface);
+            if (!$error->getFieldName() || !$error->getMessageKey() || !$error->getMessage()) {
+                continue;
+            }
+            if (!$flat) {
+                assert($errors instanceof PathAccess);
+                /**
+                 * @psalm-suppress PossiblyNullOperand
+                 */
+                $errors->set($error->getFieldName() . ':' . $error->getMessageKey(), $error->getMessage());
+
+                continue;
+            }
+            /**
+             * @psalm-suppress PossiblyNullArrayOffset
+             * @psalm-suppress MixedArrayAssignment
+             */
+            $errors[$error->getFieldName()][$error->getMessageKey()] = $error->getMessage();
+        }
+        if ($errors instanceof PathAccess) {
+            /**
+             * @var string[] $errors
+             */
+            $errors = $errors->getArrayCopy();
         }
 
         return $errors;

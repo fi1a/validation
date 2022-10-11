@@ -66,4 +66,38 @@ class ErrorsTest extends TestCase
         $this->assertEquals('messageKey', $error->getMessageKey());
         $this->assertNull($errors->firstOfField('not_exists'));
     }
+
+    /**
+     * Возвращает массив с ошибками
+     */
+    public function testAsArray(): void
+    {
+        $errors = new Errors();
+        $errors[] = new Error('required', 'array1:field1', 'messageKey', 'message');
+        $errors[] = new Error('required2', 'array1:field1', 'messageKey2', 'message2');
+        $errors[] = new Error('required', 'array2:field2', 'messageKey', 'message');
+        $errors[] = new Error('required');
+        $this->assertEquals([
+            'array1:field1' => [
+                'messageKey' => 'message',
+                'messageKey2' => 'message2',
+            ],
+            'array2:field2' => [
+                'messageKey' => 'message',
+            ],
+        ], $errors->asArray());
+        $this->assertEquals([
+            'array1' => [
+                'field1' => [
+                    'messageKey' => 'message',
+                    'messageKey2' => 'message2',
+                ],
+            ],
+            'array2' => [
+                'field2' => [
+                    'messageKey' => 'message',
+                ],
+            ],
+        ], $errors->asArray(false));
+    }
 }
