@@ -153,6 +153,7 @@ abstract class AbstractChain implements ChainInterface
         $result = new Result();
         $validatedValues = [];
         $invalidValues = [];
+        $validValues = [];
         if (is_null($fieldName)) {
             $values->setAsArray(false);
         }
@@ -166,12 +167,15 @@ abstract class AbstractChain implements ChainInterface
                 if (is_array($values->getValues()) && $values->asArray() && is_array($value)) {
                     $validatedValues = new PathAccess();
                     $invalidValues = new PathAccess();
+                    $validValues = new PathAccess();
                     foreach ($value as $item) {
                         $success = $rule->validate($item);
                         if ($item->isPresence()) {
                             $validatedValues->set($item->getPath(), $item->getValue());
                             if (!$success) {
                                 $invalidValues->set($item->getPath(), $item->getValue());
+                            } else {
+                                $validValues->set($item->getPath(), $item->getValue());
                             }
                         }
                         $messages = $this->formatMessages($rule, $item, $values);
@@ -186,6 +190,7 @@ abstract class AbstractChain implements ChainInterface
 
                     $validatedValues = $validatedValues->getArrayCopy();
                     $invalidValues = $invalidValues->getArrayCopy();
+                    $validValues = $validValues->getArrayCopy();
 
                     continue;
                 }
@@ -213,6 +218,17 @@ abstract class AbstractChain implements ChainInterface
                              * @var mixed $invalidValues
                              */
                             $invalidValues = $value->getValue();
+                        }
+                    } else {
+                        if ($value->getPath()) {
+                            $validValues = new PathAccess(is_array($validValues) ? $validValues : []);
+                            $validValues->set($value->getPath(), $value->getValue());
+                            $validValues = $validValues->getArrayCopy();
+                        } else {
+                            /**
+                             * @var mixed $validValues
+                             */
+                            $validValues = $value->getValue();
                         }
                     }
                 }
@@ -252,12 +268,25 @@ abstract class AbstractChain implements ChainInterface
                      */
                     $invalidValues = $chainResult->getInvalidValues();
                 }
+            } else {
+                if (is_array($chainResult->getValidValues()) && is_array($validValues)) {
+                    /**
+                     * @psalm-suppress MixedArgument
+                     */
+                    $validValues = array_replace_recursive($validValues, $chainResult->getValidValues());
+                } else {
+                    /**
+                     * @var mixed $validValues
+                     */
+                    $validValues = $chainResult->getInvalidValues();
+                }
             }
             $this->setSuccess($result, $chainResult);
         }
 
         $result->setValidatedValues($validatedValues);
         $result->setInvalidValues($invalidValues);
+        $result->setValidValues($validValues);
 
         return $this->prepareResult($result);
     }

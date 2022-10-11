@@ -68,4 +68,18 @@ interface ResultInterface
      * @param mixed $values
      */
     public function setInvalidValues($values): bool;
+
+    /**
+     * Возвращает данные прошедшие проверку
+     *
+     * @return mixed
+     */
+    public function getValidValues();
+
+    /**
+     * Устанавливает данные прошедшие проверку
+     *
+     * @param mixed $values
+     */
+    public function setValidValues($values): bool;
 }

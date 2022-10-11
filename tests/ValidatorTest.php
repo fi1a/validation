@@ -957,8 +957,22 @@ class ValidatorTest extends TestCase
                 ],
             ],
         ], $result->getInvalidValues());
+        $this->assertEquals([
+            'user' => [
+                'name' => 'User name',
+            ],
+            'tags' => [
+                [
+                    'id' => 1,
+                ],
+                [
+                    'id' => null,
+                ],
+            ],
+        ], $result->getValidValues());
 
         $this->assertEquals(100, AllOf::create()->required()->validate(100)->getValidatedValues());
         $this->assertEquals(null, AllOf::create()->required()->validate(null)->getInvalidValues());
+        $this->assertEquals(100, AllOf::create()->required()->validate(100)->getValidValues());
     }
 }
