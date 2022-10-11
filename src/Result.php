@@ -25,6 +25,11 @@ class Result implements ResultInterface
     private $validatedValues;
 
     /**
+     * @var mixed
+     */
+    private $invalidValues;
+
+    /**
      * @inheritDoc
      */
     public function __construct()
@@ -105,6 +110,24 @@ class Result implements ResultInterface
     public function setValidatedValues($values): bool
     {
         $this->validatedValues = $values;
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getInvalidValues()
+    {
+        return $this->invalidValues;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setInvalidValues($values): bool
+    {
+        $this->invalidValues = $values;
 
         return true;
     }

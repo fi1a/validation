@@ -902,9 +902,9 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Данные участвующие в проверке
+     * Данные участвующие в проверке, успешно проверенные и с ошибкой
      */
-    public function testValidatedValues(): void
+    public function testResultValues(): void
     {
         $validator = new Validator();
         $validation = $validator->make([
@@ -928,9 +928,9 @@ class ValidatorTest extends TestCase
             ],
         ], [
             'user:id' => 'required|integer',
-            'user:name' => 'required|max(40)|min(2)',
+            'user:name' => 'required|maxLength(40)|minLength(2)',
             'tags' => 'array|minCount(1)',
-            'tags:id' => 'required|integer',
+            'tags:*:id' => 'required|integer',
         ]);
         $result = $validation->validate();
         $this->assertEquals([
@@ -947,7 +947,18 @@ class ValidatorTest extends TestCase
                 ],
             ],
         ], $result->getValidatedValues());
+        $this->assertEquals([
+            'user' => [
+                'id' => '-no-valid-',
+            ],
+            'tags' => [
+                1 => [
+                    'id' => null,
+                ],
+            ],
+        ], $result->getInvalidValues());
 
         $this->assertEquals(100, AllOf::create()->required()->validate(100)->getValidatedValues());
+        $this->assertEquals(null, AllOf::create()->required()->validate(null)->getInvalidValues());
     }
 }
