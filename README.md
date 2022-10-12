@@ -19,11 +19,8 @@
 Установить этот пакет можно как зависимость, используя Composer.
 
 ``` bash
-composer require fi1a/validation ">=1.0.0 <1.1.0"
+composer require fi1a/validation "~1.0"
 ```
-
-**Внимание!** Совместимость версий не гарантируется при переходе major или minor версии.
-Указывайте допустимую версию пакета в своем проекте следующим образом: ```"fi1a/validation": ">=1.0.0 <1.1.0"```.
 
 ## Использование
 
@@ -116,7 +113,7 @@ echo $result->getErrors()->join("; "); // Значение не является
 
 ### Сообщения об ошибках
 
-Сообщения об ошибках можно задать при создании объекта валидации с помощью метода ```make``` передав в него  массив с сообщениями,
+Сообщения об ошибках можно задать при создании объекта валидации с помощью метода ```make```, передав в него  массив с сообщениями,
 либо позже методами ```setMessage``` или ```setMessages``` объекта валидации.
 Также сообщения можно определить в наборе правил ```Fi1a\Validation\RuleSetInterface``` (возвращаемый массив метода ```getMessages```).
 
@@ -152,7 +149,7 @@ if (!$result->isSuccess()) {
 
 ### Заголовки полей
 
-Заголовки полей можно задать при создании объекта валидации с помощью метода ```make``` передав в него заголовки,
+Заголовки полей можно задать при создании объекта валидации с помощью метода ```make```, передав в него заголовки,
 либо позже методами ```setTitle``` или ```setTitles``` объекта валидации.
 Также заголовки можно определить в наборе правил ```Fi1a\Validation\RuleSetInterface``` (возвращаемый массив метода ```getTitles```).
 
@@ -220,6 +217,38 @@ if (!$result->isSuccess()) {
 
 Также доступны все методы коллекции ```\Fi1a\Collection\Collection```.
 
+### Затронутые значения
+
+Затронутые значения представлены коллекцией ```\Fi1a\Validation\ResultValues```,
+которую можно получить с помощью метода ```getValues()``` класса
+результата проверки ```\Fi1a\Validation\Result```.
+
+```php
+use Fi1a\Validation\Validator;
+
+$validator = new Validator();
+
+$validation = $validator->make($_POST + $_FILES, [
+    'id' => 'required|integer',
+    'email' => 'required|email',
+]);
+
+$result = $validation->validate();
+
+if (!$result->isSuccess()) {
+    $values = $result->getValues(); // \Fi1a\Validation\ResultValues|\Fi1a\Validation\Value[]
+    $values->getInvalid(); // \Fi1a\Validation\ResultValues|\Fi1a\Validation\Value[]
+    $values->getValid(); // \Fi1a\Validation\ResultValues|\Fi1a\Validation\Value[]
+}
+```
+
+Доступные методы в коллекции ```\Fi1a\Validation\ResultValues```:
+
+- ```getInvalid()``` - значения не прошедшие проверку;
+- ```getValid()``` - значения успешно прошедшие проверку.
+
+Также доступны все методы коллекции ```\Fi1a\Collection\Collection```.
+
 ### Набор правил
 
 Набор правил представляет собой класс реализующий интерфейс ```\Fi1a\Validation\RuleSetInterface```.
@@ -233,10 +262,12 @@ if (!$result->isSuccess()) {
 Пример набора правил:
 
 ```php
+use Fi1a\Validation\AbstractRuleSet;
+
 /**
  * Набор правил
  */
-class UserRuleSet extends \Fi1a\Validation\AbstractRuleSet
+class UserRuleSet extends AbstractRuleSet
 {
     /**
      * @inheritDoc
@@ -466,7 +497,7 @@ AllOf::create()->integer()->validate(100.1)->isSuccess(); // false
 
 #### json()
 
-Является ли значение json строкой
+Является ли значение json-строкой
 
 ```php
 use Fi1a\Validation\AllOf;
@@ -626,7 +657,7 @@ AllOf::create()->required()->validate(null)->isSuccess(); // false
 
 #### same(string $fieldName)
 
-Совпадают ли значения с указанным полем
+Совпадает ли значение со значением в указанном поле
 
 ```php
 use Fi1a\Validation\AllOf;

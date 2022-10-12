@@ -19,7 +19,7 @@ class ResultValues extends Collection implements ResultValuesInterface
         $values = new ResultValues(ValueInterface::class);
         foreach ($this as $value) {
             assert($value instanceof ValueInterface);
-            if ($value->isValid() && $value->isPresence()) {
+            if ($value->isValid()) {
                 $values->add($value);
             }
         }
@@ -35,7 +35,7 @@ class ResultValues extends Collection implements ResultValuesInterface
         $values = new ResultValues(ValueInterface::class);
         foreach ($this as $value) {
             assert($value instanceof ValueInterface);
-            if (!$value->isValid() && $value->isPresence()) {
+            if (!$value->isValid()) {
                 $values->add($value);
             }
         }

@@ -67,8 +67,8 @@ class FileSizeRule extends AbstractFileRule
         if (!$success) {
             $this->addMessage(
                 'Размер файла {{if(name)}}"{{name}}" {{endif}}'
-                . 'должен быть{{if(min)}} больше {{min}} Байт{{endif}}{{if(max)}}'
-                . '{{if(min)}} и{{endif}} меньше {{max}} Байт{{endif}}',
+                . 'должен быть{{if(min)}} больше {{min|memory}}{{endif}}{{if(max)}}'
+                . '{{if(min)}} и{{endif}} меньше {{max|memory}}{{endif}}',
                 'fileSize'
             );
         }
@@ -99,8 +99,6 @@ class FileSizeRule extends AbstractFileRule
      * Размер в байтах
      *
      * @param string|int $size
-     *
-     * @psalm-suppress InvalidReturnType
      */
     protected function getBytesSize($size): float
     {

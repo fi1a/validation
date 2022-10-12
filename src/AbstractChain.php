@@ -173,9 +173,7 @@ abstract class AbstractChain implements ChainInterface
                         $success = $rule->validate($item);
                         $item->setValid($success);
                         $item = $rule->afterValidate($item);
-                        if ($item->isPresence()) {
-                            $resultValues[] = $item;
-                        }
+                        $resultValues[] = $item;
                         $messages = $this->formatMessages($rule, $item, $values);
                         $this->setSuccess(
                             $result,
@@ -196,9 +194,7 @@ abstract class AbstractChain implements ChainInterface
                 $success = $rule->validate($value);
                 $value->setValid($success);
                 $value = $rule->afterValidate($value);
-                if ($value->isPresence()) {
-                    $resultValues[] = $value;
-                }
+                $resultValues[] = $value;
                 $messages = $this->formatMessages($rule, $value, $values);
                 $this->setSuccess(
                     $result,
