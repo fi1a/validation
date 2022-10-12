@@ -167,7 +167,7 @@ abstract class AbstractChain implements ChainInterface
                 $rule->setValues($values);
                 $rule->setTitles($this->getTitles());
                 $value = $rule->beforeValidate($values->getValue($internalFieldName));
-                if (is_array($values->getValues()) && $values->asArray() && is_array($value)) {
+                if (is_array($values->getRaw()) && $values->asArray() && is_array($value)) {
                     foreach ($value as $item) {
                         $item->setRuleName($rule::getRuleName());
                         $success = $rule->validate($item);

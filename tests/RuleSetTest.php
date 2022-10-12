@@ -32,6 +32,7 @@ class RuleSetTest extends TestCase
                         'wildcard' => null,
                     ],
                 ],
+                'key3' => 'key3 value',
             ],
             'create'
         ));

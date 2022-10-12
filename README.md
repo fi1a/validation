@@ -208,17 +208,19 @@ class UserRuleSet extends \Fi1a\Validation\AbstractRuleSet
      */
     public function init(): bool
     {
-        $this->fields('id', 'email', 'password', 'confirm_password', 'tags', 'tags:*:id')
+        $this->fields('id', 'email', 'tags', 'tags:*:id')
             ->on('create')
             ->allOf()
             ->required();
 
         $this->fields('id')->allOf()->integer();
         $this->fields('email')->allOf()->email();
-        $this->fields('password')->allOf()->minLength(8);
-        $this->fields('confirm_password')->allOf()->same('password');
         $this->fields('tags')->allOf()->array();
         $this->fields('tags:*:id')->allOf()->numeric();
+        if ($this->getValue('password')->isPresence() || $this->getScenario() === 'create') {
+            $this->fields('password')->allOf()->required()->minLength(8);
+            $this->fields('confirm_password')->allOf()->required()->same('password');
+        }
 
         return true;
     }

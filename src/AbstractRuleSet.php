@@ -20,7 +20,7 @@ abstract class AbstractRuleSet implements RuleSetInterface
     protected $titles = [];
 
     /**
-     * @var mixed
+     * @var ValuesInterface
      */
     protected $values;
 
@@ -70,7 +70,7 @@ abstract class AbstractRuleSet implements RuleSetInterface
             foreach ($fieldsChains as $fieldsChain) {
                 $chain = $fieldsChain->getChain();
                 if (
-                    (is_null($fieldsChain->getScenario()) || $fieldsChain->getScenario() === $this->scenario)
+                    (is_null($fieldsChain->getScenario()) || $fieldsChain->getScenario() === $this->getScenario())
                     && !is_null($chain)
                 ) {
                     if (!isset($rules[$fieldName])) {
@@ -89,7 +89,7 @@ abstract class AbstractRuleSet implements RuleSetInterface
      */
     public function setValues($values): RuleSetInterface
     {
-        $this->values = $values;
+        $this->values = new Values($values);
 
         return $this;
     }
@@ -97,7 +97,7 @@ abstract class AbstractRuleSet implements RuleSetInterface
     /**
      * @inheritDoc
      */
-    public function getValues()
+    public function getValues(): ValuesInterface
     {
         return $this->values;
     }
@@ -113,6 +113,14 @@ abstract class AbstractRuleSet implements RuleSetInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getScenario(): ?string
+    {
+        return $this->scenario;
+    }
+
+    /**
      * Возвращает цепочку для объявления правил
      */
     public function fields(string ...$fields): FieldsChainInterface
@@ -123,5 +131,15 @@ abstract class AbstractRuleSet implements RuleSetInterface
         }
 
         return $fieldsChain;
+    }
+
+    /**
+     * Возвращает значение поля
+     *
+     * @return ValueInterface|ValueInterface[]
+     */
+    protected function getValue(string $fieldName)
+    {
+        return $this->values->getValue($fieldName);
     }
 }

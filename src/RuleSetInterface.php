@@ -27,15 +27,18 @@ interface RuleSetInterface
 
     /**
      *  Возвращает значения
-     *
-     * @return mixed
      */
-    public function getValues();
+    public function getValues(): ValuesInterface;
 
     /**
      * Установить сценарий
      */
     public function setScenario(?string $scenario): RuleSetInterface;
+
+    /**
+     * Возвращает текущий сценарий
+     */
+    public function getScenario(): ?string;
 
     /**
      * Возвращает сообщения

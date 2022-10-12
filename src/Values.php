@@ -32,7 +32,7 @@ class Values implements ValuesInterface
      */
     public function getValue(string $fieldName)
     {
-        if (!is_array($this->getValues()) || !$this->asArray()) {
+        if (!is_array($this->getRaw()) || !$this->asArray()) {
             $value = new Value();
             $value->setValue($this->values);
             $value->setPath('');
@@ -53,7 +53,7 @@ class Values implements ValuesInterface
     /**
      * @inheritDoc
      */
-    public function getValues()
+    public function getRaw()
     {
         return $this->values;
     }

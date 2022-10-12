@@ -41,6 +41,7 @@ class Validator implements ValidatorInterface
         $ruleInstances = [];
 
         if ($values instanceof RuleSetInterface) {
+            assert($values instanceof RuleSetInterface);
             $values->init();
             if (!is_array($rules)) {
                 $rules = [];
@@ -51,7 +52,7 @@ class Validator implements ValidatorInterface
             /**
              * @var mixed $values
              */
-            $values = $values->getValues();
+            $values = $values->getValues()->getRaw();
         }
 
         if (is_array($rules)) {

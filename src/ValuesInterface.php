@@ -30,7 +30,7 @@ interface ValuesInterface
      *
      * @return mixed
      */
-    public function getValues();
+    public function getRaw();
 
     /**
      * Значение как массив

@@ -20,6 +20,9 @@ class FixtureRuleSet extends AbstractRuleSet
         $this->fields('key2:*:wildcard')->on('create')->allOf()->null();
         $this->fields('key1:foo')->oneOf()->required()->null();
         $this->fields('key1:bar')->on('update')->oneOf()->required()->null();
+        if ($this->getValue('key3')->isPresence()) {
+            $this->fields('key3')->allOf()->required();
+        }
 
         return true;
     }
