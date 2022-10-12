@@ -19,7 +19,7 @@
 Установить этот пакет можно как зависимость, используя Composer.
 
 ``` bash
-composer require fi1a/validation "~1.0"
+composer require fi1a/validation ~1.0
 ```
 
 ## Использование
