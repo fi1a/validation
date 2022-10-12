@@ -377,6 +377,33 @@ AllOf::create()->email()->validate('foo@bar.ru')->isSuccess(); // true
 AllOf::create()->email()->validate('foo')->isSuccess(); // false
 ```
 
+#### fileSize(string $min, string $max)
+
+Размер загруженного файла.
+
+Указатели на размер:
+- KB, K - килобайты;
+- MB, M - мегабайты;
+- GB, G - гигабайты;
+- TB, T - террабайты;
+- PB, P - петабайты.
+
+```php
+use Fi1a\Validation\Validator;
+
+$validator = new Validator();
+
+$validation = $validator->make($_POST + $_FILES, [
+    'photo' => 'required|fileSize("0", "1MB")',
+]);
+
+$result = $validation->validate();
+
+if (!$result->isSuccess()) {
+    echo $result->getErrors()->join("\n");
+}
+```
+
 #### in(...$in)
 
 Допустимые значения

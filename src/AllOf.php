@@ -21,9 +21,6 @@ class AllOf extends AbstractChain
         ?string $fieldName = null,
         array $messages = []
     ): void {
-        if (is_null($result->isSuccess())) {
-            $result->setSuccess(true);
-        }
         if ($success instanceof ResultInterface) {
             $result->setSuccess($result->isSuccess() && $success->isSuccess());
             if (!$success->isSuccess()) {
@@ -42,6 +39,17 @@ class AllOf extends AbstractChain
                 $result->addError(new Error($ruleName, $fieldName, $messageKey, $message));
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function beforeValidate(ResultInterface $result): ResultInterface
+    {
+        $result = parent::beforeValidate($result);
+        $result->setSuccess(true);
+
+        return $result;
     }
 
     /**

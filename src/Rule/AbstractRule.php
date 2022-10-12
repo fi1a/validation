@@ -99,4 +99,21 @@ abstract class AbstractRule implements RuleInterface
 
         return null;
     }
+
+    /**
+     * @inheritDoc
+     * @psalm-suppress MixedInferredReturnType
+     */
+    public function beforeValidate($value)
+    {
+        return $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterValidate(ValueInterface $value)
+    {
+        return $value;
+    }
 }

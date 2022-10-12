@@ -33,6 +33,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface same(string $fieldName)
  * @method ChainInterface date(string $format = 'd.m.Y')
  * @method ChainInterface regex(string $regex)
+ * @method ChainInterface fileSize(string $min, string $max)
  */
 interface ChainInterface
 {

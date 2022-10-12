@@ -47,4 +47,20 @@ interface RuleInterface
      * @param string[]|null[] $titles
      */
     public function setTitles(array $titles): bool;
+
+    /**
+     * До валидации
+     *
+     * @param ValueInterface|ValueInterface[] $value
+     *
+     * @return ValueInterface|ValueInterface[]
+     */
+    public function beforeValidate($value);
+
+    /**
+     * До валидации
+     *
+     * @return ValueInterface
+     */
+    public function afterValidate(ValueInterface $value);
 }

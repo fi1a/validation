@@ -28,9 +28,17 @@ abstract class AbstractChain implements ChainInterface
     ): void;
 
     /**
-     * Подготовка результата
+     * После валидации
      */
-    protected function prepareResult(ResultInterface $result): ResultInterface
+    protected function afterValidate(ResultInterface $result): ResultInterface
+    {
+        return $result;
+    }
+
+    /**
+     * До валидации
+     */
+    protected function beforeValidate(ResultInterface $result): ResultInterface
     {
         return $result;
     }
@@ -146,7 +154,7 @@ abstract class AbstractChain implements ChainInterface
         if (!($values instanceof ValuesInterface)) {
             $values = new Values($values);
         }
-        $result = new Result();
+        $result = $this->beforeValidate(new Result());
         $resultValues = new ResultValues(ValueInterface::class);
 
         if (is_null($fieldName)) {
@@ -158,12 +166,13 @@ abstract class AbstractChain implements ChainInterface
             if ($rule instanceof RuleInterface) {
                 $rule->setValues($values);
                 $rule->setTitles($this->getTitles());
-                $value = $values->getValue($internalFieldName);
+                $value = $rule->beforeValidate($values->getValue($internalFieldName));
                 if (is_array($values->getValues()) && $values->asArray() && is_array($value)) {
                     foreach ($value as $item) {
                         $item->setRuleName($rule::getRuleName());
                         $success = $rule->validate($item);
                         $item->setValid($success);
+                        $item = $rule->afterValidate($item);
                         if ($item->isPresence()) {
                             $resultValues[] = $item;
                         }
@@ -182,8 +191,11 @@ abstract class AbstractChain implements ChainInterface
 
                 assert($value instanceof ValueInterface);
                 $value->setRuleName($rule::getRuleName());
+                $value = $rule->beforeValidate($value);
+                assert($value instanceof ValueInterface);
                 $success = $rule->validate($value);
                 $value->setValid($success);
+                $value = $rule->afterValidate($value);
                 if ($value->isPresence()) {
                     $resultValues[] = $value;
                 }
@@ -208,7 +220,7 @@ abstract class AbstractChain implements ChainInterface
 
         $result->setValues($resultValues);
 
-        return $this->prepareResult($result);
+        return $this->afterValidate($result);
     }
 
     /**

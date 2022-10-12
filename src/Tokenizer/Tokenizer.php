@@ -210,7 +210,7 @@ class Tokenizer extends AParseFunction
             if (preg_match('/[\s\t\n]/mui', $symbol) && !$quote && !$single) {
                 $this->whiteSpaceReturn = 'parseArgument';
                 $this->setParseFunction('parseWhitespace');
-                if ($image) {
+                if ($image !== '') {
                     $type = Token::T_ARGUMENT;
                 }
 
@@ -218,7 +218,7 @@ class Tokenizer extends AParseFunction
             }
             if ($symbol === ',' && !$quote && !$single) {
                 $this->setParseFunction('parseCommaSeparator');
-                if ($image || $image === '0') {
+                if ($image  !== '') {
                     $type = Token::T_ARGUMENT;
                 }
 
@@ -227,7 +227,7 @@ class Tokenizer extends AParseFunction
             // @codingStandardsIgnoreStart
             if ((($symbol === '"' && !$single) || ($symbol === '\'' && !$quote)) && $prevSymbol !== '\\') {
                 $this->setParseFunction('parseQuote');
-                if ($image) {
+                if ($image !== '') {
                     $type = Token::T_ARGUMENT;
                 }
 
@@ -263,7 +263,7 @@ class Tokenizer extends AParseFunction
         } while ($loop);
         $current--;
         $this->setParseFunction('parseCloseParentheses');
-        if ($image) {
+        if ($image !== '') {
             $type = Token::T_ARGUMENT;
         }
     }

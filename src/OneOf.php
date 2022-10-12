@@ -21,9 +21,6 @@ class OneOf extends AbstractChain
         ?string $fieldName = null,
         array $messages = []
     ): void {
-        if (is_null($result->isSuccess())) {
-            $result->setSuccess(false);
-        }
         if ($success instanceof ResultInterface) {
             $result->setSuccess($result->isSuccess() || $success->isSuccess());
             if (!$success->isSuccess()) {
@@ -48,11 +45,22 @@ class OneOf extends AbstractChain
     /**
      * @inheritDoc
      */
-    protected function prepareResult(ResultInterface $result): ResultInterface
+    protected function afterValidate(ResultInterface $result): ResultInterface
     {
         if ($result->isSuccess()) {
             $result->clearErrors();
         }
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function beforeValidate(ResultInterface $result): ResultInterface
+    {
+        $result = parent::beforeValidate($result);
+        $result->setSuccess(false);
 
         return $result;
     }
