@@ -118,7 +118,7 @@ echo $result->getErrors()->join("; "); // Значение не является
 
 Сообщения об ошибках можно задать при создании объекта валидации с помощью метода ```make``` передав в него  массив с сообщениями,
 либо позже методами ```setMessage``` или ```setMessages``` объекта валидации.
-Также сообщения можно определить в наборе правил (возвращаемый массив метода ```getMessages```).
+Также сообщения можно определить в наборе правил ```Fi1a\Validation\RuleSetInterface``` (возвращаемый массив метода ```getMessages```).
 
 ```php
 use Fi1a\Validation\Validator;
@@ -154,7 +154,7 @@ if (!$result->isSuccess()) {
 
 Заголовки полей можно задать при создании объекта валидации с помощью метода ```make``` передав в него заголовки,
 либо позже методами ```setTitle``` или ```setTitles``` объекта валидации.
-Также заголовки можно определить в наборе правил (возвращаемый массив метода ```getTitles```).
+Также заголовки можно определить в наборе правил ```Fi1a\Validation\RuleSetInterface``` (возвращаемый массив метода ```getTitles```).
 
 ```php
 use Fi1a\Validation\Validator;
@@ -184,6 +184,41 @@ if (!$result->isSuccess()) {
     echo $result->getErrors()->join("; "); // Значение является обязательным; Значение является обязательным
 }
 ```
+
+### Ошибки
+
+Сообщения об ошибках представленны коллекцией ```\Fi1a\Validation\Errors```,
+которую можно получить с помощью метода ```getErrors()``` класса
+результата проверки ```\Fi1a\Validation\Result```.
+
+```php
+use Fi1a\Validation\Validator;
+
+$validator = new Validator();
+
+$validation = $validator->make($_POST + $_FILES, [
+    'id' => 'required|integer',
+    'email' => 'required|email',
+]);
+
+$result = $validation->validate();
+
+if (!$result->isSuccess()) {
+    $errors = $result->getErrors(); // \Fi1a\Validation\Errors
+    echo $errors->firstOfAll()->join('; ');
+}
+```
+
+Доступные методы в коллекции ошибок ```\Fi1a\Validation\Errors```:
+
+- ```firstOfAll()``` - возвращает первые ошибки для поля;
+- ```allForField()``` - возвращает все ошибки для конкретного поля;
+- ```firstOfField()``` - возвращает первую ошибку для конкретного поля;
+- ```allForRule()``` - возвращает все ошибки для конкретного правила;
+- ```asArray(bool $flat = true)``` - возвращает массив с сообщениями об ошибках
+(аргумент $flat определяет в каком виде будет сформирован массив с сообщениями об ошибках).
+
+Также доступны все методы коллекции ```\Fi1a\Collection\Collection```.
 
 ### Набор правил
 
@@ -384,6 +419,7 @@ AllOf::create()->email()->validate('foo')->isSuccess(); // false
 Размер загруженного файла.
 
 Указатели на размер:
+- B - байты;
 - KB, K - килобайты;
 - MB, M - мегабайты;
 - GB, G - гигабайты;
@@ -476,7 +512,7 @@ AllOf::create()->max(200)->validate(300)->isSuccess(); // false
 AllOf::create()->max(200)->validate('abc')->isSuccess(); // false
 ```
 
-#### mime(... string $extensions)
+#### mime(string ...$extensions)
 
 Тип загруженного файла
 

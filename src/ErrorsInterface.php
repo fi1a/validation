@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Collection\ICollection;
+
 /**
  * Ошибки
  *
@@ -15,10 +17,10 @@ namespace Fi1a\Validation;
  * @method ErrorInterface replace($key, $value)
  * @method ErrorInterface[] column(string $name)
  */
-interface ErrorsInterface
+interface ErrorsInterface extends ICollection
 {
     /**
-     * Возвращает первую ошибку для поля
+     * Возвращает первые ошибки для поля
      */
     public function firstOfAll(): ErrorsInterface;
 
@@ -38,7 +40,7 @@ interface ErrorsInterface
     public function allForRule(string $ruleName): ErrorsInterface;
 
     /**
-     * Возвращает массив с ошибками
+     * Возвращает массив с сообщениями об ошибках
      *
      * @return string[]
      */
