@@ -19,6 +19,10 @@ class FileSizeRuleTest extends TestCase
      */
     public function testFileSize(): void
     {
+        $this->assertTrue(AllOf::create()->fileSize('1B', '20B')->validate([
+            'size' => 2,
+        ])->isSuccess());
+
         $this->assertTrue(AllOf::create()->fileSize('1MB', '20M')->validate([
             'size' => 1048577,
         ])->isSuccess());

@@ -476,6 +476,26 @@ AllOf::create()->max(200)->validate(300)->isSuccess(); // false
 AllOf::create()->max(200)->validate('abc')->isSuccess(); // false
 ```
 
+#### mime(... string $extensions)
+
+Тип загруженного файла
+
+```php
+use Fi1a\Validation\Validator;
+
+$validator = new Validator();
+
+$validation = $validator->make($_POST + $_FILES, [
+    'photo' => 'fileSize("0", "1MB")|mime("jpeg", "png")',
+]);
+
+$result = $validation->validate();
+
+if (!$result->isSuccess()) {
+    echo $result->getErrors()->join("\n");
+}
+````
+
 #### minCount(int $min)
 
 Проверка на минимальное количество элементов в массиве

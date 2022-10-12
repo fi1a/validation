@@ -132,5 +132,7 @@ class FileSizeRule extends AbstractFileRule
             case 'P':
                 return $number * pow(1024, 5);
         }
+
+        return $number;
     }
 }
