@@ -20,6 +20,7 @@ class NotInRuleTest extends TestCase
     public function testNotIn(): void
     {
         $this->assertTrue(AllOf::create()->notIn(1, 2, 3)->validate(4)->isSuccess());
+        $this->assertTrue(AllOf::create()->notIn([1, 2, 3])->validate(4)->isSuccess());
         $this->assertFalse(AllOf::create()->notIn(1, 2, 3)->validate(2)->isSuccess());
     }
 

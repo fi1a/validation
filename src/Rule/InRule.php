@@ -25,6 +25,9 @@ class InRule extends AbstractRule
      */
     public function __construct(...$in)
     {
+        if (count($in) === 1 && is_array($in[0])) {
+            $in = $in[0];
+        }
         $this->in = new MapArrayObject($in);
         if ($this->in->isEmpty()) {
             throw new InvalidArgumentException('Не переданы значения $in');

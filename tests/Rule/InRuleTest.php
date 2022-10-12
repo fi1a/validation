@@ -20,6 +20,7 @@ class InRuleTest extends TestCase
     public function testIn(): void
     {
         $this->assertTrue(AllOf::create()->in(1, 2, 3)->validate(1)->isSuccess());
+        $this->assertTrue(AllOf::create()->in([1, 2, 3])->validate(1)->isSuccess());
         $this->assertFalse(AllOf::create()->in(1, 2, 3)->validate(100.1)->isSuccess());
     }
 

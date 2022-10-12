@@ -25,6 +25,9 @@ class NotInRule extends AbstractRule
      */
     public function __construct(...$notIn)
     {
+        if (count($notIn) === 1 && is_array($notIn[0])) {
+            $notIn = $notIn[0];
+        }
         $this->notIn = new MapArrayObject($notIn);
         if ($this->notIn->isEmpty()) {
             throw new InvalidArgumentException('Не переданы значения $notIn');
