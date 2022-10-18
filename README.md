@@ -475,13 +475,14 @@ if (!$result->isSuccess()) {
 
 #### in(...$in)
 
-Допустимые значения
+Допустимые значения (не строгая проверка значения)
 
 ```php
 use Fi1a\Validation\AllOf;
 
 AllOf::create()->in(1, 2, 3)->validate(1)->isSuccess(); // true
 AllOf::create()->in(1, 2, 3)->validate(100.1)->isSuccess(); // false
+AllOf::create()->in('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // true
 ```
 
 #### integer()
@@ -602,13 +603,14 @@ AllOf::create()->min(200)->validate('abc')->isSuccess(); // false
 
 #### notIn(...$notIn)
 
-Не допустимые значения
+Не допустимые значения (не строгая проверка значения)
 
 ```php
 use Fi1a\Validation\AllOf;
 
 AllOf::create()->notIn(1, 2, 3)->validate(4)->isSuccess(); // true
 AllOf::create()->notIn(1, 2, 3)->validate(2)->isSuccess(); // false
+AllOf::create()->notIn('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // false
 ```
 
 #### null()
@@ -664,6 +666,30 @@ use Fi1a\Validation\AllOf;
 
 AllOf::create()->same('field1')->validate(200)->isSuccess(); // false
 AllOf::create()->same('bar')->validate(['foo' => 200, 'bar' => 200], 'foo')->isSuccess(); // true
+```
+
+#### strictIn(...$in)
+
+Допустимые значения (строгая проверка значения)
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()->strictIn(1, 2, 3)->validate(1)->isSuccess(); // true
+AllOf::create()->strictIn(1, 2, 3)->validate(100.1)->isSuccess(); // false
+AllOf::create()->strictIn('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // false
+```
+
+#### strictNotIn(...$notIn)
+
+Не допустимые значения (строгая проверка значения)
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()->strictNotIn(1, 2, 3)->validate(4)->isSuccess(); // true
+AllOf::create()->strictNotIn(1, 2, 3)->validate(2)->isSuccess(); // false
+AllOf::create()->strictNotIn('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // true
 ```
 
 ### Пользовательское правило проверки

@@ -28,6 +28,8 @@ use Fi1a\Validation\Rule\NumericRule;
 use Fi1a\Validation\Rule\RegexRule;
 use Fi1a\Validation\Rule\RequiredRule;
 use Fi1a\Validation\Rule\SameRule;
+use Fi1a\Validation\Rule\StrictInRule;
+use Fi1a\Validation\Rule\StrictNotInRule;
 use Fi1a\Validation\Validator;
 
 Validator::addRule(RequiredRule::class);
@@ -56,3 +58,5 @@ Validator::addRule(DateRule::class);
 Validator::addRule(RegexRule::class);
 Validator::addRule(FileSizeRule::class);
 Validator::addRule(MimeRule::class);
+Validator::addRule(StrictNotInRule::class);
+Validator::addRule(StrictInRule::class);

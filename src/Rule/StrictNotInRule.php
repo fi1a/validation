@@ -9,9 +9,9 @@ use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
 /**
- * Не допустимые значения
+ * Не допустимые значения (строгая проверка)
  */
-class NotInRule extends AbstractRule
+class StrictNotInRule extends AbstractRule
 {
     /**
      * @var MapArrayObject
@@ -43,27 +43,12 @@ class NotInRule extends AbstractRule
             return true;
         }
 
-        $notIn = new MapArrayObject($this->notIn->getArrayCopy());
-        /**
-         * @var mixed $check
-         */
-        $check = $value->getValue();
-        if (is_string($check)) {
-            $check = mb_strtolower($check);
-        }
-
-        $success = !$notIn->map(function ($value) {
-            if (is_string($value)) {
-                $value = mb_strtolower($value);
-            }
-
-            return $value;
-        })->hasValue($check);
+        $success = !$this->notIn->hasValue($value->getValue());
 
         if (!$success) {
             $this->addMessage(
                 '{{if(name)}}Для "{{name}}" не{{else}}Не{{endif}} разрешены значения {{notIn}}',
-                'notIn'
+                'strictNotIn'
             );
         }
 
@@ -86,6 +71,6 @@ class NotInRule extends AbstractRule
      */
     public static function getRuleName(): string
     {
-        return 'notIn';
+        return 'strictNotIn';
     }
 }

@@ -10,32 +10,32 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Допустимые значения
+ * Допустимые значения (строгая проверка)
  */
-class InRuleTest extends TestCase
+class StrictInRuleTest extends TestCase
 {
     /**
-     * Допустимые значения
+     * Допустимые значения (строгая проверка)
      */
     public function testIn(): void
     {
-        $this->assertTrue(AllOf::create()->in(1, 2, 3)->validate(1)->isSuccess());
-        $this->assertTrue(AllOf::create()->in([1, 2, 3])->validate(1)->isSuccess());
-        $this->assertTrue(AllOf::create()->in(['camelCase', 'CAPS'])->validate('Caps')->isSuccess());
-        $this->assertFalse(AllOf::create()->in(1, 2, 3)->validate(100.1)->isSuccess());
+        $this->assertTrue(AllOf::create()->strictIn(1, 2, 3)->validate(1)->isSuccess());
+        $this->assertTrue(AllOf::create()->strictIn([1, 2, 3])->validate(1)->isSuccess());
+        $this->assertFalse(AllOf::create()->strictIn(1, 2, 3)->validate('1')->isSuccess());
+        $this->assertFalse(AllOf::create()->strictIn(1, 2, 3)->validate(100.1)->isSuccess());
     }
 
     /**
-     * Допустимые значения
+     * Допустимые значения (строгая проверка)
      */
     public function testInValidator(): void
     {
         $validator = new Validator();
-        $validation = $validator->make(['foo' => 1], ['foo' => 'in(1, 2, 3)']);
+        $validation = $validator->make(['foo' => 1], ['foo' => 'strictIn(1, 2, 3)']);
         $this->assertTrue($validation->validate()->isSuccess());
         $validation->setValues(['foo' => 100.1]);
         $this->assertFalse($validation->validate()->isSuccess());
-        $validation = $validator->make([], ['foo' => 'in(1, 2, 3)']);
+        $validation = $validator->make([], ['foo' => 'strictIn(1, 2, 3)']);
         $this->assertTrue($validation->validate()->isSuccess());
     }
 
@@ -46,7 +46,7 @@ class InRuleTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $validator = new Validator();
-        $validation = $validator->make(['foo' => 1], ['foo' => 'in()']);
+        $validation = $validator->make(['foo' => 1], ['foo' => 'strictIn()']);
         $validation->validate();
     }
 }

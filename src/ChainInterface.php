@@ -35,6 +35,8 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface regex(string $regex)
  * @method ChainInterface fileSize(string $min, string $max)
  * @method ChainInterface mime(string ...$extensions)
+ * @method ChainInterface strictIn(...$in)
+ * @method ChainInterface strictNotIn(...$notIn)
  */
 interface ChainInterface
 {
