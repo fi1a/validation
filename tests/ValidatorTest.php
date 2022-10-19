@@ -948,4 +948,21 @@ class ValidatorTest extends TestCase
             AllOf::create()->required()->min(10)->validate(100)->getValues()->getInvalid()
         );
     }
+
+    /**
+     * Валидация массива
+     */
+    public function testWildcard(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make([
+            'array' => ['a', 2, 3],
+        ], [
+            'array' => 'array|minCount(1)',
+            'array:*' => 'required|integer',
+        ]);
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertCount(1, $result->getErrors());
+    }
 }

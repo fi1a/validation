@@ -90,7 +90,7 @@ class Values implements ValuesInterface
         if (is_null($realPath)) {
             $realPath = '';
         }
-        if ($path !== '*') {
+        if ($path !== '*' && $path) {
             $realPath .= ($realPath ? ':' : '') . $path;
         }
         $return = new Value();
@@ -117,6 +117,14 @@ class Values implements ValuesInterface
 
             $return->setValue($result);
             $return->setWildcard(true);
+            $return->setPath($realPath);
+            $return->setWildcardPath($validationPath);
+            $return->setPresence(true);
+
+            return $return;
+        }
+        if (!count($paths) && !$path) {
+            $return->setValue($values);
             $return->setPath($realPath);
             $return->setWildcardPath($validationPath);
             $return->setPresence(true);

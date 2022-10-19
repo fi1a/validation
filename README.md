@@ -1,4 +1,4 @@
-# Библиотека проверки (валидации) значений
+# PHP библиотека проверки (валидации) значений
 
 [![Latest Version][badge-release]][packagist]
 [![Software License][badge-license]][license]
@@ -431,6 +431,7 @@ use Fi1a\Validation\AllOf;
 
 AllOf::create()->date()->validate('10.10.2022')->isSuccess(); // true
 AllOf::create()->date('d')->validate('10.10.2022')->isSuccess(); // false
+AllOf::create()->date('d m, Y')->validate('10 10, 2022')->isSuccess(); // true
 AllOf::create()->date()->validate('abc')->isSuccess(); // false
 ```
 
