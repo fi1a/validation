@@ -1,4 +1,4 @@
-# PHP библиотека проверки (валидации) значений
+# PHP валидация (проверка) значений
 
 [![Latest Version][badge-release]][packagist]
 [![Software License][badge-license]][license]
