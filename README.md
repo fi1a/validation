@@ -278,7 +278,11 @@ class UserRuleSet extends AbstractRuleSet
             ->on('create')
             ->allOf()
             ->required();
-
+        $this->fields('id', 'email', 'tags', 'tags:*:id')
+            ->on('update')
+            ->allOf()
+            ->requiredIfPresence();
+            
         $this->fields('id')->allOf()->integer();
         $this->fields('email')->allOf()->email();
         $this->fields('tags')->allOf()->array();
@@ -645,6 +649,25 @@ use Fi1a\Validation\AllOf;
 
 AllOf::create()->regex('/[0-9]/mui')->validate(200)->isSuccess(); // true
 AllOf::create()->regex('/[0-9]/mui')->validate('abc')->isSuccess(); // false
+```
+
+#### requiredIfPresence()
+
+Обязательное значение, если передано
+
+```php
+use Fi1a\Validation\Validator;
+
+$validator = new Validator();
+$validation = $validator->make(['foo' => true], ['foo' => 'requiredIfPresence']);
+
+$validation->validate()->isSuccess(); // true
+
+$validation->setValues(['foo' => null]);
+$validation->validate()->isSuccess(); // false
+
+$validation->setValues([]);
+$validation->validate()->isSuccess(); // true
 ```
 
 #### required()

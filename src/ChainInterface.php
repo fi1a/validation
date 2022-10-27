@@ -37,6 +37,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface mime(string ...$extensions)
  * @method ChainInterface strictIn(...$in)
  * @method ChainInterface strictNotIn(...$notIn)
+ * @method ChainInterface requiredIfPresence()
  */
 interface ChainInterface
 {
