@@ -34,11 +34,11 @@ class MaxCountRule extends AbstractRule
         }
 
         /** @psalm-suppress MixedArgument */
-        $success = is_array($value->getValue()) && count($value->getValue()) < $this->max;
+        $success = is_array($value->getValue()) && count($value->getValue()) <= $this->max;
 
         if (!$success) {
             $this->addMessage(
-                'Количество {{if(name)}}"{{name}}" {{endif}}должно быть меньше {{max}}',
+                'Количество {{if(name)}}"{{name}}" {{endif}}должно быть меньше или равно {{max}}',
                 'maxCount'
             );
         }

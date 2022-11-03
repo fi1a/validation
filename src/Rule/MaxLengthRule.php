@@ -33,11 +33,11 @@ class MaxLengthRule extends AbstractRule
             return true;
         }
 
-        $success = mb_strlen((string) $value->getValue()) < $this->max;
+        $success = mb_strlen((string) $value->getValue()) <= $this->max;
 
         if (!$success) {
             $this->addMessage(
-                'Длина значения {{if(name)}}"{{name}}" {{endif}}должна быть меньше {{max}}',
+                'Длина значения {{if(name)}}"{{name}}" {{endif}}должна быть меньше или равно {{max}}',
                 'maxLength'
             );
         }

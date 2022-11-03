@@ -32,7 +32,7 @@ class BetweenRuleTest extends TestCase
         $validator = new Validator();
         $validation = $validator->make(['foo' => 150], ['foo' => 'between(100, 200)']);
         $this->assertTrue($validation->validate()->isSuccess());
-        $validation->setValues(['foo' => 200]);
+        $validation->setValues(['foo' => 201]);
         $this->assertFalse($validation->validate()->isSuccess());
         $validation = $validator->make([], ['foo' => 'between(100, 200)']);
         $this->assertTrue($validation->validate()->isSuccess());

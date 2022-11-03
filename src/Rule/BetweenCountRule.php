@@ -45,12 +45,13 @@ class BetweenCountRule extends AbstractRule
 
         /** @psalm-suppress MixedArgument */
         $success = is_array($value->getValue())
-            && $this->max > count($value->getValue())
-            && $this->min < count($value->getValue());
+            && $this->max >= count($value->getValue())
+            && $this->min <= count($value->getValue());
 
         if (!$success) {
             $this->addMessage(
-                'Количество {{if(name)}}"{{name}}" {{endif}}должно быть больше {{min}} и меньше {{max}}',
+                'Количество {{if(name)}}"{{name}}" {{endif}}должно быть '
+                . 'больше или равно {{min}} и меньше или равно {{max}}',
                 'betweenCount'
             );
         }

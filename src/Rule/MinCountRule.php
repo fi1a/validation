@@ -34,11 +34,11 @@ class MinCountRule extends AbstractRule
         }
 
         /** @psalm-suppress MixedArgument */
-        $success = is_array($value->getValue()) && count($value->getValue()) > $this->min;
+        $success = is_array($value->getValue()) && count($value->getValue()) >= $this->min;
 
         if (!$success) {
             $this->addMessage(
-                'Количество {{if(name)}}"{{name}}" {{endif}}должно быть больше {{min}}',
+                'Количество {{if(name)}}"{{name}}" {{endif}}должно быть больше или равно {{min}}',
                 'minCount'
             );
         }

@@ -33,11 +33,11 @@ class MinLengthRule extends AbstractRule
             return true;
         }
 
-        $success = mb_strlen((string) $value->getValue()) > $this->min;
+        $success = mb_strlen((string) $value->getValue()) >= $this->min;
 
         if (!$success) {
             $this->addMessage(
-                'Длина значения {{if(name)}}"{{name}}" {{endif}}должна быть больше {{min}}',
+                'Длина значения {{if(name)}}"{{name}}" {{endif}}должна быть больше или равно {{min}}',
                 'minLength'
             );
         }

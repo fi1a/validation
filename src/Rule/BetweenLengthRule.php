@@ -44,11 +44,12 @@ class BetweenLengthRule extends AbstractRule
         }
 
         $length = mb_strlen((string) $value->getValue());
-        $success = $this->max > $length && $this->min < $length;
+        $success = $this->max >= $length && $this->min <= $length;
 
         if (!$success) {
             $this->addMessage(
-                'Длина значения {{if(name)}}"{{name}}" {{endif}}должна быть больше {{min}} и меньше {{max}}',
+                'Длина значения {{if(name)}}"{{name}}" {{endif}}должна быть '
+                . 'больше или равно {{min}} и меньше или равно {{max}}',
                 'betweenLength'
             );
         }

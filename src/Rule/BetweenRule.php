@@ -54,11 +54,12 @@ class BetweenRule extends AbstractRule
             return true;
         }
         $success = is_numeric($value->getValue());
-        $success = $success && $this->max > $value->getValue() && $this->min < $value->getValue();
+        $success = $success && $this->max >= $value->getValue() && $this->min <= $value->getValue();
 
         if (!$success) {
             $this->addMessage(
-                'Значение {{if(name)}}"{{name}}" {{endif}}должно быть больше {{min}} и меньше {{max}}',
+                'Значение {{if(name)}}"{{name}}" {{endif}}должно быть '
+                . 'больше или равно {{min}} и меньше или равно {{max}}',
                 'between'
             );
         }
