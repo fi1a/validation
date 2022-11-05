@@ -1,7 +1,7 @@
 {
   "name": "fi1a/validation",
   "type": "library",
-  "description": "Библиотека проверки (валидации) значений",
+  "description": "PHP валидация (проверка) значений формы",
   "keywords": [],
   "homepage": "https://github.com/fi1a/validation",
   "license": "MIT",
