@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\AST;
 
-use Fi1a\Collection\DataType\IArrayObject;
+use Fi1a\Collection\DataType\ArrayObjectInterface;
 
 /**
  * Правила
  */
-interface RulesInterface extends IArrayObject
+interface RulesInterface extends ArrayObjectInterface
 {
 }

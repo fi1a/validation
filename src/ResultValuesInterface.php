@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
-use Fi1a\Collection\ICollection;
+use Fi1a\Collection\CollectionInterface;
 
 /**
  * Интерфейс результирующих значений
@@ -17,7 +17,7 @@ use Fi1a\Collection\ICollection;
  * @method ValueInterface replace($key, $value)
  * @method ValueInterface[] column(string $name)
  */
-interface ResultValuesInterface extends ICollection
+interface ResultValuesInterface extends CollectionInterface
 {
     /**
      * Возвращает значения успешно прошедшие проверку
