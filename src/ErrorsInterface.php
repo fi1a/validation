@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
-use Fi1a\Collection\ICollection;
+use Fi1a\Collection\CollectionInterface;
 
 /**
  * Ошибки
@@ -17,7 +17,7 @@ use Fi1a\Collection\ICollection;
  * @method ErrorInterface replace($key, $value)
  * @method ErrorInterface[] column(string $name)
  */
-interface ErrorsInterface extends ICollection
+interface ErrorsInterface extends CollectionInterface
 {
     /**
      * Возвращает первые ошибки для поля
