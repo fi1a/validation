@@ -41,7 +41,7 @@ class RegexRule extends AbstractRule
 
         if (!$success) {
             $this->addMessage(
-                '{{if(name)}}"{{name}}" не{{else}}Не{{endif}}допустимый формат',
+                'Формат {{if(name)}}"{{name}}" {{endif}}должен быть "{{regex|unescape}}"',
                 'regex'
             );
         }
