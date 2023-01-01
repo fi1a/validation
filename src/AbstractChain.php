@@ -155,7 +155,7 @@ abstract class AbstractChain implements ChainInterface
             $values = new Values($values);
         }
         $result = $this->beforeValidate(new Result());
-        $resultValues = new ResultValues(ValueInterface::class);
+        $resultValues = new ResultValues();
 
         if (is_null($fieldName)) {
             $values->setAsArray(false);

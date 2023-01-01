@@ -14,9 +14,17 @@ class ResultValues extends Collection implements ResultValuesInterface
     /**
      * @inheritDoc
      */
+    public function __construct(?array $data = null)
+    {
+        parent::__construct(ValueInterface::class, $data);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getValid(): ResultValuesInterface
     {
-        $values = new ResultValues(ValueInterface::class);
+        $values = new ResultValues();
         foreach ($this as $value) {
             assert($value instanceof ValueInterface);
             if ($value->isValid()) {
@@ -32,7 +40,7 @@ class ResultValues extends Collection implements ResultValuesInterface
      */
     public function getInvalid(): ResultValuesInterface
     {
-        $values = new ResultValues(ValueInterface::class);
+        $values = new ResultValues();
         foreach ($this as $value) {
             assert($value instanceof ValueInterface);
             if (!$value->isValid()) {
