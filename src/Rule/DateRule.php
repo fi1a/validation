@@ -45,7 +45,7 @@ class DateRule extends AbstractRule
 
         if (!$success) {
             $this->addMessage(
-                '{{if(name)}}"{{name}}" не{{else}}Не{{endif}} является допустимым форматом даты',
+                '{{if(name)}}"{{name}}" не{{else}}Не{{endif}} является допустимым форматом "{{format}}" даты',
                 'date'
             );
         }
