@@ -11,6 +11,7 @@ use Fi1a\Validation\AllOf;
 use Fi1a\Validation\ErrorInterface;
 use Fi1a\Validation\Errors;
 use Fi1a\Validation\Exception\RuleNotFound;
+use Fi1a\Validation\On;
 use Fi1a\Validation\Rule\ArrayRule;
 use Fi1a\Validation\Rule\NullRule;
 use Fi1a\Validation\Rule\RequiredRule;
@@ -964,5 +965,101 @@ class ValidatorTest extends TestCase
         $result = $validation->validate();
         $this->assertFalse($result->isSuccess());
         $this->assertCount(1, $result->getErrors());
+    }
+
+    /**
+     * Валидация по сценарию
+     */
+    public function testScenario(): void
+    {
+        $validator = new Validator();
+        $values = [
+            'array' => [1, 2, 3],
+        ];
+        $rules = [
+            new On('array', AllOf::create()->array()->minCount(1), 'create'),
+            new On('array', AllOf::create()->array()->minCount(4), 'update'),
+            'array:*' => 'required|integer',
+        ];
+        $validation = $validator->make(
+            $values,
+            $rules,
+            [],
+            [],
+            'create'
+        );
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+
+        $validation = $validator->make(
+            $values,
+            $rules,
+            [],
+            [],
+            'update'
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+    }
+
+    /**
+     * Валидация по сценарию
+     */
+    public function testScenarioEmptyChain(): void
+    {
+        $validator = new Validator();
+        $values = [
+            'array' => [1, 2, 3],
+        ];
+        $rules = [
+            new On('array', null, 'create'),
+            'array:*' => 'required|integer',
+        ];
+        $validation = $validator->make(
+            $values,
+            $rules,
+            [],
+            [],
+            'create'
+        );
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Валидация по сценарию
+     */
+    public function testScenarioMergeRules(): void
+    {
+        $validator = new Validator();
+        $values = [
+            'array' => [1, 2, 3],
+        ];
+        $rules = [
+            'array' => new ArrayRule(),
+            new On('array', AllOf::create()->minCount(1), 'create'),
+            'array:*' => 'required|integer',
+        ];
+        $validation = $validator->make(
+            $values,
+            $rules,
+            [],
+            [],
+            'create'
+        );
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+
+        $validation = $validator->make(
+            [
+                'array' => 1,
+            ],
+            $rules,
+            [],
+            [],
+            'create'
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
     }
 }

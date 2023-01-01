@@ -249,6 +249,57 @@ if (!$result->isSuccess()) {
 
 Также доступны все методы коллекции ```\Fi1a\Collection\Collection```.
 
+### Сценарии
+
+Сценарии предназначены для определения какие правила применять к текущему состоянию. Например: при сценарии создания
+пароль обязателен для заполнения, а при сценарии обновления нет. Это можно определить используя сценарии.
+
+Класс ```Fi1a\Validation\On``` задает к какому сценарию относится цепочка правил.
+
+| Аргумент               | Описание                                           |
+|------------------------|----------------------------------------------------|
+| string $fieldName      | Имя поля для которого предназначена цепочка правил |
+| ?ChainInterface $chain | Цепочка правил                                     |
+| string ...$scenario    | Сценарии для которых применяется цепочка правил    |
+
+Текущий используемый сценарий передается пятым аргументом в метод `make` класса `Fi1a\Validation\Validator`.
+
+```php
+use Fi1a\Validation\AllOf;
+use Fi1a\Validation\On;
+use Fi1a\Validation\Validator;
+
+$validator = new Validator();
+$values = [
+    'key1' => [1, 2, 3],
+];
+$rules = [
+    'key1' => 'array',
+    new On('key1', AllOf::create()->minCount(1), 'create'),
+    new On('key1', AllOf::create()->minCount(4), 'update'),
+    'key1:*' => 'required|integer',
+];
+$validation = $validator->make(
+    $values,
+    $rules,
+    [],
+    [],
+    'create'
+);
+$result = $validation->validate();
+$result->isSuccess(); // true
+
+$validation = $validator->make(
+    $values,
+    $rules,
+    [],
+    [],
+    'update'
+);
+$result = $validation->validate();
+$result->isSuccess(); // false
+```
+
 ### Набор правил
 
 Набор правил представляет собой класс реализующий интерфейс ```\Fi1a\Validation\RuleSetInterface```.
@@ -315,7 +366,6 @@ class UserRuleSet extends AbstractRuleSet
         ]);
     }
 }
-
 ```
 
 Использование набора правил по сценарию ```create```:
@@ -325,7 +375,7 @@ use Fi1a\Validation\Validator;
 
 $validator = new Validator();
 
-$validation = $validator->make(new UserRuleSet($_POST + $_FILES, 'create'));
+$validation = $validator->make(new UserRuleSet($_POST + $_FILES), [], [], [], 'create');
 
 $result = $validation->validate();
 
