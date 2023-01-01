@@ -15,15 +15,18 @@ class FieldsChain implements FieldsChainInterface
     private $chain;
 
     /**
-     * @var string|null
+     * @var string[]
      */
-    private $scenario;
+    private $scenario = [];
 
     /**
      * @inheritDoc
      */
-    public function on(?string $scenario): FieldsChainInterface
+    public function on($scenario): FieldsChainInterface
     {
+        if (!is_array($scenario)) {
+            $scenario = [$scenario];
+        }
         $this->scenario = $scenario;
 
         return $this;
@@ -32,7 +35,7 @@ class FieldsChain implements FieldsChainInterface
     /**
      * @inheritDoc
      */
-    public function getScenario(): ?string
+    public function getScenario(): array
     {
         return $this->scenario;
     }

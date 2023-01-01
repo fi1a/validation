@@ -70,7 +70,10 @@ abstract class AbstractRuleSet implements RuleSetInterface
             foreach ($fieldsChains as $fieldsChain) {
                 $chain = $fieldsChain->getChain();
                 if (
-                    (is_null($fieldsChain->getScenario()) || $fieldsChain->getScenario() === $this->getScenario())
+                    (
+                        !count($fieldsChain->getScenario())
+                        || in_array($this->getScenario(), $fieldsChain->getScenario())
+                    )
                     && !is_null($chain)
                 ) {
                     if (!isset($rules[$fieldName])) {
