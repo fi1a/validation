@@ -11,13 +11,17 @@ interface FieldsChainInterface
 {
     /**
      * Цепочка для определнного сценария
+     *
+     * @param string[] $scenario
      */
-    public function on(?string $scenario): FieldsChainInterface;
+    public function on(string ...$scenario): FieldsChainInterface;
 
     /**
      * Возвращает сценарий
+     *
+     * @return string[]
      */
-    public function getScenario(): ?string;
+    public function getScenario(): array;
 
     /**
      * Все правила должны удовлетворять условию
