@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
@@ -795,14 +796,21 @@ class MimeRule extends AbstractFileRule
 
     /**
      * Конструктор
+     *
+     * @param WhenPresenceInterface|string|null  $presence
      */
-    public function __construct(string ...$extensions)
+    public function __construct($presence = null, string ...$extensions)
     {
+        if (!($presence instanceof WhenPresenceInterface) && $presence !== null) {
+            array_unshift($extensions, $presence);
+            $presence = null;
+        }
         $this->extensions = $extensions;
 
         if (!count($this->extensions)) {
             throw new InvalidArgumentException('Необходимо указать разрешенные файлы');
         }
+        parent::__construct($presence);
     }
 
     /**
@@ -810,7 +818,7 @@ class MimeRule extends AbstractFileRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->presence->isPresence($value, $this->values)) {
             return true;
         }
 

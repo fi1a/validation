@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 
 /**
@@ -19,9 +20,10 @@ class MaxCountRule extends AbstractRule
     /**
      * Конструктор
      */
-    public function __construct(int $max)
+    public function __construct(int $max, ?WhenPresenceInterface $presence = null)
     {
         $this->max = $max;
+        parent::__construct($presence);
     }
 
     /**
@@ -29,7 +31,7 @@ class MaxCountRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->presence->isPresence($value, $this->values)) {
             return true;
         }
 

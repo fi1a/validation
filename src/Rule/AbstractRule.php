@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresence;
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use Fi1a\Validation\ValuesInterface;
 use LogicException;
@@ -27,6 +29,19 @@ abstract class AbstractRule implements RuleInterface
      * @var string[]|null[]
      */
     protected $titles = [];
+
+    /**
+     * @var WhenPresenceInterface
+     */
+    protected $presence;
+
+    public function __construct(?WhenPresenceInterface $presence = null)
+    {
+        if ($presence === null) {
+            $presence = new WhenPresence();
+        }
+        $this->presence = $presence;
+    }
 
     /**
      * @inheritDoc

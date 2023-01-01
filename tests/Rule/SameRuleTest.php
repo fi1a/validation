@@ -41,11 +41,11 @@ class SameRuleTest extends TestCase
     public function testSameValidator(): void
     {
         $validator = new Validator();
-        $validation = $validator->make(['foo' => 200, 'bar' => 200], ['foo' => 'same("bar", "barTitle")']);
+        $validation = $validator->make(['foo' => 200, 'bar' => 200], ['foo' => 'same("bar")']);
         $this->assertTrue($validation->validate()->isSuccess());
         $validation->setValues(['foo' => 200, 'bar' => 300]);
         $this->assertFalse($validation->validate()->isSuccess());
-        $validation = $validator->make([], ['foo' => 'same("bar", "barTitle")']);
+        $validation = $validator->make([], ['foo' => 'same("bar")']);
         $this->assertTrue($validation->validate()->isSuccess());
     }
 

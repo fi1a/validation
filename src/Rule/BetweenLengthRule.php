@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
@@ -25,13 +26,14 @@ class BetweenLengthRule extends AbstractRule
     /**
      * Конструктор
      */
-    public function __construct(int $min, int $max)
+    public function __construct(int $min, int $max, ?WhenPresenceInterface $presence = null)
     {
         if ($min >= $max) {
             throw new InvalidArgumentException('Аргумент $max должен быть больше $min');
         }
         $this->min = $min;
         $this->max = $max;
+        parent::__construct($presence);
     }
 
     /**
@@ -39,7 +41,7 @@ class BetweenLengthRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->presence->isPresence($value, $this->values)) {
             return true;
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 
 /**
@@ -24,12 +25,13 @@ class DateRule extends AbstractRule
     /**
      * Конструктор
      */
-    public function __construct(?string $format = null)
+    public function __construct(?string $format = null, ?WhenPresenceInterface $presence = null)
     {
         if (!$format) {
             $format = static::$defaultFormat;
         }
         $this->format = $format;
+        parent::__construct($presence);
     }
 
     /**
@@ -37,7 +39,7 @@ class DateRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->presence->isPresence($value, $this->values)) {
             return true;
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
@@ -28,7 +29,7 @@ class BetweenRule extends AbstractRule
      * @param float|int $min
      * @param float|int $max
      */
-    public function __construct($min, $max)
+    public function __construct($min, $max, ?WhenPresenceInterface $presence = null)
     {
         /** @psalm-suppress DocblockTypeContradiction */
         if (!is_numeric($min)) {
@@ -43,6 +44,7 @@ class BetweenRule extends AbstractRule
         }
         $this->min = $min;
         $this->max = $max;
+        parent::__construct($presence);
     }
 
     /**
@@ -50,7 +52,7 @@ class BetweenRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->presence->isPresence($value, $this->values)) {
             return true;
         }
         $success = is_numeric($value->getValue());
