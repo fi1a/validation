@@ -698,7 +698,7 @@ class ValidatorTest extends TestCase
                 'key2' => 'fixtureRule ( true, false, null, 100, 100.10, \'\\\' 200 \\\'\' )',
             ],
             [
-                'fixtureRule' => '{{bool1}}, {{bool2}}, {{null}}, {{int}}, {{float}}, {{string}}',
+                'fixtureRule' => '{{bool1}}, {{bool2}}, {{null}}, {{int}}, {{float}}, {{string|unescape}}',
             ]
         );
         $result = $validation->validate();
