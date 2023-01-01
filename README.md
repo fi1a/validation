@@ -275,7 +275,7 @@ class UserRuleSet extends AbstractRuleSet
     public function init(): bool
     {
         $this->fields('id', 'email', 'tags', 'tags:*:id')
-            ->on(['create', 'copy'])
+            ->on('create', 'copy')
             ->allOf()
             ->required();
         $this->fields('id', 'email', 'tags', 'tags:*:id')

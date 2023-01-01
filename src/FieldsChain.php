@@ -22,11 +22,8 @@ class FieldsChain implements FieldsChainInterface
     /**
      * @inheritDoc
      */
-    public function on($scenario): FieldsChainInterface
+    public function on(string ...$scenario): FieldsChainInterface
     {
-        if (!is_array($scenario)) {
-            $scenario = [$scenario];
-        }
         $this->scenario = $scenario;
 
         return $this;

@@ -12,9 +12,9 @@ interface FieldsChainInterface
     /**
      * Цепочка для определнного сценария
      *
-     * @param string[]|string $scenario
+     * @param string[] $scenario
      */
-    public function on($scenario): FieldsChainInterface;
+    public function on(string ...$scenario): FieldsChainInterface;
 
     /**
      * Возвращает сценарий
