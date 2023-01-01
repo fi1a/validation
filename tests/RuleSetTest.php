@@ -46,22 +46,27 @@ class RuleSetTest extends TestCase
     public function testRuleSetScenarioCreateNotSuccess(): void
     {
         $validator = new Validator();
-        $validation = $validator->make(new FixtureRuleSet(
-            [
-                'key1' => [
-                    'id' => null,
-                    'name' => null,
-                    'foo' => null,
-                    'bar' => false,
-                ],
-                'key2' => [
-                    [
-                        'wildcard' => null,
+        $validation = $validator->make(
+            new FixtureRuleSet(
+                [
+                    'key1' => [
+                        'id' => null,
+                        'name' => null,
+                        'foo' => null,
+                        'bar' => false,
                     ],
-                ],
-            ],
+                    'key2' => [
+                        [
+                            'wildcard' => null,
+                        ],
+                    ],
+                ]
+            ),
+            [],
+            [],
+            [],
             'create'
-        ));
+        );
         $result = $validation->validate();
         $this->assertFalse($result->isSuccess());
         $this->assertCount(2, $result->getErrors());
@@ -95,14 +100,19 @@ class RuleSetTest extends TestCase
     public function testRuleSetScenarioUpdateNotSuccess(): void
     {
         $validator = new Validator();
-        $validation = $validator->make(new FixtureRuleSet(
-            [
-                'key1' => [
-                    'bar' => false,
+        $validation = $validator->make(
+            new FixtureRuleSet(
+                [
+                    'key1' => [
+                        'bar' => false,
+                    ],
                 ],
-            ],
+            ),
+            [],
+            [],
+            [],
             'update'
-        ));
+        );
         $result = $validation->validate();
         $this->assertFalse($result->isSuccess());
         $this->assertEquals(

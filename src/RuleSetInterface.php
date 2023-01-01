@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
-use Fi1a\Validation\Rule\RuleInterface;
-
 /**
  * Набор правил
  */
@@ -16,7 +14,7 @@ interface RuleSetInterface
      *
      * @param mixed $values
      */
-    public function __construct($values, ?string $scenario = null);
+    public function __construct($values);
 
     /**
      * Установить значения
@@ -57,7 +55,7 @@ interface RuleSetInterface
     /**
      * Возвращает набор правил
      *
-     * @return RuleInterface[]|ChainInterface[]
+     * @return OnInterface[]
      */
     public function getRules(): array;
 
