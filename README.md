@@ -616,6 +616,17 @@ if (!$result->isSuccess()) {
 }
 ```
 
+### url(?WhenPresenceInterface $presence = null)
+
+Валидация (проверка) url адреса
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()->url()->validate('https://domain.ru/path/')->isSuccess(); // true
+AllOf::create()->url()->validate('https')->isSuccess(); // false
+```
+
 ### in($presence, ...$in)
 
 Допустимые значения (не строгая проверка значения)
