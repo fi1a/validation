@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Validation;
 
+use Fi1a\Unit\Validation\Fixtures\DTO;
 use Fi1a\Unit\Validation\Fixtures\EmptyValues;
 use Fi1a\Unit\Validation\Fixtures\FixtureRule;
 use Fi1a\Validation\AST\Exception\ParseRuleException;
@@ -1082,5 +1083,44 @@ class ValidatorTest extends TestCase
         $this->assertInstanceOf(WhenPresenceInterface::class, $validation->getPresence());
         $result = $validation->validate();
         $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Валидация DTO
+     */
+    public function testValidateDTO(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            new DTO(),
+            [
+                'propertyA' => 'required|integer',
+                'propertyB' => 'required',
+                'propertyC' => 'null',
+                'propertyD' => 'required|boolean',
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Валидация DTO
+     */
+    public function testValidateDTONotSuccess(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            new DTO(),
+            [
+                'propertyA' => 'required|integer',
+                'propertyB' => 'required',
+                'propertyC' => 'required',
+                'propertyD' => 'required|boolean',
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertCount(1, $result->getErrors());
     }
 }

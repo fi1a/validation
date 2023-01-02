@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Hydrator\Extractor;
 use Fi1a\Validation\AST\AST;
 use Fi1a\Validation\Exception\RuleNotFound;
 use Fi1a\Validation\Rule\RuleInterface;
@@ -55,6 +56,8 @@ class Validator implements ValidatorInterface
              * @var mixed $values
              */
             $values = $values->getValues()->getRaw();
+        } elseif (is_object($values)) {
+            $values = (new Extractor())->extract($values);
         }
 
         if (is_array($rules)) {
