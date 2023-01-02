@@ -4,42 +4,19 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
-use Fi1a\Collection\DataType\MapArrayObject;
 use Fi1a\Validation\ValueInterface;
-use InvalidArgumentException;
 
 /**
  * Допустимые значения (строгая проверка)
  */
-class StrictInRule extends AbstractRule
+class StrictInRule extends InRule
 {
-    /**
-     * @var MapArrayObject
-     */
-    private $in;
-
-    /**
-     * Конструктор
-     *
-     * @param mixed ...$in
-     */
-    public function __construct(...$in)
-    {
-        if (count($in) === 1 && is_array($in[0])) {
-            $in = $in[0];
-        }
-        $this->in = new MapArrayObject($in);
-        if ($this->in->isEmpty()) {
-            throw new InvalidArgumentException('Не переданы значения $in');
-        }
-    }
-
     /**
      * @inheritDoc
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 
@@ -53,17 +30,6 @@ class StrictInRule extends AbstractRule
         }
 
         return $success;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getVariables(): array
-    {
-        return array_merge(
-            parent::getVariables(),
-            ['in' => $this->in->wraps('"')->join(', ')]
-        );
     }
 
     /**

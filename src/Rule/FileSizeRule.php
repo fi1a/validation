@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
@@ -25,7 +26,7 @@ class FileSizeRule extends AbstractFileRule
     /**
      * Конструктор
      */
-    public function __construct(string $min, string $max)
+    public function __construct(string $min, string $max, ?WhenPresenceInterface $presence = null)
     {
         $this->min = $this->getBytesSize($min);
         $this->max = $this->getBytesSize($max);
@@ -33,6 +34,7 @@ class FileSizeRule extends AbstractFileRule
         if (!$this->min && !$this->max) {
             throw new InvalidArgumentException('Минимальный или максимальный размер файла должен быть больше нуля');
         }
+        parent::__construct($presence);
     }
 
     /**
@@ -40,7 +42,7 @@ class FileSizeRule extends AbstractFileRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 

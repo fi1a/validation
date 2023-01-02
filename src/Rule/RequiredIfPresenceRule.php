@@ -16,7 +16,7 @@ class RequiredIfPresenceRule extends RequiredRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 

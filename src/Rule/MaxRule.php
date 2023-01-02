@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
@@ -22,13 +23,14 @@ class MaxRule extends AbstractRule
      *
      * @param float|int $max
      */
-    public function __construct($max)
+    public function __construct($max, ?WhenPresenceInterface $presence = null)
     {
         /** @psalm-suppress DocblockTypeContradiction */
         if (!is_numeric($max)) {
             throw new InvalidArgumentException('Аргумент $max должен быть числом');
         }
         $this->max = $max;
+        parent::__construct($presence);
     }
 
     /**
@@ -36,7 +38,7 @@ class MaxRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
+
 /**
  * Класс проверки значений
  */
@@ -149,5 +151,21 @@ class Validation implements ValidationInterface
     public function getTitles(): array
     {
         return $this->titles;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setPresence(?WhenPresenceInterface $presence): bool
+    {
+        return $this->chain->setPresence($presence);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPresence(): ?WhenPresenceInterface
+    {
+        return $this->chain->getPresence();
     }
 }

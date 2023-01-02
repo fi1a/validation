@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
@@ -22,13 +23,14 @@ class MinRule extends AbstractRule
      *
      * @param float|int $min
      */
-    public function __construct($min)
+    public function __construct($min, ?WhenPresenceInterface $presence = null)
     {
         /** @psalm-suppress DocblockTypeContradiction */
         if (!is_numeric($min)) {
             throw new InvalidArgumentException('Аргумент $min должен быть числом');
         }
         $this->min = $min;
+        parent::__construct($presence);
     }
 
     /**
@@ -36,7 +38,7 @@ class MinRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 

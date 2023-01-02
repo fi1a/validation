@@ -12,6 +12,8 @@ use Fi1a\Validation\ErrorInterface;
 use Fi1a\Validation\Errors;
 use Fi1a\Validation\Exception\RuleNotFound;
 use Fi1a\Validation\On;
+use Fi1a\Validation\Presence\WhenNotNull;
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\Rule\ArrayRule;
 use Fi1a\Validation\Rule\NullRule;
 use Fi1a\Validation\Rule\RequiredRule;
@@ -1061,5 +1063,24 @@ class ValidatorTest extends TestCase
         );
         $result = $validation->validate();
         $this->assertFalse($result->isSuccess());
+    }
+
+    /**
+     * Установка объекта определяющего присутсвие
+     */
+    public function testPresence(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make([
+            'array' => [null, 2, 3],
+        ], [
+            'array' => 'array|minCount(1)',
+            'array:*' => 'integer',
+        ]);
+        $this->assertNull($validation->getPresence());
+        $validation->setPresence(new WhenNotNull());
+        $this->assertInstanceOf(WhenPresenceInterface::class, $validation->getPresence());
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
     }
 }

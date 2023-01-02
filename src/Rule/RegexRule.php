@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
@@ -20,12 +21,13 @@ class RegexRule extends AbstractRule
     /**
      * Конструктор
      */
-    public function __construct(string $regex)
+    public function __construct(string $regex, ?WhenPresenceInterface $presence = null)
     {
         if (!$regex) {
             throw new InvalidArgumentException('Аргумент $regex не может быть пустым');
         }
         $this->regex = $regex;
+        parent::__construct($presence);
     }
 
     /**
@@ -33,7 +35,7 @@ class RegexRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 

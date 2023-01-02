@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Validation\Rule;
 
 use Fi1a\Collection\DataType\MapArrayObject;
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use InvalidArgumentException;
 
@@ -16,15 +17,20 @@ class NotInRule extends AbstractRule
     /**
      * @var MapArrayObject
      */
-    private $notIn;
+    protected $notIn;
 
     /**
      * Конструктор
      *
+     * @param WhenPresenceInterface|mixed|null  $presence
      * @param mixed ...$notIn
      */
-    public function __construct(...$notIn)
+    public function __construct($presence = null, ...$notIn)
     {
+        if (!($presence instanceof WhenPresenceInterface) && $presence !== null) {
+            array_unshift($notIn, $presence);
+            $presence = null;
+        }
         if (count($notIn) === 1 && is_array($notIn[0])) {
             $notIn = $notIn[0];
         }
@@ -32,6 +38,7 @@ class NotInRule extends AbstractRule
         if ($this->notIn->isEmpty()) {
             throw new InvalidArgumentException('Не переданы значения $notIn');
         }
+        parent::__construct($presence);
     }
 
     /**
@@ -39,7 +46,7 @@ class NotInRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 

@@ -4,40 +4,41 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\Rule\RuleInterface;
 
 /**
  * Цепочка правил валидатора
  *
  * @method ChainInterface required()
- * @method ChainInterface null()
- * @method ChainInterface numeric()
- * @method ChainInterface alpha()
- * @method ChainInterface alphaNumeric()
- * @method ChainInterface email()
- * @method ChainInterface min(float $min)
- * @method ChainInterface max(float $max)
- * @method ChainInterface between(float $min, float $max)
- * @method ChainInterface array()
- * @method ChainInterface boolean()
- * @method ChainInterface integer()
- * @method ChainInterface json()
- * @method ChainInterface minLength(int $min)
+ * @method ChainInterface null(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface numeric(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface alpha(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface alphaNumeric(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface email(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface min(float $min, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface max(float $max, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface between(float $min, float $max, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface array(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface boolean(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface integer(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface json(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface minLength(int $min, ?WhenPresenceInterface $presence = null)
  * @method ChainInterface maxLength(int $max)
- * @method ChainInterface betweenLength(int $min, int $max)
- * @method ChainInterface minCount(int $min)
- * @method ChainInterface maxCount(int $max)
- * @method ChainInterface betweenCount(int $min, int $max)
- * @method ChainInterface in(...$in)
- * @method ChainInterface notIn(...$notIn)
- * @method ChainInterface same(string $fieldName)
- * @method ChainInterface date(string $format = 'd.m.Y')
- * @method ChainInterface regex(string $regex)
- * @method ChainInterface fileSize(string $min, string $max)
- * @method ChainInterface mime(string ...$extensions)
- * @method ChainInterface strictIn(...$in)
- * @method ChainInterface strictNotIn(...$notIn)
- * @method ChainInterface requiredIfPresence()
+ * @method ChainInterface betweenLength(int $min, int $max, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface minCount(int $min, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface maxCount(int $max, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface betweenCount(int $min, int $max, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface in($presence = null, ...$in)
+ * @method ChainInterface notIn($presence = null, ...$notIn)
+ * @method ChainInterface same(string $fieldName, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface date(string $format = 'd.m.Y', ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface regex(string $regex, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface fileSize(string $min, string $max, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface mime($presence = null, string ...$extensions)
+ * @method ChainInterface strictIn($presence = null, ...$in)
+ * @method ChainInterface strictNotIn($presence = null, ...$notIn)
+ * @method ChainInterface requiredIfPresence(?WhenPresenceInterface $presence = null)
  */
 interface ChainInterface
 {
@@ -118,4 +119,14 @@ interface ChainInterface
      * @param RuleInterface|ChainInterface $rule
      */
     public function addRule($rule): ChainInterface;
+
+    /**
+     * Установить значение объекта определяющего присутсвие
+     */
+    public function setPresence(?WhenPresenceInterface $presence): bool;
+
+    /**
+     * Вернуть значение объекта определяющего присутсвие
+     */
+    public function getPresence(): ?WhenPresenceInterface;
 }
