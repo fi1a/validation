@@ -41,6 +41,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface requiredIfPresence(?WhenPresenceInterface $presence = null)
  * @method ChainInterface url(?WhenPresenceInterface $presence = null)
  * @method ChainInterface equal(float $equal, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface minDate(string $minDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
  */
 interface ChainInterface
 {

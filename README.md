@@ -741,6 +741,18 @@ AllOf::create()->minCount(2)->validate(100)->isSuccess(); // false
 AllOf::create()->minCount(2)->validate([1])->isSuccess(); // false
 ```
 
+### minDate(string $minDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
+
+Проверка на минимальную дату
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()->minDate('10.10.2022 10:10:10')->validate('10.10.2022 10:10:10')->isSuccess(); // true
+AllOf::create()->minDate('10.10.2022 10:10:10')->validate('10.10.2022 09:00:00')->isSuccess(); // false
+AllOf::create()->minDate('10.10.2022', 'd.m.Y')->validate('10.10.2022')->isSuccess(); // true
+```
+
 ### minLength(int $min, ?WhenPresenceInterface $presence = null)
 
 Проверка на минимальную длину строки

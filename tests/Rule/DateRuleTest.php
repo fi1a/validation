@@ -18,7 +18,7 @@ class DateRuleTest extends TestCase
      */
     public function testDate(): void
     {
-        $this->assertTrue(AllOf::create()->date()->validate('10.10.2022')->isSuccess());
+        $this->assertTrue(AllOf::create()->date()->validate('10.10.2022 10:10:10')->isSuccess());
         $this->assertFalse(AllOf::create()->date('d')->validate('10.10.2022')->isSuccess());
         $this->assertFalse(AllOf::create()->date()->validate('abc')->isSuccess());
     }
