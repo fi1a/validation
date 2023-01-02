@@ -519,6 +519,29 @@ AllOf::create()->betweenCount(2, 5)->validate(3000000)->isSuccess(); // false
 AllOf::create()->betweenCount(2, 5)->validate([1,])->isSuccess(); // false
 ```
 
+### betweenDate(string $minDate, string $maxDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
+
+Проверка на максимальную и минимальную дату
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()
+    ->betweenDate('10.10.2022 10:10:10', '12.10.2022 10:10:10')
+    ->validate('11.10.2022 10:10:10')
+    ->isSuccess(); // true
+
+AllOf::create()
+    ->betweenDate('10.10.2022 10:10:10', '12.10.2022 10:10:10')
+    ->validate('10.10.2022 09:00:00')
+    ->isSuccess(); // false
+
+AllOf::create()
+    ->betweenDate('10.10.2022', '12.10.2022', 'd.m.Y')
+    ->validate('11.10.2022')
+    ->isSuccess(); // true
+```
+
 ### betweenLength(int $min, int $max, ?WhenPresenceInterface $presence = null)
 
 Проверка на максимальную и минимальную длину строки
