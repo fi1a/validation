@@ -8,23 +8,23 @@ use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 
 /**
- * Проверка на максимальное значение
+ * Проверка на равенство
  */
-class MaxRule extends AbstractRule
+class EqualRule extends AbstractRule
 {
     /**
      * @var float
      */
-    private $max;
+    private $equal;
 
     /**
      * Конструктор
      *
-     * @param float|int $max
+     * @param float|int $min
      */
-    public function __construct(float $max, ?WhenPresenceInterface $presence = null)
+    public function __construct(float $equal, ?WhenPresenceInterface $presence = null)
     {
-        $this->max = $max;
+        $this->equal = $equal;
         parent::__construct($presence);
     }
 
@@ -38,10 +38,10 @@ class MaxRule extends AbstractRule
         }
 
         $success = is_numeric($value->getValue());
-        $success = $success && (float) $value->getValue() <= $this->max;
+        $success = $success && (float) $value->getValue() === $this->equal;
 
         if (!$success) {
-            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть максимум {{max}}', 'max');
+            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть равно {{equal}}', 'equal');
         }
 
         return $success;
@@ -52,7 +52,7 @@ class MaxRule extends AbstractRule
      */
     public function getVariables(): array
     {
-        return array_merge(parent::getVariables(), ['max' => $this->max]);
+        return array_merge(parent::getVariables(), ['equal' => $this->equal]);
     }
 
     /**
@@ -60,6 +60,6 @@ class MaxRule extends AbstractRule
      */
     public static function getRuleName(): string
     {
-        return 'max';
+        return 'equal';
     }
 }

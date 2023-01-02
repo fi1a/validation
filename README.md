@@ -588,6 +588,17 @@ AllOf::create()->email()->validate('foo@bar.ru')->isSuccess(); // true
 AllOf::create()->email()->validate('foo')->isSuccess(); // false
 ```
 
+### equal(float $equal, ?WhenPresenceInterface $presence = null)
+
+Проверяет число на равенство
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()->equal(100)->validate(100)->isSuccess(); // true
+AllOf::create()->equal(100)->validate(200)->isSuccess(); // false
+```
+
 ### fileSize(string $min, string $max, ?WhenPresenceInterface $presence = null)
 
 Размер загруженного файла.

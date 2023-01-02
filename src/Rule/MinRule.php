@@ -6,7 +6,6 @@ namespace Fi1a\Validation\Rule;
 
 use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
-use InvalidArgumentException;
 
 /**
  * Проверка на минимальное значение
@@ -14,7 +13,7 @@ use InvalidArgumentException;
 class MinRule extends AbstractRule
 {
     /**
-     * @var int|float
+     * @var float
      */
     private $min;
 
@@ -23,12 +22,8 @@ class MinRule extends AbstractRule
      *
      * @param float|int $min
      */
-    public function __construct($min, ?WhenPresenceInterface $presence = null)
+    public function __construct(float $min, ?WhenPresenceInterface $presence = null)
     {
-        /** @psalm-suppress DocblockTypeContradiction */
-        if (!is_numeric($min)) {
-            throw new InvalidArgumentException('Аргумент $min должен быть числом');
-        }
         $this->min = $min;
         parent::__construct($presence);
     }
@@ -43,7 +38,7 @@ class MinRule extends AbstractRule
         }
 
         $success = is_numeric($value->getValue());
-        $success = $success && $value->getValue() >= $this->min;
+        $success = $success && (float) $value->getValue() >= $this->min;
 
         if (!$success) {
             $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть минимум {{min}}', 'min');
