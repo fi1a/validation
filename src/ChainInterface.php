@@ -40,6 +40,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface strictNotIn($presence = null, ...$notIn)
  * @method ChainInterface requiredIfPresence(?WhenPresenceInterface $presence = null)
  * @method ChainInterface url(?WhenPresenceInterface $presence = null)
+ * @method ChainInterface equal(float $equal, ?WhenPresenceInterface $presence = null)
  */
 interface ChainInterface
 {
