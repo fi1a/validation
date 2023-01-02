@@ -109,6 +109,45 @@ echo $result->isSuccess(); // false
 echo $result->getErrors()->join("; "); // Значение не является числом; Значение должно быть минимум 10; Длина значения должна быть больше 2
 ```
 
+## Проверка объекта
+
+Вместо массива значений можно передать объект для проверки значений свойств объекта:
+
+```php
+class DTO
+{
+    public $propertyA = 100;
+
+    public $propertyB = 'string';
+
+    public $propertyC;
+
+    public $propertyD = true;
+
+    public function getPropertyD(): bool
+    {
+        return $this->propertyD;
+    }
+}
+
+use Fi1a\Validation\Validator;
+
+$validator = new Validator();
+
+$validation = $validator->make(
+    new DTO(),
+    [
+        'propertyA' => 'required|integer',
+        'propertyB' => 'required',
+        'propertyC' => 'null',
+        'propertyD' => 'required|boolean',
+    ]
+);
+
+$result = $validation->validate();
+$result->isSuccess(); // true
+```
+
 ## Сообщения об ошибках
 
 Сообщения об ошибках можно задать при создании объекта валидации с помощью метода ```make```, передав в него  массив с сообщениями,
