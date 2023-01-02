@@ -42,6 +42,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface url(?WhenPresenceInterface $presence = null)
  * @method ChainInterface equal(float $equal, ?WhenPresenceInterface $presence = null)
  * @method ChainInterface minDate(string $minDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
+ * @method ChainInterface maxDate(string $maxDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
  */
 interface ChainInterface
 {

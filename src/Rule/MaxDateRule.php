@@ -8,14 +8,14 @@ use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 
 /**
- * Проверка на минимальное значение даты
+ * Проверка на максимальное значение даты
  */
-class MinDateRule extends AbstractDateRule
+class MaxDateRule extends AbstractDateRule
 {
     /**
      * @var string
      */
-    private $minDate;
+    private $maxDate;
 
     /**
      * @var string
@@ -25,12 +25,12 @@ class MinDateRule extends AbstractDateRule
     /**
      * Конструктор
      */
-    public function __construct(string $minDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
+    public function __construct(string $maxDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
     {
         if (!$format) {
             $format = static::$defaultFormat;
         }
-        $this->minDate = $minDate;
+        $this->maxDate = $maxDate;
         $this->format = $format;
         parent::__construct($presence);
     }
@@ -44,14 +44,14 @@ class MinDateRule extends AbstractDateRule
             return true;
         }
 
-        $minDate = date_create_from_format($this->format, $this->minDate);
+        $maxDate = date_create_from_format($this->format, $this->maxDate);
         $value = date_create_from_format($this->format, (string) $value->getValue());
 
-        $success = $minDate !== false && $value !== false;
-        $success = $success && $value >= $minDate;
+        $success = $maxDate !== false && $value !== false;
+        $success = $success && $value <= $maxDate;
 
         if (!$success) {
-            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть минимум {{minDate}}', 'minDate');
+            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть максимум {{maxDate}}', 'maxDate');
         }
 
         return $success;
@@ -62,7 +62,7 @@ class MinDateRule extends AbstractDateRule
      */
     public function getVariables(): array
     {
-        return array_merge(parent::getVariables(), ['minDate' => $this->minDate]);
+        return array_merge(parent::getVariables(), ['maxDate' => $this->maxDate]);
     }
 
     /**
@@ -70,6 +70,6 @@ class MinDateRule extends AbstractDateRule
      */
     public static function getRuleName(): string
     {
-        return 'minDate';
+        return 'maxDate';
     }
 }

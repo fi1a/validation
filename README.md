@@ -684,6 +684,18 @@ AllOf::create()->maxCount(2)->validate(100)->isSuccess(); // false
 AllOf::create()->maxCount(2)->validate([1, 2, 3])->isSuccess(); // false
 ```
 
+### maxDate(string $maxDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
+
+Проверка на максимальную дату
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()->maxDate('10.10.2022 11:10:10')->validate('10.10.2022 10:10:10')->isSuccess(); // true
+AllOf::create()->maxDate('10.10.2022 10:10:10')->validate('10.10.2022 12:00:00')->isSuccess(); // false
+AllOf::create()->maxDate('10.10.2022', 'd.m.Y')->validate('09.10.2022')->isSuccess(); // true
+```
+
 ### maxLength(int $max, ?WhenPresenceInterface $presence = null)
 
 Проверка на максимальную длину строки
