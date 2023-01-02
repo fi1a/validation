@@ -48,7 +48,7 @@ class MinDateRule extends AbstractDateRule
         $value = date_create_from_format($this->format, (string) $value->getValue());
 
         $success = $minDate !== false && $value !== false;
-        $success = $success && $value >= $minDate;
+        $success = $success && $value->getTimestamp() >= $minDate->getTimestamp();
 
         if (!$success) {
             $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть минимум {{minDate}}', 'minDate');

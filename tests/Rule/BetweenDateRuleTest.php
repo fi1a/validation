@@ -33,6 +33,12 @@ class BetweenDateRuleTest extends TestCase
         $this->assertFalse(
             AllOf::create()
                 ->betweenDate('10.10.2022 10:10:10', '12.10.2022 10:10:10')
+                ->validate('12.10.2022 11:00:00')
+                ->isSuccess()
+        );
+        $this->assertFalse(
+            AllOf::create()
+                ->betweenDate('10.10.2022 10:10:10', '12.10.2022 10:10:10')
                 ->validate('abc')
                 ->isSuccess()
         );

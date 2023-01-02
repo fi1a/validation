@@ -8,14 +8,14 @@ use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 
 /**
- * Проверка на максимальное значение даты
+ * Проверка на равенство даты
  */
-class MaxDateRule extends AbstractDateRule
+class EqualDateRule extends AbstractDateRule
 {
     /**
      * @var string
      */
-    private $maxDate;
+    private $equalDate;
 
     /**
      * @var string
@@ -25,12 +25,12 @@ class MaxDateRule extends AbstractDateRule
     /**
      * Конструктор
      */
-    public function __construct(string $maxDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
+    public function __construct(string $equalDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
     {
         if (!$format) {
             $format = static::$defaultFormat;
         }
-        $this->maxDate = $maxDate;
+        $this->equalDate = $equalDate;
         $this->format = $format;
         parent::__construct($presence);
     }
@@ -44,14 +44,14 @@ class MaxDateRule extends AbstractDateRule
             return true;
         }
 
-        $maxDate = date_create_from_format($this->format, $this->maxDate);
+        $equalDate = date_create_from_format($this->format, $this->equalDate);
         $value = date_create_from_format($this->format, (string) $value->getValue());
 
-        $success = $maxDate !== false && $value !== false;
-        $success = $success && $value->getTimestamp() <= $maxDate->getTimestamp();
+        $success = $equalDate !== false && $value !== false;
+        $success = $success && $value->getTimestamp() === $equalDate->getTimestamp();
 
         if (!$success) {
-            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть максимум {{maxDate}}', 'maxDate');
+            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}не равно {{equalDate}}', 'equalDate');
         }
 
         return $success;
@@ -62,7 +62,7 @@ class MaxDateRule extends AbstractDateRule
      */
     public function getVariables(): array
     {
-        return array_merge(parent::getVariables(), ['maxDate' => $this->maxDate]);
+        return array_merge(parent::getVariables(), ['equalDate' => $this->equalDate]);
     }
 
     /**
@@ -70,6 +70,6 @@ class MaxDateRule extends AbstractDateRule
      */
     public static function getRuleName(): string
     {
-        return 'maxDate';
+        return 'equalDate';
     }
 }

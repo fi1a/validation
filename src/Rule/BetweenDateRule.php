@@ -59,7 +59,9 @@ class BetweenDateRule extends AbstractDateRule
         $value = date_create_from_format($this->format, (string) $value->getValue());
 
         $success = $minDate !== false && $maxDate !== false && $value !== false;
-        $success = $success && $value >= $minDate;
+        $success = $success
+            && $value->getTimestamp() >= $minDate->getTimestamp()
+            && $value->getTimestamp() <= $maxDate->getTimestamp();
 
         if (!$success) {
             $this->addMessage(
