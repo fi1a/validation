@@ -611,6 +611,18 @@ AllOf::create()->email()->validate('foo@bar.ru')->isSuccess(); // true
 AllOf::create()->email()->validate('foo')->isSuccess(); // false
 ```
 
+### equalDate(string $equalDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
+
+Проверяет дату на равенство
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()->equalDate('10.10.2022 10:10:10')->validate('10.10.2022 10:10:10')->isSuccess(); // true
+AllOf::create()->equalDate('10.10.2022 10:10:10')->validate('10.10.2022 09:00:00')->isSuccess(); // false
+AllOf::create()->equalDate('10.10.2022', 'd.m.Y')->validate('10.10.2022')->isSuccess(); // true
+```
+
 ### equal(float $equal, ?WhenPresenceInterface $presence = null)
 
 Проверяет число на равенство
