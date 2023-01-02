@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Validation;
 
 use Fi1a\Format\Formatter;
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\Rule\RuleInterface;
 use InvalidArgumentException;
 
@@ -57,6 +58,11 @@ abstract class AbstractChain implements ChainInterface
      * @var string[]|null[]
      */
     private $titles = [];
+
+    /**
+     * @var WhenPresenceInterface|null
+     */
+    private $presence;
 
     /**
      * Конструктор
@@ -156,13 +162,16 @@ abstract class AbstractChain implements ChainInterface
         }
         $result = $this->beforeValidate(new Result());
         $resultValues = new ResultValues();
-
+        $presence = $this->getPresence();
         if (is_null($fieldName)) {
             $values->setAsArray(false);
         }
 
         foreach ($this->getRules() as $key => $rule) {
             $internalFieldName = is_null($fieldName) || $fieldName === false ? (string) $key : (string) $fieldName;
+            if ($presence) {
+                $rule->setPresence($presence);
+            }
             if ($rule instanceof RuleInterface) {
                 $rule->setValues($values);
                 $rule->setTitles($this->getTitles());
@@ -325,5 +334,23 @@ abstract class AbstractChain implements ChainInterface
         $this->setRules($rules);
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setPresence(?WhenPresenceInterface $presence): bool
+    {
+        $this->presence = $presence;
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPresence(): ?WhenPresenceInterface
+    {
+        return $this->presence;
     }
 }

@@ -35,7 +35,7 @@ class RegexRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$this->presence->isPresence($value, $this->values)) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 

@@ -119,4 +119,14 @@ interface ChainInterface
      * @param RuleInterface|ChainInterface $rule
      */
     public function addRule($rule): ChainInterface;
+
+    /**
+     * Установить значение объекта определяющего присутсвие
+     */
+    public function setPresence(?WhenPresenceInterface $presence): bool;
+
+    /**
+     * Вернуть значение объекта определяющего присутсвие
+     */
+    public function getPresence(): ?WhenPresenceInterface;
 }

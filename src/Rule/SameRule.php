@@ -41,8 +41,8 @@ class SameRule extends AbstractRule
         }
 
         if (
-            !$this->presence->isPresence($value, $this->values)
-            && !$this->presence->isPresence($sameValue, $this->values)
+            !$this->getPresence()->isPresence($value, $this->values)
+            && !$this->getPresence()->isPresence($sameValue, $this->values)
         ) {
             return true;
         }

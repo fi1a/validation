@@ -409,6 +409,30 @@ $chain->validate(true)->isSuccess(); // true
 $chain->validate('not-boolean')->isSuccess(); // false
 ```
 
+Объект определяющий присутсвие значения можно установить сразу для всех правил используя метод `setPresence`:
+
+```php
+use Fi1a\Validation\Presence\WhenNotNull;
+use Fi1a\Validation\Validator;
+
+$validator = new Validator();
+
+$validation = $validator->make(
+    [
+        'array' => [null, 2, 3],
+    ],
+    [
+        'array' => 'array|minCount(1)',
+        'array:*' => 'integer',
+    ]
+);
+
+$validation->setPresence(new WhenNotNull());
+
+$result = $validation->validate();
+$result->isSuccess(); // true
+```
+
 ## Правила
 
 ### alphaNumeric(?WhenPresenceInterface $presence = null)

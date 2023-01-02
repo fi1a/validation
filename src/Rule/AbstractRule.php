@@ -32,15 +32,13 @@ abstract class AbstractRule implements RuleInterface
 
     /**
      * @var WhenPresenceInterface
+     * @psalm-suppress PropertyNotSetInConstructor
      */
-    protected $presence;
+    private $presence;
 
     public function __construct(?WhenPresenceInterface $presence = null)
     {
-        if ($presence === null) {
-            $presence = new WhenPresence();
-        }
-        $this->presence = $presence;
+        $this->setPresence($presence);
     }
 
     /**
@@ -130,5 +128,26 @@ abstract class AbstractRule implements RuleInterface
     public function afterValidate(ValueInterface $value)
     {
         return $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setPresence(?WhenPresenceInterface $presence): bool
+    {
+        if ($presence === null) {
+            $presence = new WhenPresence();
+        }
+        $this->presence = $presence;
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPresence(): WhenPresenceInterface
+    {
+        return $this->presence;
     }
 }
