@@ -8,10 +8,15 @@ use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 
 /**
- * Проверка на формат даты
+ * Проверка на минимальное значение даты
  */
-class DateRule extends AbstractDateRule
+class MinDateRule extends AbstractDateRule
 {
+    /**
+     * @var string
+     */
+    private $minDate;
+
     /**
      * @var string
      */
@@ -20,11 +25,12 @@ class DateRule extends AbstractDateRule
     /**
      * Конструктор
      */
-    public function __construct(?string $format = null, ?WhenPresenceInterface $presence = null)
+    public function __construct(string $minDate, ?string $format = null, ?WhenPresenceInterface $presence = null)
     {
         if (!$format) {
             $format = static::$defaultFormat;
         }
+        $this->minDate = $minDate;
         $this->format = $format;
         parent::__construct($presence);
     }
@@ -38,13 +44,14 @@ class DateRule extends AbstractDateRule
             return true;
         }
 
-        $success = date_create_from_format($this->format, (string) $value->getValue()) !== false;
+        $min = date_create_from_format($this->format, $this->minDate);
+        $value = date_create_from_format($this->format, (string) $value->getValue());
+
+        $success = $min !== false && $value !== false;
+        $success = $success && $value >= $min;
 
         if (!$success) {
-            $this->addMessage(
-                '{{if(name)}}"{{name}}" не{{else}}Не{{endif}} является допустимым форматом "{{format}}" даты',
-                'date'
-            );
+            $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть минимум {{minDate}}', 'minDate');
         }
 
         return $success;
@@ -55,7 +62,7 @@ class DateRule extends AbstractDateRule
      */
     public function getVariables(): array
     {
-        return array_merge(parent::getVariables(), ['format' => $this->format]);
+        return array_merge(parent::getVariables(), ['minDate' => $this->minDate]);
     }
 
     /**
@@ -63,6 +70,6 @@ class DateRule extends AbstractDateRule
      */
     public static function getRuleName(): string
     {
-        return 'date';
+        return 'minDate';
     }
 }
