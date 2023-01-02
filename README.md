@@ -22,9 +22,7 @@
 composer require fi1a/validation
 ```
 
-## Использование
-
-### Проверка массива полей
+## Проверка массива полей
 
 Для проверки массива полей нужно использовать метод ```make``` класса валидатора ```\Fi1a\Validation\Validator```.
 После создания объекта валидации необходимо вызвать метод ```validate``` для проверки переданных значений.
@@ -53,7 +51,7 @@ if (!$result->isSuccess()) {
 }
 ```
 
-### Проверка одного поля
+## Проверка одного поля
 
 Для проверки одного поля нужно использовать один из классов цепочки правил.
 Цепочки правил реализует "Fluent interface" для объявления используемых правил. 
@@ -111,7 +109,7 @@ echo $result->isSuccess(); // false
 echo $result->getErrors()->join("; "); // Значение не является числом; Значение должно быть минимум 10; Длина значения должна быть больше 2
 ```
 
-### Сообщения об ошибках
+## Сообщения об ошибках
 
 Сообщения об ошибках можно задать при создании объекта валидации с помощью метода ```make```, передав в него  массив с сообщениями,
 либо позже методами ```setMessage``` или ```setMessages``` объекта валидации.
@@ -147,7 +145,7 @@ if (!$result->isSuccess()) {
 }
 ```
 
-### Заголовки полей
+## Заголовки полей
 
 Заголовки полей можно задать при создании объекта валидации с помощью метода ```make```, передав в него заголовки,
 либо позже методами ```setTitle``` или ```setTitles``` объекта валидации.
@@ -182,7 +180,7 @@ if (!$result->isSuccess()) {
 }
 ```
 
-### Ошибки
+## Ошибки
 
 Сообщения об ошибках представленны коллекцией ```\Fi1a\Validation\Errors```,
 которую можно получить с помощью метода ```getErrors()``` класса
@@ -217,7 +215,7 @@ if (!$result->isSuccess()) {
 
 Также доступны все методы коллекции ```\Fi1a\Collection\Collection```.
 
-### Затронутые значения
+## Затронутые значения
 
 Затронутые значения представлены коллекцией ```\Fi1a\Validation\ResultValues```,
 которую можно получить с помощью метода ```getValues()``` класса
@@ -249,7 +247,7 @@ if (!$result->isSuccess()) {
 
 Также доступны все методы коллекции ```\Fi1a\Collection\Collection```.
 
-### Сценарии
+## Сценарии
 
 Сценарии предназначены для определения какие правила применять к текущему состоянию. Например: при сценарии создания
 пароль обязателен для заполнения, а при сценарии обновления нет. Это можно определить используя сценарии.
@@ -300,7 +298,7 @@ $result = $validation->validate();
 $result->isSuccess(); // false
 ```
 
-### Набор правил
+## Набор правил
 
 Набор правил представляет собой класс реализующий интерфейс ```\Fi1a\Validation\RuleSetInterface```.
 
@@ -384,9 +382,35 @@ if (!$result->isSuccess()) {
 }
 ```
 
-### Правила
+## Значение присутствует для валидации (проверки)
 
-#### alphaNumeric()
+По умолчанию большинство правил при валидации (проверке) возвращают `true`, если значение не присутсвует (за исключением `require()`).
+Класс реализующий интерфейс `Fi1a\Validation\Presence\WhenPresenceInterface` определяет по какому критерию будет происходить
+проверка на присутсвие значения.
+
+Доступны следующие классы:
+
+- `Fi1a\Validation\Presence\WhenPresence` - определяет по наличию ключа в значениях присутсвует оно или нет;
+- `Fi1a\Validation\Presence\WhenNotValue` - определяет по переданному значению присутсвует значение или нет (если равно считается, что не присутсвует);
+- `Fi1a\Validation\Presence\WhenNotNull` - определяет по значению null присутсвует значение или нет (если null считается, что не присутсвует);
+- `Fi1a\Validation\Presence\WhenNotIn` - определяет по переданным значениям присутсвует значение или нет (если входит в значения считается, что не присутсвует);
+
+По умолчанию используется класс `Fi1a\Validation\Presence\WhenPresence`. Но вы можете передать нужный вам.
+
+```php
+use Fi1a\Validation\AllOf;
+use Fi1a\Validation\Presence\WhenNotNull;
+
+$chain = AllOf::create()->boolean(new WhenNotNull());
+
+$chain->validate(null)->isSuccess(); // true
+$chain->validate(true)->isSuccess(); // true
+$chain->validate('not-boolean')->isSuccess(); // false
+```
+
+## Правила
+
+### alphaNumeric(?WhenPresenceInterface $presence = null)
 
 Значение должно быть буквенно-цифровым
 
@@ -397,7 +421,7 @@ AllOf::create()->alphaNumeric()->validate('123abc')->isSuccess(); // true
 AllOf::create()->alphaNumeric()->validate('abc 123')->isSuccess(); // false
 ```
 
-#### alpha()
+### alpha(?WhenPresenceInterface $presence = null)
 
 Является ли значение только буквенным(без чисел)
 
@@ -408,7 +432,7 @@ AllOf::create()->alpha()->validate('abc')->isSuccess(); // true
 AllOf::create()->alpha()->validate('abc100')->isSuccess(); // false
 ```
 
-#### array()
+### array(?WhenPresenceInterface $presence = null)
 
 Является ли значение массивом
 
@@ -419,7 +443,7 @@ AllOf::create()->array()->validate([1, 2, 3])->isSuccess(); // true
 AllOf::create()->array()->validate(false)->isSuccess(); // false
 ```
 
-#### betweenCount(int $min, int $max)
+### betweenCount(int $min, int $max, ?WhenPresenceInterface $presence = null)
 
 Проверка на минимальное и максимальное количество элементов в массиве
 
@@ -431,7 +455,7 @@ AllOf::create()->betweenCount(2, 5)->validate(3000000)->isSuccess(); // false
 AllOf::create()->betweenCount(2, 5)->validate([1,])->isSuccess(); // false
 ```
 
-#### betweenLength(int $min, int $max)
+### betweenLength(int $min, int $max, ?WhenPresenceInterface $presence = null)
 
 Проверка на максимальную и минимальную длину строки
 
@@ -443,7 +467,7 @@ AllOf::create()->betweenLength(2, 5)->validate(3000000)->isSuccess(); // false
 AllOf::create()->betweenLength(2, 5)->validate('abc def gh')->isSuccess(); // false
 ```
 
-#### between($min, $max)
+### between($min, $max, ?WhenPresenceInterface $presence = null)
 
 Проверка на максимальное и мимальное значение
 
@@ -455,7 +479,7 @@ AllOf::create()->between(100, 200)->validate(300)->isSuccess(); // false
 AllOf::create()->between(100, 200)->validate('abc')->isSuccess(); // false
 ```
 
-#### boolean()
+### boolean(?WhenPresenceInterface $presence = null)
 
 Является ли значение логическим
 
@@ -476,7 +500,7 @@ AllOf::create()->boolean()->validate(100)->isSuccess(); // false
 AllOf::create()->boolean()->validate('abc')->isSuccess(); // false
 ```
 
-#### date(string $format = null)
+### date(string $format = null, ?WhenPresenceInterface $presence = null)
 
 Проверка на формат даты
 
@@ -489,7 +513,7 @@ AllOf::create()->date('d m, Y')->validate('10 10, 2022')->isSuccess(); // true
 AllOf::create()->date()->validate('abc')->isSuccess(); // false
 ```
 
-#### email()
+### email(?WhenPresenceInterface $presence = null)
 
 Является ли значение email адресом
 
@@ -500,7 +524,7 @@ AllOf::create()->email()->validate('foo@bar.ru')->isSuccess(); // true
 AllOf::create()->email()->validate('foo')->isSuccess(); // false
 ```
 
-#### fileSize(string $min, string $max)
+### fileSize(string $min, string $max, ?WhenPresenceInterface $presence = null)
 
 Размер загруженного файла.
 
@@ -528,7 +552,7 @@ if (!$result->isSuccess()) {
 }
 ```
 
-#### in(...$in)
+### in($presence, ...$in)
 
 Допустимые значения (не строгая проверка значения)
 
@@ -540,7 +564,7 @@ AllOf::create()->in(1, 2, 3)->validate(100.1)->isSuccess(); // false
 AllOf::create()->in('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // true
 ```
 
-#### integer()
+### integer(?WhenPresenceInterface $presence = null)
 
 Является ли значение целым числом
 
@@ -551,7 +575,7 @@ AllOf::create()->integer()->validate(1)->isSuccess(); // true
 AllOf::create()->integer()->validate(100.1)->isSuccess(); // false
 ```
 
-#### json()
+### json(?WhenPresenceInterface $presence = null)
 
 Является ли значение json-строкой
 
@@ -562,7 +586,7 @@ AllOf::create()->json()->validate(json_encode([1, 2, 3]))->isSuccess(); // true
 AllOf::create()->json()->validate('{')->isSuccess(); // false
 ```
 
-#### maxCount(int $max)
+### maxCount(int $max, ?WhenPresenceInterface $presence = null)
 
 Проверка на максимальное количество элементов в массиве
 
@@ -574,7 +598,7 @@ AllOf::create()->maxCount(2)->validate(100)->isSuccess(); // false
 AllOf::create()->maxCount(2)->validate([1, 2, 3])->isSuccess(); // false
 ```
 
-#### maxLength(int $max)
+### maxLength(int $max, ?WhenPresenceInterface $presence = null)
 
 Проверка на максимальную длину строки
 
@@ -587,7 +611,7 @@ AllOf::create()->maxLength(5)->validate(1000000)->isSuccess(); // false
 AllOf::create()->maxLength(5)->validate('abc def h')->isSuccess(); // false
 ```
 
-#### max($max)
+### max($max, ?WhenPresenceInterface $presence = null)
 
 Проверка на максимальное значение
 
@@ -599,7 +623,7 @@ AllOf::create()->max(200)->validate(300)->isSuccess(); // false
 AllOf::create()->max(200)->validate('abc')->isSuccess(); // false
 ```
 
-#### mime(string ...$extensions)
+### mime(WhenPresenceInterface|string $presence, string ...$extensions)
 
 Тип загруженного файла
 
@@ -619,7 +643,7 @@ if (!$result->isSuccess()) {
 }
 ````
 
-#### minCount(int $min)
+### minCount(int $min, ?WhenPresenceInterface $presence = null)
 
 Проверка на минимальное количество элементов в массиве
 
@@ -631,7 +655,7 @@ AllOf::create()->minCount(2)->validate(100)->isSuccess(); // false
 AllOf::create()->minCount(2)->validate([1])->isSuccess(); // false
 ```
 
-#### minLength(int $min)
+### minLength(int $min, ?WhenPresenceInterface $presence = null)
 
 Проверка на минимальную длину строки
 
@@ -644,7 +668,7 @@ AllOf::create()->minLength(5)->validate(100)->isSuccess(); // false
 AllOf::create()->minLength(5)->validate('abc')->isSuccess(); // false
 ```
 
-#### min($min)
+### min($min, ?WhenPresenceInterface $presence = null)
 
 Проверка на минимальное значение
 
@@ -656,7 +680,7 @@ AllOf::create()->min(200)->validate(100)->isSuccess(); // false
 AllOf::create()->min(200)->validate('abc')->isSuccess(); // false
 ```
 
-#### notIn(...$notIn)
+### notIn($presence, ...$notIn)
 
 Не допустимые значения (не строгая проверка значения)
 
@@ -668,7 +692,7 @@ AllOf::create()->notIn(1, 2, 3)->validate(2)->isSuccess(); // false
 AllOf::create()->notIn('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // false
 ```
 
-#### null()
+### null(?WhenPresenceInterface $presence = null)
 
 Является ли значение null
 
@@ -679,7 +703,7 @@ AllOf::create()->null()->validate(null)->isSuccess(); // true
 AllOf::create()->null()->validate(false)->isSuccess(); // false
 ```
 
-#### numeric()
+### numeric(?WhenPresenceInterface $presence = null)
 
 Является ли значение числом
 
@@ -690,7 +714,7 @@ AllOf::create()->numeric()->validate(1)->isSuccess(); // true
 AllOf::create()->numeric()->validate(false)->isSuccess(); // false
 ```
 
-#### regex(string $regex)
+### regex(string $regex, ?WhenPresenceInterface $presence = null)
 
 Проверка на регулярное выражение
 
@@ -701,7 +725,7 @@ AllOf::create()->regex('/[0-9]/mui')->validate(200)->isSuccess(); // true
 AllOf::create()->regex('/[0-9]/mui')->validate('abc')->isSuccess(); // false
 ```
 
-#### requiredIfPresence()
+### requiredIfPresence(?WhenPresenceInterface $presence = null)
 
 Обязательное значение, если передано
 
@@ -720,7 +744,7 @@ $validation->setValues([]);
 $validation->validate()->isSuccess(); // true
 ```
 
-#### required()
+### required()
 
 Обязательное значение
 
@@ -731,7 +755,7 @@ AllOf::create()->required()->validate(true)->isSuccess(); // true
 AllOf::create()->required()->validate(null)->isSuccess(); // false
 ```
 
-#### same(string $fieldName)
+### same(string $fieldName, ?WhenPresenceInterface $presence = null)
 
 Совпадает ли значение со значением в указанном поле
 
@@ -742,7 +766,7 @@ AllOf::create()->same('field1')->validate(200)->isSuccess(); // false
 AllOf::create()->same('bar')->validate(['foo' => 200, 'bar' => 200], 'foo')->isSuccess(); // true
 ```
 
-#### strictIn(...$in)
+### strictIn($presence, ...$in)
 
 Допустимые значения (строгая проверка значения)
 
@@ -754,7 +778,7 @@ AllOf::create()->strictIn(1, 2, 3)->validate(100.1)->isSuccess(); // false
 AllOf::create()->strictIn('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // false
 ```
 
-#### strictNotIn(...$notIn)
+### strictNotIn($presence, ...$notIn)
 
 Не допустимые значения (строгая проверка значения)
 
@@ -766,7 +790,7 @@ AllOf::create()->strictNotIn(1, 2, 3)->validate(2)->isSuccess(); // false
 AllOf::create()->strictNotIn('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // true
 ```
 
-### Пользовательское правило проверки
+## Пользовательское правило проверки
 
 В библиотеки есть возможность расширить доступные правила проверки.
 Правило проверки должно реализовывать интерфейс ```\Fi1a\Validation\Rule\RuleInterface```.
@@ -800,11 +824,12 @@ class UniqueRule extends AbstractRule
     /**
      * Конструктор
      */
-    public function __construct(string $className, string $column, ?int $notId = null)
+    public function __construct(string $className, string $column, ?int $notId = null, ?WhenPresenceInterface $presence = null)
     {
         $this->className = $className;
         $this->column = $column;
         $this->notId = $notId;
+        parent::__construct($presence);
     }
 
     /**
