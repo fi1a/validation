@@ -30,7 +30,7 @@ class Result implements ResultInterface
     public function __construct()
     {
         $this->errors = new Errors(ErrorInterface::class);
-        $this->values = new ResultValues(ValueInterface::class);
+        $this->values = new ResultValues();
     }
 
     /**

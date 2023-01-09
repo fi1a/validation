@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Hydrator\Extractor;
 use Fi1a\Validation\AST\AST;
 use Fi1a\Validation\Exception\RuleNotFound;
 use Fi1a\Validation\Rule\RuleInterface;
@@ -33,7 +34,8 @@ class Validator implements ValidatorInterface
         $values,
         ?array $rules = null,
         array $messages = [],
-        array $titles = []
+        array $titles = [],
+        ?string $scenario = null
     ): ValidationInterface {
         /**
          * @var RuleInterface[]|ChainInterface[] $ruleInstances
@@ -42,6 +44,7 @@ class Validator implements ValidatorInterface
 
         if ($values instanceof RuleSetInterface) {
             assert($values instanceof RuleSetInterface);
+            $values->setScenario($scenario);
             $values->init();
             if (!is_array($rules)) {
                 $rules = [];
@@ -53,10 +56,44 @@ class Validator implements ValidatorInterface
              * @var mixed $values
              */
             $values = $values->getValues()->getRaw();
+        } elseif (is_object($values)) {
+            $values = (new Extractor())->extract($values);
         }
 
         if (is_array($rules)) {
             foreach ($rules as $fieldName => $rule) {
+                if ($rule instanceof OnInterface) {
+                    $chain = $rule->getChain();
+                    if ($chain === null) {
+                        continue;
+                    }
+                    if (
+                        (
+                            !$scenario
+                            && !count($rule->getScenario())
+                        )
+                        || (
+                            $scenario
+                            && (
+                                !count($rule->getScenario())
+                                || in_array($scenario, $rule->getScenario())
+                            )
+                        )
+                    ) {
+                        if (!isset($ruleInstances[$rule->getFieldName()])) {
+                            $ruleInstances[$rule->getFieldName()] = AllOf::create();
+                        }
+                        if ($ruleInstances[$rule->getFieldName()] instanceof RuleInterface) {
+                            $ruleInstances[$rule->getFieldName()] = AllOf::create(
+                                $ruleInstances[$rule->getFieldName()]
+                            );
+                        }
+                        /** @psalm-suppress PossiblyUndefinedMethod */
+                        $ruleInstances[$rule->getFieldName()]->addRule($chain);
+                    }
+
+                    continue;
+                }
                 if ($rule instanceof RuleInterface || $rule instanceof ChainInterface) {
                     $ruleInstances[$fieldName] = $rule;
 

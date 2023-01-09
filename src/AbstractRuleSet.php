@@ -37,10 +37,9 @@ abstract class AbstractRuleSet implements RuleSetInterface
     /**
      * @inheritDoc
      */
-    public function __construct($values, ?string $scenario = null)
+    public function __construct($values)
     {
-        $this->setValues($values)
-            ->setScenario($scenario);
+        $this->setValues($values);
     }
 
     /**
@@ -65,19 +64,9 @@ abstract class AbstractRuleSet implements RuleSetInterface
     public function getRules(): array
     {
         $rules = [];
-
         foreach ($this->fieldChains as $fieldName => $fieldsChains) {
             foreach ($fieldsChains as $fieldsChain) {
-                $chain = $fieldsChain->getChain();
-                if (
-                    (is_null($fieldsChain->getScenario()) || $fieldsChain->getScenario() === $this->getScenario())
-                    && !is_null($chain)
-                ) {
-                    if (!isset($rules[$fieldName])) {
-                        $rules[$fieldName] = AllOf::create();
-                    }
-                    $rules[$fieldName]->addRule($chain);
-                }
+                $rules[] = new On((string) $fieldName, $fieldsChain->getChain(), ...$fieldsChain->getScenario());
             }
         }
 

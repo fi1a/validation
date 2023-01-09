@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
+
 /**
  * Класс проверки значений
  */
@@ -85,4 +87,14 @@ interface ValidationInterface
      * @return string[]|null[]
      */
     public function getTitles(): array;
+
+    /**
+     * Установить значение объекта определяющего присутсвие
+     */
+    public function setPresence(?WhenPresenceInterface $presence): bool;
+
+    /**
+     * Вернуть значение объекта определяющего присутсвие
+     */
+    public function getPresence(): ?WhenPresenceInterface;
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
-use InvalidArgumentException;
 
 /**
  * Проверка на максимальное значение
@@ -13,7 +13,7 @@ use InvalidArgumentException;
 class MaxRule extends AbstractRule
 {
     /**
-     * @var int|float
+     * @var float
      */
     private $max;
 
@@ -22,13 +22,10 @@ class MaxRule extends AbstractRule
      *
      * @param float|int $max
      */
-    public function __construct($max)
+    public function __construct(float $max, ?WhenPresenceInterface $presence = null)
     {
-        /** @psalm-suppress DocblockTypeContradiction */
-        if (!is_numeric($max)) {
-            throw new InvalidArgumentException('Аргумент $max должен быть числом');
-        }
         $this->max = $max;
+        parent::__construct($presence);
     }
 
     /**
@@ -36,12 +33,12 @@ class MaxRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 
         $success = is_numeric($value->getValue());
-        $success = $success && $value->getValue() <= $this->max;
+        $success = $success && (float) $value->getValue() <= $this->max;
 
         if (!$success) {
             $this->addMessage('Значение {{if(name)}}"{{name}}" {{endif}}должно быть максимум {{max}}', 'max');

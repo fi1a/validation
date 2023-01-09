@@ -1,14 +1,14 @@
 {
   "name": "fi1a/validation",
   "type": "library",
-  "description": "PHP валидация (проверка) значений формы",
+  "description": "PHP валидация (проверка) значений формы и данных",
   "keywords": [],
   "homepage": "https://github.com/fi1a/validation",
   "license": "MIT",
   "authors": [
     {
       "name": "Fi1a",
-      "email": "fi1a@icloud.com"
+      "email": "support@fi1a.ru"
     }
   ],
   "require": {
@@ -16,7 +16,8 @@
     "ext-json": "*",
     "fi1a/collection": "^2.0",
     "fi1a/format": "^2.0",
-    "fi1a/tokenizer": "^1.1"
+    "fi1a/tokenizer": "^1.1",
+    "fi1a/hydrator": "^1.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.3",

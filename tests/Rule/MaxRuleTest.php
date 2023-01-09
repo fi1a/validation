@@ -6,7 +6,6 @@ namespace Fi1a\Unit\Validation\Rule;
 
 use Fi1a\Validation\AllOf;
 use Fi1a\Validation\Validator;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,15 +35,5 @@ class MaxRuleTest extends TestCase
         $this->assertFalse($validation->validate()->isSuccess());
         $validation = $validator->make([], ['foo' => 'max(100)']);
         $this->assertTrue($validation->validate()->isSuccess());
-    }
-
-    /**
-     * Исключение
-     */
-    public function testMaxArgumentException(): void
-    {
-        $validator = new Validator();
-        $this->expectException(InvalidArgumentException::class);
-        $validator->make(['foo' => 200], ['foo' => 'max("abc")']);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use Fi1a\Validation\ValuesInterface;
 
@@ -63,4 +64,14 @@ interface RuleInterface
      * @return ValueInterface
      */
     public function afterValidate(ValueInterface $value);
+
+    /**
+     * Установить значение объекта определяющего присутсвие
+     */
+    public function setPresence(?WhenPresenceInterface $presence): bool;
+
+    /**
+     * Вернуть значение объекта определяющего присутсвие
+     */
+    public function getPresence(): WhenPresenceInterface;
 }

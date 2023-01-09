@@ -30,7 +30,8 @@ interface ValidatorInterface
         $values,
         ?array $rules = null,
         array $messages = [],
-        array $titles = []
+        array $titles = [],
+        ?string $scenario = null
     ): ValidationInterface;
 
     /**

@@ -17,8 +17,10 @@ class FixtureRuleSet extends AbstractRuleSet
     public function init(): bool
     {
         $this->fields('key1:id', 'key1:name')->on('create')->allOf()->required();
-        $this->fields('key2:*:wildcard')->on('create')->allOf()->null();
-        $this->fields('key1:foo')->oneOf()->required()->null();
+        $this->fields('key2:*:wildcard')->on('create', 'copy')->allOf()->null();
+        if (!$this->getScenario() || in_array($this->getScenario(), ['create', 'copy', 'update'])) {
+            $this->fields('key1:foo')->oneOf()->required()->null();
+        }
         $this->fields('key1:bar')->on('update')->oneOf()->required()->null();
         if ($this->getValue('key3')->isPresence()) {
             $this->fields('key3')->allOf()->required();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 use Fi1a\Validation\ValuesInterface;
 use InvalidArgumentException;
@@ -18,13 +19,14 @@ class SameRule extends AbstractRule
      */
     private $fieldName;
 
-    public function __construct(string $fieldName)
+    public function __construct(string $fieldName, ?WhenPresenceInterface $presence = null)
     {
         if (!$fieldName) {
             throw new InvalidArgumentException('Аргумент $fieldName не может быть пустым');
         }
 
         $this->fieldName = $fieldName;
+        parent::__construct($presence);
     }
 
     /**
@@ -38,7 +40,10 @@ class SameRule extends AbstractRule
             throw new InvalidArgumentException('Значение не должно быть массивом');
         }
 
-        if (!$value->isPresence() && !$sameValue->isPresence()) {
+        if (
+            !$this->getPresence()->isPresence($value, $this->values)
+            && !$this->getPresence()->isPresence($sameValue, $this->values)
+        ) {
             return true;
         }
 

@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace Fi1a\Validation\Rule;
 
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\ValueInterface;
 
 /**
  * Проверка на формат даты
  */
-class DateRule extends AbstractRule
+class DateRule extends AbstractDateRule
 {
-    /**
-     * @var string
-     */
-    protected static $defaultFormat = 'd.m.Y';
-
     /**
      * @var string
      */
@@ -24,12 +20,13 @@ class DateRule extends AbstractRule
     /**
      * Конструктор
      */
-    public function __construct(?string $format = null)
+    public function __construct(?string $format = null, ?WhenPresenceInterface $presence = null)
     {
         if (!$format) {
             $format = static::$defaultFormat;
         }
         $this->format = $format;
+        parent::__construct($presence);
     }
 
     /**
@@ -37,7 +34,7 @@ class DateRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
 
@@ -45,7 +42,7 @@ class DateRule extends AbstractRule
 
         if (!$success) {
             $this->addMessage(
-                '{{if(name)}}"{{name}}" не{{else}}Не{{endif}} является допустимым форматом даты',
+                '{{if(name)}}"{{name}}" не{{else}}Не{{endif}} является допустимым форматом "{{format}}" даты',
                 'date'
             );
         }

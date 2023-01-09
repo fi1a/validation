@@ -16,7 +16,7 @@ class AlphaNumericRule extends AbstractRule
      */
     public function validate(ValueInterface $value): bool
     {
-        if (!$value->isPresence()) {
+        if (!$this->getPresence()->isPresence($value, $this->values)) {
             return true;
         }
         $success = is_string($value->getValue()) || is_numeric($value->getValue());

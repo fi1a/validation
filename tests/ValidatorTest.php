@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Validation;
 
+use Fi1a\Unit\Validation\Fixtures\DTO;
 use Fi1a\Unit\Validation\Fixtures\EmptyValues;
 use Fi1a\Unit\Validation\Fixtures\FixtureRule;
 use Fi1a\Validation\AST\Exception\ParseRuleException;
@@ -11,6 +12,9 @@ use Fi1a\Validation\AllOf;
 use Fi1a\Validation\ErrorInterface;
 use Fi1a\Validation\Errors;
 use Fi1a\Validation\Exception\RuleNotFound;
+use Fi1a\Validation\On;
+use Fi1a\Validation\Presence\WhenNotNull;
+use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\Rule\ArrayRule;
 use Fi1a\Validation\Rule\NullRule;
 use Fi1a\Validation\Rule\RequiredRule;
@@ -698,7 +702,7 @@ class ValidatorTest extends TestCase
                 'key2' => 'fixtureRule ( true, false, null, 100, 100.10, \'\\\' 200 \\\'\' )',
             ],
             [
-                'fixtureRule' => '{{bool1}}, {{bool2}}, {{null}}, {{int}}, {{float}}, {{string}}',
+                'fixtureRule' => '{{bool1}}, {{bool2}}, {{null}}, {{int}}, {{float}}, {{string|unescape}}',
             ]
         );
         $result = $validation->validate();
@@ -961,6 +965,160 @@ class ValidatorTest extends TestCase
             'array' => 'array|minCount(1)',
             'array:*' => 'required|integer',
         ]);
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+        $this->assertCount(1, $result->getErrors());
+    }
+
+    /**
+     * Валидация по сценарию
+     */
+    public function testScenario(): void
+    {
+        $validator = new Validator();
+        $values = [
+            'array' => [1, 2, 3],
+        ];
+        $rules = [
+            new On('array', AllOf::create()->array()->minCount(1), 'create'),
+            new On('array', AllOf::create()->array()->minCount(4), 'update'),
+            'array:*' => 'required|integer',
+        ];
+        $validation = $validator->make(
+            $values,
+            $rules,
+            [],
+            [],
+            'create'
+        );
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+
+        $validation = $validator->make(
+            $values,
+            $rules,
+            [],
+            [],
+            'update'
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+    }
+
+    /**
+     * Валидация по сценарию
+     */
+    public function testScenarioEmptyChain(): void
+    {
+        $validator = new Validator();
+        $values = [
+            'array' => [1, 2, 3],
+        ];
+        $rules = [
+            new On('array', null, 'create'),
+            'array:*' => 'required|integer',
+        ];
+        $validation = $validator->make(
+            $values,
+            $rules,
+            [],
+            [],
+            'create'
+        );
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Валидация по сценарию
+     */
+    public function testScenarioMergeRules(): void
+    {
+        $validator = new Validator();
+        $values = [
+            'array' => [1, 2, 3],
+        ];
+        $rules = [
+            'array' => new ArrayRule(),
+            new On('array', AllOf::create()->minCount(1), 'create'),
+            'array:*' => 'required|integer',
+        ];
+        $validation = $validator->make(
+            $values,
+            $rules,
+            [],
+            [],
+            'create'
+        );
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+
+        $validation = $validator->make(
+            [
+                'array' => 1,
+            ],
+            $rules,
+            [],
+            [],
+            'create'
+        );
+        $result = $validation->validate();
+        $this->assertFalse($result->isSuccess());
+    }
+
+    /**
+     * Установка объекта определяющего присутсвие
+     */
+    public function testPresence(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make([
+            'array' => [null, 2, 3],
+        ], [
+            'array' => 'array|minCount(1)',
+            'array:*' => 'integer',
+        ]);
+        $this->assertNull($validation->getPresence());
+        $validation->setPresence(new WhenNotNull());
+        $this->assertInstanceOf(WhenPresenceInterface::class, $validation->getPresence());
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Валидация DTO
+     */
+    public function testValidateDTO(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            new DTO(),
+            [
+                'propertyA' => 'required|integer',
+                'propertyB' => 'required',
+                'propertyC' => 'null',
+                'propertyD' => 'required|boolean',
+            ]
+        );
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Валидация DTO
+     */
+    public function testValidateDTONotSuccess(): void
+    {
+        $validator = new Validator();
+        $validation = $validator->make(
+            new DTO(),
+            [
+                'propertyA' => 'required|integer',
+                'propertyB' => 'required',
+                'propertyC' => 'required',
+                'propertyD' => 'required|boolean',
+            ]
+        );
         $result = $validation->validate();
         $this->assertFalse($result->isSuccess());
         $this->assertCount(1, $result->getErrors());
