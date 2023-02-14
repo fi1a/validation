@@ -54,9 +54,9 @@ class Tokenizer extends AParseFunction
             if ($current < 0) {
                 $current = 0;
             }
-            if (!$source || $current >= mb_strlen($source)) {
+            if ($source === '' || $current >= mb_strlen($source)) {
                 $finish = true;
-                if ($image) {
+                if ($image !== '') {
                     $type = Token::T_RULE;
                 }
 
