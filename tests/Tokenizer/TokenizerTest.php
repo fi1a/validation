@@ -203,6 +203,13 @@ class TokenizerTest extends TestCase
                     Token::T_QUOTE, Token::T_CLOSE_PARENTHESES,
                 ],
             ],
+            // 15
+            [
+                '0',
+                1,
+                ['0'],
+                [Token::T_RULE,],
+            ],
         ];
     }
 
