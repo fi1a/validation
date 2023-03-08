@@ -8,6 +8,7 @@
     bootstrap="vendor/autoload.php"
     failOnRisky="true"
     failOnWarning="true"
+    cacheResultFile="runtime/cache/.phpunit.result.cache"
 >
     <coverage
         includeUncoveredFiles="true"
@@ -25,7 +26,7 @@
         </exclude>
     </coverage>
     <testsuites>
-        <testsuite name="Collection Test Suite">
+        <testsuite name="Validation Test Suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
