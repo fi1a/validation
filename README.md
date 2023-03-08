@@ -964,6 +964,17 @@ AllOf::create()->strictNotIn(1, 2, 3)->validate(2)->isSuccess(); // false
 AllOf::create()->strictNotIn('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // true
 ```
 
+### string(?WhenPresenceInterface $presence = null)
+
+Является ли значение строкой
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()->string()->validate('foo')->isSuccess(); // true
+AllOf::create()->string()->validate(false)->isSuccess(); // false
+```
+
 ## Пользовательское правило проверки
 
 В библиотеки есть возможность расширить доступные правила проверки.
