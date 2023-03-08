@@ -45,6 +45,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface maxDate(string $maxDate, ?string $format = null, ?WP $presence = null)
  * @method ChainInterface betweenDate(string $minDate, string $maxDate, ?string $format = null, ?WP $presence = null)
  * @method ChainInterface equalDate(string $equalDate, ?string $format = null, ?WP $presence = null)
+ * @method ChainInterface requiredWith(string ...$fieldNames)
  */
 interface ChainInterface
 {

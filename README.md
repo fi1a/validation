@@ -906,6 +906,29 @@ AllOf::create()->required()->validate(true)->isSuccess(); // true
 AllOf::create()->required()->validate(null)->isSuccess(); // false
 ```
 
+### requiredWith(string ...$fieldNames)
+
+Обязательное значение, если есть значения в полях
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()
+    ->requiredWith('array:foo', 'array:bar')
+    ->validate(['array' => ['foo' => 'foo', 'bar' => 'bar'], 'baz' => 'baz'], 'baz')
+    ->isSuccess(); // true
+                
+AllOf::create()
+    ->requiredWith('array:foo', 'array:bar')
+    ->validate(['array' => ['foo' => 'foo', 'bar' => null], 'baz' => null], 'baz')
+    ->isSuccess(); // true
+
+AllOf::create()
+    ->requiredWith('array:foo', 'array:bar')
+    ->validate(['array' => ['foo' => 'foo', 'bar' => 'bar'], 'baz' => null], 'baz')
+    ->isSuccess(); // false
+```
+
 ### same(string $fieldName, ?WhenPresenceInterface $presence = null)
 
 Совпадает ли значение со значением в указанном поле
