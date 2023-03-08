@@ -33,9 +33,11 @@ use Fi1a\Validation\Rule\NumericRule;
 use Fi1a\Validation\Rule\RegexRule;
 use Fi1a\Validation\Rule\RequiredIfPresenceRule;
 use Fi1a\Validation\Rule\RequiredRule;
+use Fi1a\Validation\Rule\RequiredWithRule;
 use Fi1a\Validation\Rule\SameRule;
 use Fi1a\Validation\Rule\StrictInRule;
 use Fi1a\Validation\Rule\StrictNotInRule;
+use Fi1a\Validation\Rule\StringRule;
 use Fi1a\Validation\Rule\UrlRule;
 use Fi1a\Validation\Validator;
 
@@ -74,3 +76,5 @@ Validator::addRule(MinDateRule::class);
 Validator::addRule(MaxDateRule::class);
 Validator::addRule(BetweenDateRule::class);
 Validator::addRule(EqualDateRule::class);
+Validator::addRule(RequiredWithRule::class);
+Validator::addRule(StringRule::class);

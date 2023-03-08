@@ -906,6 +906,29 @@ AllOf::create()->required()->validate(true)->isSuccess(); // true
 AllOf::create()->required()->validate(null)->isSuccess(); // false
 ```
 
+### requiredWith(string ...$fieldNames)
+
+Обязательное значение, если есть значения в полях
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()
+    ->requiredWith('array:foo', 'array:bar')
+    ->validate(['array' => ['foo' => 'foo', 'bar' => 'bar'], 'baz' => 'baz'], 'baz')
+    ->isSuccess(); // true
+                
+AllOf::create()
+    ->requiredWith('array:foo', 'array:bar')
+    ->validate(['array' => ['foo' => 'foo', 'bar' => null], 'baz' => null], 'baz')
+    ->isSuccess(); // true
+
+AllOf::create()
+    ->requiredWith('array:foo', 'array:bar')
+    ->validate(['array' => ['foo' => 'foo', 'bar' => 'bar'], 'baz' => null], 'baz')
+    ->isSuccess(); // false
+```
+
 ### same(string $fieldName, ?WhenPresenceInterface $presence = null)
 
 Совпадает ли значение со значением в указанном поле
@@ -939,6 +962,17 @@ use Fi1a\Validation\AllOf;
 AllOf::create()->strictNotIn(1, 2, 3)->validate(4)->isSuccess(); // true
 AllOf::create()->strictNotIn(1, 2, 3)->validate(2)->isSuccess(); // false
 AllOf::create()->strictNotIn('camelCase', 'UPPERCASE')->validate('uppercase')->isSuccess(); // true
+```
+
+### string(?WhenPresenceInterface $presence = null)
+
+Является ли значение строкой
+
+```php
+use Fi1a\Validation\AllOf;
+
+AllOf::create()->string()->validate('foo')->isSuccess(); // true
+AllOf::create()->string()->validate(false)->isSuccess(); // false
 ```
 
 ## Пользовательское правило проверки
