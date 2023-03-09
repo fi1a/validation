@@ -668,6 +668,56 @@ if (!$result->isSuccess()) {
 }
 ```
 
+### generic(array $rules, array $messages = [], array $titles = [], ?WhenPresenceInterface $presence = null)
+
+Вложенные правила
+
+```php
+use Fi1a\Validation\Validator;
+
+$validator = new Validator();
+$validation = $validator->make(
+    [
+        'columns' => [
+            [
+                'foo' => null,
+            ],
+            [
+                'foo' => [
+                    'bar' => 'baz'
+                ],
+            ],
+        ],
+    ],
+    [
+        'columns' => AllOf::create()->array(),
+        'columns:*:foo' => AllOf::create()->generic(['bar' => 'required']),
+    ]
+);
+$validation->validate()->isSuccess(); // true
+
+$validator = new Validator();
+$validation = $validator->make(
+    [
+        'columns' => [
+            [
+                'foo' => [],
+            ],
+            [
+                'foo' => [
+                    'bar' => 'baz'
+                ],
+            ],
+        ],
+    ],
+    [
+        'columns' => AllOf::create()->array(),
+        'columns:*:foo' => AllOf::create()->generic(['bar' => 'required']),
+    ]
+);
+$validation->validate()->isSuccess(); // false
+```
+
 ### url(?WhenPresenceInterface $presence = null)
 
 Валидация (проверка) url адреса
