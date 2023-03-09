@@ -47,6 +47,7 @@ use Fi1a\Validation\Rule\RuleInterface;
  * @method ChainInterface equalDate(string $equalDate, ?string $format = null, ?WP $presence = null)
  * @method ChainInterface requiredWith(string ...$fieldNames)
  * @method ChainInterface string(?WP $presence = null)
+ * @method ChainInterface generic(array $rules, string[] $messages = [], string[] $titles = [], ?WP $presence = null)
  */
 interface ChainInterface
 {
