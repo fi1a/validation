@@ -12,6 +12,11 @@ use InvalidArgumentException;
 class OneOf extends AbstractChain
 {
     /**
+     * @var bool
+     */
+    protected $noPresence = true;
+
+    /**
      * @inheritDoc
      */
     protected function setSuccess(
@@ -21,6 +26,7 @@ class OneOf extends AbstractChain
         ?string $fieldName = null,
         array $messages = []
     ): void {
+        $this->noPresence = false;
         if ($success instanceof ResultInterface) {
             $result->setSuccess($result->isSuccess() || $success->isSuccess());
             if (!$success->isSuccess()) {
@@ -49,6 +55,9 @@ class OneOf extends AbstractChain
     {
         if ($result->isSuccess()) {
             $result->clearErrors();
+        }
+        if ($this->noPresence) {
+            $result->setSuccess(true);
         }
 
         return $result;
