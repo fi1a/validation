@@ -13,6 +13,7 @@ use Fi1a\Validation\ErrorInterface;
 use Fi1a\Validation\Errors;
 use Fi1a\Validation\Exception\RuleNotFound;
 use Fi1a\Validation\On;
+use Fi1a\Validation\OneOf;
 use Fi1a\Validation\Presence\WhenNotNull;
 use Fi1a\Validation\Presence\WhenPresenceInterface;
 use Fi1a\Validation\Rule\ArrayRule;
@@ -1122,5 +1123,28 @@ class ValidatorTest extends TestCase
         $result = $validation->validate();
         $this->assertFalse($result->isSuccess());
         $this->assertCount(1, $result->getErrors());
+    }
+
+    /**
+     * Цепочка считается выполненной, если не представлены значения
+     */
+    public function testValidateOneOfNoPresence(): void
+    {
+        $validator = new Validator();
+
+        $validation = $validator->make(
+            [
+                'array' => [],
+            ],
+            [
+                'foo' => 'array',
+                'foo:bar' => OneOf::create()->array()->null(),
+                'foo:*:baz' => OneOf::create()->array()->null(),
+            ]
+        );
+
+        $result = $validation->validate();
+        $this->assertTrue($result->isSuccess());
+        $this->assertCount(0, $result->getErrors());
     }
 }

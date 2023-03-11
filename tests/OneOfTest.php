@@ -104,4 +104,15 @@ class OneOfTest extends TestCase
         $this->assertTrue($chain->validate(['field' => null], 'field')->isSuccess());
         $this->assertFalse($chain->validate(['field' => false], 'field')->isSuccess());
     }
+
+    /**
+     * Цепочка считается выполненной, если не представлены значения
+     */
+    public function testNoPresenceResult(): void
+    {
+        $chain = OneOf::create()->array()->null();
+        $result = $chain->validate([], 'foo:*:bar');
+        $this->assertTrue($result->isSuccess());
+        $this->assertCount(0, $result->getErrors());
+    }
 }
